@@ -1,0 +1,206 @@
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="edProfModal" tabindex="-1" aria-labelledby="edProfModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="width: 40vh;">
+            <div class="container">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="width: 75vh; font-size: 1.3rem; opacity: 1;"></button>
+                <div class="modal-content logreg-modal">
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                              <label for="email" class="col-form-label"><b>email</b></label>
+                              <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="mb-3">
+                              <label for="password" class="col-form-label"><b>password</b></label>
+                              <input type="password" class="form-control" id="password" name="password">
+                            </div>
+                            <p><span class="reg-mod">already have an account?</span> <a class="form-btn reg-btn" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">login</a>.</p>
+                          </form>
+                    </div>
+                        <button type="button" class="btn btn-loginreg" style="margin-right: 2vh; margin-left: 2vh; margin-top: -1vh;">register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create a Post-->
+    <a href="post.html"><div class="create-post">
+        <i class="fa-solid fa-circle-plus create-post-style" style="margin-right: 15px"></i>
+        <h4 class="create-post-style mt-2"><b>Post</b></h4>
+    </div></a>
+
+      <!-- Content Body -->
+      <div class="container mt-4 pt-3">
+        <div class="container d-flex content-container mt-4">
+
+            <!-- Profile Container -->
+            <div class="container flex-grow-1 profile">
+
+                <!-- Profile Proper -->
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-end">
+                    </div>
+                </div>
+                <div class="row d-flex align-items-center">
+                    <div class="col-3">
+                        <img src="img/{{username}}.jpg" class="user-profile-pic">
+                    </div>
+                    <div class="col-9" style="padding: 2.5vh;">
+                        <h3><strong>{{username}}</strong></h3>
+                        <span>{{profile_dec}}</span>
+                    </div>
+                </div>
+
+                <div class="profile-user-line mt-4"></div>
+
+                <!-- User's Comments and Posts -->
+                <div class="row mt-5">
+                    <nav>
+                        <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
+                                <button class="nav-link active profile-btn" id="nav-posts-tab" data-bs-toggle="tab" data-bs-target="#nav-posts" type="button" role="tab" aria-controls="nav-posts" aria-selected="true">
+                                    posts
+                                    <div class="profile-line"></div>
+                                </button>                          
+                              <button class="nav-link profile-btn" id="nav-comments-tab" data-bs-toggle="tab" data-bs-target="#nav-comments" type="button" role="tab" aria-controls="nav-comments" aria-selected="false">
+                                comments
+                                <div class="profile-line"></div>
+                            </button>    
+                            <button class="nav-link profile-btn" id="nav-tags-tab" data-bs-toggle="tab" data-bs-target="#nav-tags" type="button" role="tab" aria-controls="nav-comments" aria-selected="false">
+                                subscribed
+                                <div class="profile-line"></div>
+                            </button>                 
+                            </div>
+                      </nav>
+
+                      <!-- Tab Contents -->
+
+                      <div class="tab-content mt-4" id="nav-tabContent">
+                        
+                        <!-- Posts Content Tab -->
+                        <div class="tab-pane fade show active" id="nav-posts" role="tabpanel" aria-labelledby="nav-posts-tab">
+                            <div class="container">
+                                    
+                                <!-- Post Container -->
+                                    <div class="row post-user">
+
+                                        <!-- Post Proper -->
+
+                                            <div class="d-flex justify-content-between">
+                                                <h5 class="post-title"><b><a href="deeznuts_post.html">Get Coconut'd</a></b></h5>
+                                            </div>
+                                           
+                                            <span class="post-info">posted by <a href="deeznuts.html">DeezNuts</a> on May 10, 2023</span>
+                                            <p class="post-content pt-2">(Copy paste the lyrics of the Da Coconut Nut)</p>
+                                            <div class="d-flex justify-content-between">
+                                                                                            <div class="d-flex">
+                                                <span class="postcom-tags post-tags-cont"><a href="tag.html">#coconut</a></span>
+                                                <span class="postcom-tags post-tags-cont"><a href="tag.html">#morenuts</a></span>
+                                                <span class="postcom-tags post-tags-cont"><a href="tag.html">#deeznuts</a></span>
+                                                
+                                            </div>
+                                                <div class="actions-cont d-flex">
+                                                    <div class="share-cont">
+                                                        <i class="fa-regular fa-share-from-square"></i>
+                                                    </div>
+                                                    <div class="votes-cont">
+                                                        <i class="fa-solid fa-circle-up"></i>
+                                                        <span style="font-size:smaller; margin-right: 0.5vh;"><b>3</b></span>
+                                                        <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
+                                                        <i class="fa-regular fa-circle-down"></i>
+                                                        <span style="font-size:smaller"><b>0</b></span>
+                                                    </div>
+                                                    <div class="comments-cont">
+                                                        <i class="fa-regular fa-comment-dots"></i>
+                                                        <span style="font-size:smaller"><b>0</b></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+                        <!-- User Comments Tab -->
+                        <div class="tab-pane fade" id="nav-comments" role="tabpanel" aria-labelledby="nav-comments-tab">
+                            <div class="container">                                
+                       
+
+
+                                 <!-- Comment Container -->
+                                 <div class="row post-comment">
+
+                                    <!-- Comment Proper -->
+                                        <div class="d-flex justify-content-between">
+                                            <h6 class="comment-title"><b><a href="view-post.html">undertale sans is so cool</a></b></h6> 
+                                            <div class="d-flex">
+                                                <span class="postcom-tags post-tags-cont"><a href="tag.html">#sans</a></span>
+                                                <span class="postcom-tags post-tags-cont"><a href="tag.html">#lorem </a></span>
+                                                <span class="postcom-tags post-tags-cont"><a href="tag.html">#ipsum</a></span>
+                                                <span class="postcom-tags post-tags-cont"><a href="tag.html">#mybrainisdying</a></span>
+                                            </div>
+                                            
+                                        </div>
+                                       
+                                        <span class="comment-info"><a href="deeznuts.html">DeezNuts</a> commented on May 1, 2023</span>
+                                        <p class="post-content pt-2">umm are you sure you're old enough to be on this site</p>
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                
+                                            </div>
+                                            <div class="actions-cont d-flex">
+                                                <div>
+                                                </div>
+                                                <div class="votes-cont">
+                                                    <i class="fa-solid fa-circle-up"></i>
+                                                    <span style="font-size:smaller; margin-right: 0.5vh;"><b>20</b></span>
+                                                    <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
+                                                    <i class="fa-regular fa-circle-down"></i>
+                                                    <span style="font-size:smaller"><b>0</b></span>
+                                                </div>
+                                                <div class="comments-cont">
+                                                    <i class="fa-regular fa-comment-dots"></i>
+                                                    <span style="font-size:smaller"><b>Reply</b></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+    
+
+                            </div>
+                        </div>
+
+                         <!-- Subscribed Tags Tab -->
+                         <div class="tab-pane fade" id="nav-tags" role="tabpanel" aria-labelledby="nav-tags-tab">
+                            <div class="container">
+                                <div class="row" style="display: flex; justify-content: center;">
+                                    <div class="tag-group col-md-3" style="margin-right: 5vh;">
+                                        <div><h6 class="tag-group-name"><a href="view-tags.html">#nou</a></h4></div>
+                                        <div class="tag-group-img" style="background-image:url(img/nou.jpg);"></div>
+                                        <div><h6 class="tag-group-count">702 posts</h4></div>
+                                    </div>
+                                    <div class="tag-group mr-5 col-md-3" style="margin-right: 5vh;">
+                                        <div><h6 class="tag-group-name"><a href="view-tags.html">#hahafunny</a></h4></div>
+                                        <div class="tag-group-img" style="background-image:url(img/hahafunny.jpg);"></div>
+                                        <div><h6 class="tag-group-count">4.3k posts</h4></div>
+                                    </div>
+                                    <div class="tag-group mr-5 col-md-3">
+                                        <div><h6 class="tag-group-name"><a href="view-tags.html">#meme</a></h4></div>
+                                        <div class="tag-group-img" style="background-image:url(img/meme.jpg);"></div>
+                                        <div><h6 class="tag-group-count">8k posts</h4></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                </div>
+
+            </div>
+            
+            {{> side-container}}
+        
+        
+        </div>
+
+      </div>

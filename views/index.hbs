@@ -1,0 +1,12 @@
+
+<div class="container d-flex content-container mt-4">
+    <!-- All Posts Container -->
+    <div class="container flex-grow-1 posts">
+        {{#each posts}}
+        {{> post_preview this}}
+        {{/each}}
+    </div> <!-- End of post container -->
+    
+    {{> side-container}}
+    
+</div>
