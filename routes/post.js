@@ -9,5 +9,12 @@ router.get('/', (req, res) =>{
 });
 
 // add viewing of page for a specific post
+router.get('/:id', (req, res) =>{
+    
+    res.render("create-post", {
+        header: "Create a new post",
+        script: "js/post.js"
+    });
+});
 
 module.exports = router;
