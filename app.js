@@ -118,8 +118,9 @@ app.get('/', (req, res) =>{
 });
 
 app.get('/home', async (req, res) => {
-    try
-    {
+    const maxTextLength = 100;
+
+    try {
         // not finished, still figuring out how to do this
         const listofposts = await Post.find().populate({
             path: 'username',
@@ -127,8 +128,19 @@ app.get('/home', async (req, res) => {
         }).populate({
             path:'tags',
             select: 'tag_name'
-        // need to add more populate methods and call functions para malimit ung text
         }).lean();
+
+        listofposts.forEach((post) => {
+            
+            if (post.post_title && post.post_title.length > maxTextLength) {
+              post.post_title = post.post_title.substring(0, maxTextLength) + '...';
+            }
+
+            if (post.tags && post.tags.length > 3) {
+                post.tags = post.tags.slice(0, 3);
+              }
+        });
+
         res.render("index", {
         header: "Hot Posts",
         script: 'js/index.js',
