@@ -17,7 +17,6 @@ router.get("/:name", async (req, res)=>{
     }
 })
 
-
 router.get("/", (req, res)=>{
     res.redirect('/');
 });
