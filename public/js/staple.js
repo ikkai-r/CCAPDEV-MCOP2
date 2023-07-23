@@ -1,3 +1,4 @@
+/* Original
 $(".add-tag").click(function () {
     if($(this).hasClass('fa-circle-plus')) {
         $(this).removeClass('fa-circle-plus');
@@ -5,6 +6,16 @@ $(".add-tag").click(function () {
     } else {
         $(this).removeClass('fa-circle-minus');
         $(this).addClass('fa-circle-plus');
+    }
+    
+});
+*/
+
+$(".add-tag").click(function () {
+    if( document.getElementById("subs").innerHTML == "Subscribe") {
+        document.getElementById("subs").innerHTML = "Unsubscribe";
+    } else {
+        document.getElementById("subs").innerHTML = "Subscribe";
     }
     
 });
@@ -74,9 +85,7 @@ $("#toggle-pass-con").click(function () {
 });
 
 $('#password-reg, #confirm-password').on('keyup', function () {
-
-    if ($('#password-reg').val() == $('#confirm-password').val() && $('#password-reg').val() != "") {
-        $('#pass-msg').css('display', 'block');
+    if ($('#password-reg').val() == $('#confirm-password').val()) {
         $('#pass-msg').removeClass('alert-danger');
         $('#pass-msg').addClass('alert-success');
         $('#pass-msg').text('Matching password');
@@ -87,33 +96,11 @@ $('#password-reg, #confirm-password').on('keyup', function () {
     }
   });
 
- 
-
   $("#register-btn").click(function (e) {
-    if ($('#password-reg').val() != $('#confirm-password').val() && $('#password-reg').val() != "") {
+    if ($('#password-reg').val() != $('#confirm-password').val()) {
         e.preventDefault();
         $('#pass-msg').addClass('alert-danger');
         $('#pass-msg').removeClass('alert-success');
-        $('#pass-msg').text('Ensure your passwords are the same/you inputted a password before registering.');
-    } else {
-        console.log('here');
-        const formData = $('#register-user').serialize();
-
-        // Send the form data to the server using AJAX
-        $.ajax({
-          url: '/', 
-          method: 'POST',
-          data: formData,
-          success: function(data) {
-            $('#pass-msg').text(data.message); // Use data.message to access the success message in the JSON response
-            setTimeout(function() {
-              window.location = "/user/"+data.username;
-            }, 2000);
-          },
-          error: function(error) {
-            console.error('Error submitting form:', error);
-          }
-        });
-     
+        $('#pass-msg').text('Ensure your passwords are the same before registering.');
     }
 });
