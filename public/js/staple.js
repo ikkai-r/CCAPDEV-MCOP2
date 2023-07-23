@@ -92,10 +92,10 @@ $('#password-reg, #confirm-password').on('keyup', function () {
 
   $("#register-btn").click(function (e) {
     e.preventDefault();
-    if ($('#password-reg').val() != $('#confirm-password').val() && $('#password-reg').val() != "" || $('#password-reg').val() == "") {
+    if ($('#password-reg').val() != $('#confirm-password').val()) {
         $('#pass-msg').addClass('alert-danger');
         $('#pass-msg').removeClass('alert-success');
-        $('#pass-msg').text('Ensure your passwords are the same/you inputted a password before registering.');
+        $('#pass-msg').text('Ensure your passwords are the same before registering.');
     } else {
         const formData = $('#register-user').serialize();
 
@@ -106,6 +106,7 @@ $('#password-reg, #confirm-password').on('keyup', function () {
           data: formData,
           success: function(data) {
             $('#pass-msg').text(data.message); 
+
             setTimeout(function() {
               window.location = "/user/"+data.username;
             }, 2000);
@@ -116,4 +117,38 @@ $('#password-reg, #confirm-password').on('keyup', function () {
         });
      
     }
+});
+
+
+
+$("#login-btn").click(function (e) {
+    e.preventDefault();
+
+        const formData = $('#login-user').serialize();
+
+        // Send the form data to the server using AJAX
+        $.ajax({
+          url: '/', 
+          method: 'POST',
+          data: formData,
+          success: function(data) {     
+            $('#login-msg').css('display', 'block');
+            $('#login-msg').removeClass('alert-danger');
+            $('#login-msg').addClass('alert-success');
+            $('#login-msg').text('Successful login. You will be redirected shortly.'); 
+            setTimeout(function() {
+                // Handle the redirect using JavaScript
+                window.location = "/user/" + data.username;
+              }, 2000);
+               },
+          error: function(error) {
+            console.error('Error submitting form:', error);
+            $('#login-msg').css('display', 'block');
+            $('#login-msg').removeClass('alert-success');
+            $('#login-msg').addClass('alert-danger');
+            $('#login-msg').text('Invalid credentials'); 
+          }
+        });
+     
+    
 });

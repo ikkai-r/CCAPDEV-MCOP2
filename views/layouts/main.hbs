@@ -92,23 +92,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="width: 75vh; font-size: 1.3rem"></button>
                 <div class="modal-content logreg-modal">
                     <div class="modal-body">
-                        <form>
+                        <form method="post" id="login-user">
                             <div class="mb-3">
                               <label for="email" class="col-form-label"><b>email</b></label>
-                              <input type="email" class="form-control" id="email-log" name="email-log">
+                              <input type="email" class="form-control" id="email-log" name="email_log" required>
                             </div>
                              <label for="password" class="col-form-label"><b>password</b></label>
                             <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="password-log"  aria-label="password">
+                            <input type="password" class="form-control" id="password-log"  aria-label="password" name="password_log" required>
                             <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-log"></i></span>
                             </div>
                             <div class="d-flex align-items-center justify-content-start" style="margin-top: -1vh">
                                 <input type="checkbox" value="rememberMe" id="rememberMe" name="rememberMe"> <p style="font-size: smaller; margin-left: 0.4vh !important" class="pt-3"><b>remember me</b></p>
                             </div>
+                            <input type="hidden" name="action" value="login">
+                            <div class="alert alert-danger" id="login-msg" role="alert" style="display: none;"></div>
                             <p style="margin-top: -1vh;"><span class="reg-mod">don't have an account yet?</span> <a class="form-btn reg-btn" data-bs-toggle="modal" data-bs-target="#regModal" data-bs-dismiss="modal">register</a>.</p>
+                            <button type="button" class="btn btn-loginreg" style="width:100%"  id="login-btn">login</button>
                           </form>
                     </div>
-                        <button type="button" class="btn btn-loginreg" style="margin-right: 2vh; margin-left: 2vh; margin-top: -1vh;">login</button>
                 </div>
             </div>
         </div>
@@ -138,22 +140,23 @@
                         <form method="post" id="register-user">
                             <div class="mb-3">
                               <label for="username" class="col-form-label"><b>username</b></label>
-                              <input type="username" class="form-control" id="username" name="username">
+                              <input type="username" class="form-control" id="username" name="username" required>
                             </div>
                             <div class="mb-3">
                               <label for="email" class="col-form-label"><b>email</b></label>
-                              <input type="email" class="form-control" id="email-reg" name="email_reg">
+                              <input type="email" class="form-control" id="email-reg" name="email_reg" required>
                             </div>
                             <label for="password" class="col-form-label"><b>password</b></label>
                             <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="password-reg"  aria-label="password" name="password_reg">
+                            <input type="password" class="form-control" id="password-reg"  aria-label="password" name="password_reg" required> 
                             <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-reg"></i></span>
                             </div>
                             <label for="password" class="col-form-label"><b>confirm password</b></label>
                             <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="confirm-password"  aria-label="confirm-password" name="confirm_password">
+                            <input type="password" class="form-control" id="confirm-password"  aria-label="confirm-password" name="confirm_password" required>
                             <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-con"></i></span>
                             </div>
+                            <input type="hidden" name="action" value="register">
                             <div class="alert" id="pass-msg" role="alert" style="display: none;"></div>
                             <p><span class="reg-mod">already have an account?</span> <a class="form-btn reg-btn" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">login</a>.</p>
                             <button type="button" class="btn btn-loginreg" style="width:100%" id="register-btn">register</button>
