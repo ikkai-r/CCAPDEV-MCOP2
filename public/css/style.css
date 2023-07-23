@@ -611,6 +611,54 @@ body::-webkit-scrollbar{
     background-color: #D4A373;
 }
 
+/* Post Creator Attachments */
+.post-creator-attach{
+    float: right;
+    /* Same height as textarea even when the page is zoom-in or zoom-out */
+    height: 100%;
+    /* Same as padding-left value */
+    padding-left: 1.5vh;
+    padding-right: 1.5vh;
+    padding-top: 1.5vh;
+    padding-bottom: 1.5vh;
+    border-left: 1px solid #919191;
+    /* Same background color as the textarea */
+    background-color: #ebebeb;
+}
+
+.fa-paperclip:hover{
+    cursor: pointer;
+}
+
+.post-creator-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Attachments*/
+.attachment-container {
+    display: flex;
+    align-items: right;
+    margin-bottom: 1.5vh;
+    gap:0.5vh;
+}
+
+.post-attachment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5vh;
+    background-color: #D4A373;
+    padding-left: 0.5vh;
+    padding-right: 0.5vh;
+    border-radius: 10px;
+    font-size: 1.3vh;
+}
+
+.post-attachment-delete {
+    padding: 0.5vh;
+}
+
 
 /* View Post */
 .viewed-post{
