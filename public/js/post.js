@@ -39,40 +39,37 @@ const fileInput = document.getElementById("file");
 const attachmentContainer = document.getElementById("attachment-container");
 
 fileInput.addEventListener("change", function(e) {
-  const files = e.target.files;
+  const file = e.target.files[0];
 
   // Clear the container
   attachmentContainer.innerHTML = "";
 
   // Loop through the selected files and display their content in the div element
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const reader = new FileReader();
+  const reader = new FileReader();
 
-    reader.addEventListener("load", function(e) {
-      const fileContent = e.target.result;
-      const divPostAttachment = document.createElement("div");
-      const divPostAttachmentDelete = document.createElement("div");
-      const divPostAttachmentAnchor = document.createElement("a");
-      const divPostAttachmentDeleteIcon = document.createElement("i");
+  reader.addEventListener("load", function(e) {
+    const fileContent = e.target.result;
+    const divPostAttachment = document.createElement("div");
+    const divPostAttachmentDelete = document.createElement("div");
+    const divPostAttachmentAnchor = document.createElement("a");
+    const divPostAttachmentDeleteIcon = document.createElement("i");
 
-      divPostAttachment.className = "post-attachment";
-      divPostAttachment.id = "post-attachment";
-      divPostAttachmentDelete.className = "post-attachment-delete";
-      divPostAttachmentDelete.id = "post-attachment-delete";
-      divPostAttachmentAnchor.href = "index.html";
-      divPostAttachmentDeleteIcon.className = "fa-regular fa-trash-can";
+    divPostAttachment.className = "post-attachment";
+    divPostAttachment.id = "post-attachment";
+    divPostAttachmentDelete.className = "post-attachment-delete";
+    divPostAttachmentDelete.id = "post-attachment-delete";
+    divPostAttachmentAnchor.href = "index.html";
+    divPostAttachmentDeleteIcon.className = "fa-regular fa-trash-can";
 
-      divPostAttachment.textContent = file.name;
-      
-      divPostAttachmentDelete.appendChild(divPostAttachmentAnchor);
-      divPostAttachmentDelete.appendChild(divPostAttachmentDeleteIcon);
-      divPostAttachment.appendChild(divPostAttachmentDelete);
-      attachmentContainer.appendChild(divPostAttachment);
-    });
+    divPostAttachment.textContent = file.name;
+    
+    divPostAttachmentDelete.appendChild(divPostAttachmentAnchor);
+    divPostAttachmentDelete.appendChild(divPostAttachmentDeleteIcon);
+    divPostAttachment.appendChild(divPostAttachmentDelete);
+    attachmentContainer.appendChild(divPostAttachment);
+  });
 
-    reader.readAsText(file);
-  }
+  reader.readAsDataURL(file);
 });
 
 // For removing attachments
