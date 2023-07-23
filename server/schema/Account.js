@@ -31,7 +31,13 @@ const accountSchema = new mongoose.Schema({
     },
     subscribed_tags: [{
         type: mongoose.Schema.Types.ObjectId, ref:'Tag',
-    }]
+    }],
+    upvotes: [{
+        type: mongoose.Schema.Types.ObjectId, ref:'Account'
+    } ],
+    downvotes: [{   
+        type: mongoose.Schema.Types.ObjectId, ref:'Account'
+     }]
 })
 
 

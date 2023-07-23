@@ -12,6 +12,9 @@
   },
   {
     "$oid": "64b7dff723b197fa3cd7538d"
+  }],
+  "upvotes": [{
+    "$oid": "64ba7e036e63a83b851bdf09"
   }]
 },
 {
@@ -24,13 +27,19 @@
   "profile_pic": "img/profile.png",
   "profile_desc": "i'm a great placeholder, just like how i am easily replaced",
   "subscribed_tags": [{
-    "$oid": "64bcec56e1d38fe2365cd637"
+    "$oid": "64b7dff723b197fa3cd75374"
   },
   {
     "$oid": "64b7dff723b197fa3cd7538f"
   },
   {
-    "$oid": ""
+    "$oid": "64bcec56e1d38fe2365cd637"
+  }],
+  "upvotes": [{
+    "$oid": "64ba866d6e63a83b851bdf14"
+  }],
+  "downvotes":[{
+    "$oid": "64ba866d6e63a83b851bdf15"
   }]
 },
 {
@@ -49,6 +58,15 @@
   },
   {
     "$oid": "64b7dff723b197fa3cd75381"
+  }],
+  "upvotes": [{
+    "$oid": "64ba866d6e63a83b851bdf14"
+  }],
+  "downvotes": [{
+    "$oid": "64b7e12123b197fa3cd7539c"
+  },
+  {
+    "$oid": "64ba866d6e63a83b851bdf15"
   }]
 },
 {
@@ -62,7 +80,18 @@
   "profile_desc": "The truth is what I make it. I could set this world on fire and call it rain.",
   "subscribed_tags": {
     "$oid": "64b7dff723b197fa3cd75390"
-  }
+  },
+  "upvotes": [{
+    "$oid": "64ba866d6e63a83b851bdf15"
+  },
+  {
+    "$oid": "64ba866d6e63a83b851bdf13"
+  }],
+  "downvotes": [{
+    "$oid": "64ba866d6e63a83b851bdf16"
+  }, {
+    "$oid": "64ba866d6e63a83b851bdf14"
+  }]
 },
 {
   "_id": {
@@ -81,6 +110,21 @@
   },
   {
     "$oid": "64b7dff723b197fa3cd75396"
+  }],
+  "upvotes": [{
+    "$oid": "64ba866d6e63a83b851bdf13"
+  },
+  {
+    "$oid": "64ba866d6e63a83b851bdf14"
+  },
+  {
+    "$oid": "64ba866d6e63a83b851bdf16"
+  }],
+  "downvotes": [{
+    "$oid": "64ba866d6e63a83b851bdf15"
+  },
+  {
+    "$oid": "64ba866d6e63a83b851bdf16"
   }]
 },
 {
@@ -100,5 +144,13 @@
   },
   {
     "$oid": "64b7dff723b197fa3cd7538f"
+  }],
+  "upvotes": [{
+    "$oid": "64ba866d6e63a83b851bdf14"},
+  {
+    "$oid": "64ba866d6e63a83b851bdf16"
+  }],
+  "downvotes": [{
+    "$oid": "64ba866d6e63a83b851bdf15"
   }]
 }]
