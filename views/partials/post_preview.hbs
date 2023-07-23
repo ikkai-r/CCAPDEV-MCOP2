@@ -12,7 +12,7 @@
         <span class="post-info">posted by <a href="user/{{{username.username}}}">{{{username.username}}}</a> on {{{post_date}}}</span>
         <p class="post-content pt-2">{{{post_content}}}</p>
         <div class="d-flex justify-content-between">
-            <div class="d-flex">
+            <div class="d-flex tags-con">
                 {{#each tags}}
                 <a href="tag/{{this.tag_name}}" class="postcom-tags post-tags-cont">#{{this.tag_name}}</a>
                 {{/each}}
@@ -30,7 +30,7 @@
                 </div>
                 <div class="comments-cont" onclick="redirectToPage('view-post.html')">
                     <i class="fa-regular fa-comment-dots"></i>
-                    <span style="font-size:smaller"><b>{{{comments}}}</b></span>
+                    <span style="font-size:smaller; display:none"><b>{{{comments}}}</b></span>
                 </div>
             </div>
         </div>

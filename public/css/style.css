@@ -329,10 +329,19 @@ button.active div {
     color: #8D5821;
 }
 
+body::-webkit-scrollbar{
+    display: none;
+  }
+
 .reg-mod {
     color: #8D5821;
     font-weight: bold;
     font-size: small;
+}
+
+.tags-con {
+    overflow-x: auto;
+    max-width: 400px;
 }
 
 .reg-btn {
@@ -342,8 +351,12 @@ button.active div {
 }
 
 .post-content {
-    font-weight: bold;
     margin-bottom: 1.5vh;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 500px;
+    max-height: 32px;
 }
 
 .post-info {
@@ -384,6 +397,7 @@ button.active div {
     padding-left: 2vh;
     padding-right: 2vh;
 }
+
 
 .post-tags-cont {
     border-radius: 10vh;
