@@ -15,16 +15,15 @@ const postSchema = new mongoose.Schema({
         required: true,
         min: 1,
     },
+    post_attachment: {
+        type: String,
+        max: 1
+    },
     post_date: {
         type: Date,
         default: () => Date.now(),
     },
     post_date_modified: Date,
-    upvotes: [{
-        type: mongoose.Schema.Types.ObjectId, ref:'Account',
-    }],
-    downvotes: [{type: mongoose.Schema.Types.ObjectId, ref:'Account',
-    }],
     comments: [{
         type: mongoose.Schema.Types.ObjectId, ref:'Comment',
     }],

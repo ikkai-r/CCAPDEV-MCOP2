@@ -28,10 +28,11 @@ const Post = require('./server/schema/Post');
 app.use('/post', postRouter);
 app.use('/post', express.static(__dirname + "/public"));
 
+const accountAuthRouter = require('./routes/account-auth');
+app.use('/', accountAuthRouter);
+
 connecttoDB();
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(express.static(__dirname + "/public"));
 app.engine("hbs", exphbs.engine({extname:'hbs'}));
 app.set("view engine", "hbs");
@@ -86,41 +87,6 @@ app.get('/home', async (req, res) => {
     } catch(error){
         console.log(error);
     }
-});
-
-//for register
-app.post('/', async (req, res) =>{
-    try {
-        const { username, email_reg, password_reg } = req.body;
-    
-        //Check if the user already exists 
-        //will make frontend for this
-        const existingUser = await Account.findOne({ email_reg });
-        if (existingUser) {
-          return res.status(400).send('User already exists');
-        }
-    
-        // Create a new account document
-        const newAccount = new Account({
-          username: username.toLowerCase(),
-          email: email_reg,
-          password: password_reg
-        });
-    
-        newAccount.save()
-            .then(savedAccount => {
-                console.log('New Account created:', savedAccount);
-                return res.json({ message: 'Successfully registered! You will be redirected shortly.', username: username.toLowerCase() });
-            })
-            .catch(error => {
-                console.error('Error creating Account:', error);
-            });
-                } catch (error) {
-                    
-                    console.error('Error registering user:', error);
-                    return res.status(500).send('Error registering user.');
-                }
-
 });
 
 app.all('*', (req, res) => {
