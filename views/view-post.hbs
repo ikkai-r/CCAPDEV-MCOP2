@@ -1,0 +1,19 @@
+<!-- Content Body -->
+<div class="container mt-4 pt-3">
+<div class="container d-flex content-container mt-4">
+
+    
+    <!-- View Post Container -->
+    <div class="container viewed-post">
+        {{> post this}}
+    
+        <h3>Comments (<span id="comment-bar-amnt">0</span>)</h3>
+        <!-- Comment portion -->
+        {{#each comment}}
+        {{> comments}}
+        {{/each}}
+    </div>
+    
+    {{> side-container}}
+</div>
+        

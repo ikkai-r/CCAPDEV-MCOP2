@@ -26,12 +26,13 @@ app.use('/search', express.static(__dirname + "/public"));
 const postRouter = require('./routes/post');
 const Post = require('./server/schema/Post');
 app.use('/post', postRouter);
-app.use('/user', express.static(__dirname + "/public"));
+app.use('/post', express.static(__dirname + "/public"));
+
+const accountAuthRouter = require('./routes/account-auth');
+app.use('/', accountAuthRouter);
 
 connecttoDB();
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(express.static(__dirname + "/public"));
 app.engine("hbs", exphbs.engine({extname:'hbs'}));
 app.set("view engine", "hbs");
@@ -58,9 +59,8 @@ app.get('/home', async (req, res) => {
             select: 'tag_name'
         }).lean();
 
-
         listofposts.forEach((post) => {
-            
+
             if (post.post_title && post.post_title.length > maxTextLength) {
               post.post_title = post.post_title.substring(0, maxTextLength) + '...';
             }
@@ -72,6 +72,7 @@ app.get('/home', async (req, res) => {
 
         const latest_posts = await Post.find().populate('username').sort({date:'asc'}).limit(5);
         console.log(latest_posts);
+
         latest_posts.forEach((post) => {
             post.post_date = post.post_date.toDateString();
         });
@@ -88,47 +89,8 @@ app.get('/home', async (req, res) => {
     }
 });
 
-//for register
-app.post('/', async (req, res) =>{
-    try {
-        const { username, email_reg, password_reg } = req.body;
-    
-        //Check if the user already exists 
-        //will make frontend for this
-        const existingUser = await Account.findOne({ email_reg });
-        if (existingUser) {
-          return res.status(400).send('User already exists');
-        }
-    
-        // Create a new account document
-        const newAccount = new Account({
-          username: username,
-          email: email_reg,
-          password: password_reg
-        });
-    
-        newAccount.save()
-            .then(savedAccount => {
-                console.log('New Account created:', savedAccount);
-                return res.json({ message: 'Successfully registered! You will be redirected shortly.', username: username });
-            })
-            .catch(error => {
-                console.error('Error creating Account:', error);
-            });
-                } catch (error) {
-                    
-                    console.error('Error registering user:', error);
-                    return res.status(500).send('Error registering user.');
-                }
-
-});
-
 app.all('*', (req, res) => {
     res.status(404);
     res.render("404")
 });
 
-function limitPreview (string, limit = 0){
-    string = string.replace(/&lt;br&gt;/g, ' ');
-    return (string.substring(0, 50)).concat("...");
-}

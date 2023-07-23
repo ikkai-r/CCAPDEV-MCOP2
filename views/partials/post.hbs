@@ -1,21 +1,17 @@
-<!-- View Post Container -->
-            <div class="container viewed-post">
-                <div class="viewed-post-container mb-4">
-                    <h2>{{title}}</h2>
-                    <p class="post-creator-posted-by">posted by <a href="redqueen.html">RedQueen</a> on May 15, 2023</p>
+<div class="viewed-post-container mb-4">
+                    <h2>Get Coconut'd</h2>
+                    <p class="post-creator-posted-by">posted by <a href="deeznuts.html">DeezNuts</a> on May 10, 2023</p>
                     <p>
-                        {{post_content}}
+                       {{post_content}}
                     </p>
                     <div class="d-flex">
-                        {{#each tags}}
-                        <a href="view-tags.html" class="postcom-tags post-tags-cont">
-                            {{> tags.tag_name this}}
-                        </a>
-                        {{/each}}
+                        <a href="view-tags.html" class="postcom-tags post-tags-cont">#coconut</a>
+                        <a href="view-tags.html" class="postcom-tags post-tags-cont">#morenuts</a>
+                        <a href="view-tags.html" class="postcom-tags post-tags-cont">#deeznuts</a>
+                    </div>
 
-                     </div>
                     <div class="actions-cont viewed-post-actions mb-3 mt-3">
-                        <div class="share-cont" id="share-btn" onclick="copyLink('redqueen_post.html')">
+                        <div class="share-cont" id="share-btn" onclick="copyLink('view-post.html')">
                             <i class="fa-regular fa-share-from-square"></i>
                         </div>
                         <div class="votes-cont">
@@ -23,47 +19,11 @@
                             <span style="font-size:smaller; margin-right: 0.5vh;" id="upvote-amnt"><b>3</b></span>
                             <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
                             <i class="fa-regular fa-circle-down" id="downvote-btn"></i>
-                            <span style="font-size:smaller" id="downvote-amnt"><b>45</b></span>
+                            <span style="font-size:smaller" id="downvote-amnt"><b>0</b></span>
                         </div>
                         <div class="comments-cont">
                             <i class="fa-regular fa-comment-dots"></i>
-                            <span style="font-size:smaller" id="comment-amnt"><b>1</b></span>
+                            <span style="font-size:smaller" id="comment-amnt"><b>0</b></span>
                         </div>
                     </div>
                 </div>
-                
-                
-                <h3>Comments (<span id="comment-bar-amnt">1</span>)</h3>
-                <!-- Comment portion -->
-
-                <div class="comment-container">
-                    <div class="all-comment">
-                        <div class="row comment" id="comment">
-                            <!-- Votes -->
-                            <div class="col-1 com-votes-cont" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                                <div><i class="fa-regular fa-circle-up comment-proper-votes" style="color: #292F33; font-size: x-large"></i></div>
-                                <div class="comment-vote-cont"><span class="com-prop-amnt">-49</span></div>
-                                <div><i class="fa-regular fa-circle-down comment-proper-votes" style="color: #292F33; font-size: x-large"></i></div>
-                            </div>
-                            <div class="col-11">
-                                <!-- Username and Date Commented -->
-                                <div class="row">
-                                    <div class="col-1">
-                                        <img src="img/redqueen.png" class="comment-profile-pic">
-                                    </div>
-                                    <div class="col-11">
-                                        <div class="comment-username"><a href="redqueen.html">RedQueen</a></div>
-                                        <div class="comment-username">May 17, 2023</div>
-                                    </div>
-                                </div>
-                                <!-- Comment contents -->
-                                <div class="comment-content">
-                                    I demand a recount!
-                                </div>
-                                <span class="comment-reply" onclick="onClickRep(event)">reply</span>
-                                <span class="comment-time-reply">10h ago</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
