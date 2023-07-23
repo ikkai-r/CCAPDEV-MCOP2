@@ -1,10 +1,10 @@
+
+
 $(".add-tag").click(function () {
-    if($(this).hasClass('fa-circle-plus')) {
-        $(this).removeClass('fa-circle-plus');
-        $(this).addClass('fa-circle-minus');
+    if( document.getElementById("subs").innerHTML == "Subscribe") {
+        document.getElementById("subs").innerHTML = "Unsubscribe";
     } else {
-        $(this).removeClass('fa-circle-minus');
-        $(this).addClass('fa-circle-plus');
+        document.getElementById("subs").innerHTML = "Subscribe";
     }
     
 });
@@ -150,5 +150,5 @@ $("#login-btn").click(function (e) {
           }
         });
      
-    
+
 });
