@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
 
             // Create a new post document
             const newPost = new Post({
-                username: '64b7e12123b197fa3cd7539a',
+                username: '64b7e12123b197fa3cd7539b',
                 post_title: post_title,
                 post_content: post_content,
                 post_date: post_date,
