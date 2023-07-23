@@ -5,18 +5,14 @@ const commentSchema = new mongoose.Schema({
     username: {
         type: mongoose.Schema.Types.ObjectId, ref:'Account'
     },
+    post_commented: {
+        type: mongoose.Schema.Types.ObjectId, ref:'Post'
+    },
     comment_content: {
         type: String,
         required: true,
         min: 1,
     },
-    // upvotes and downvotes are counted by account
-    upvotes: [{
-        type: mongoose.Schema.Types.ObjectId, ref:'Account',
-    }],
-    downvotes: [{
-        type: mongoose.Schema.Types.ObjectId, ref:'Account',
-    }],
     comment_date: {
         type: Date,
         default: () => Date.now(),

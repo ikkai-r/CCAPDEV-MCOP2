@@ -33,10 +33,10 @@ const accountSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref:'Tag',
     }],
     upvotes: [{
-        type: mongoose.Schema.Types.ObjectId, ref:'Account'
+        type: mongoose.Schema.Types.ObjectId, ref:'Post'
     } ],
     downvotes: [{   
-        type: mongoose.Schema.Types.ObjectId, ref:'Account'
+        type: mongoose.Schema.Types.ObjectId, ref:'Post'
      }]
 })
 
