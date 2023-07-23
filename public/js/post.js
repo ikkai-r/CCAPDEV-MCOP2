@@ -34,6 +34,35 @@ $(document).on("click", ".fa-xmark", function () {
   $(this).parent().remove();
 });
 
+$("#create-post-btn").click(function(e) {
+  e.preventDefault();
+
+  var tags = $("#tag-grp div span").map(function() {
+    return $(this).text();
+  }).get().join(",");
+
+  const formData = $('#create-post-form').serializeArray();
+
+  formData.push({ name: "tags", value: tags });
+
+  // Send the form data to the server using AJAX
+  $.ajax({
+    url: '/post', 
+    method: 'POST',
+    data: formData,
+    success: function(data) {     
+      console.log(data.message);
+       window.location = "/post/" + data.id;
+         },
+    error: function(error) {
+      console.error('Error submitting form:', error);
+    }
+  });
+
+  console.log(formData);
+
+})
+
 // For attaching files
 const fileInput = document.getElementById("file");
 const attachmentContainer = document.getElementById("attachment-container");

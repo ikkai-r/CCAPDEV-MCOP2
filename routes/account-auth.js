@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 
 
 router.post('/', async (req, res) =>{
-    
+
     try {
         const { action } = req.body;
         
