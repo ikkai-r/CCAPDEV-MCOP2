@@ -45,44 +45,6 @@ app.get('/', (req, res) =>{
     res.redirect('/home');
 });
 
-app.post('/', async (req, res) =>{
-    try {
-        const { username, email_reg, password_reg } = req.body;
-    
-        //Check if the user already exists 
-        const existingUser = await Account.findOne({ email_reg });
-        if (existingUser) {
-          return res.status(400).send('User already exists');
-        }
-    
-        // Create a new account document
-        const newAccount = new Account({
-          username: username,
-          email: email_reg,
-          password: password_reg
-        });
-    
-        newAccount.save()
-            .then(savedAccount => {
-                console.log('New Account created:', savedAccount);
-                // Handle any additional logic after the document is saved successfully
-            })
-            .catch(error => {
-                console.error('Error creating Account:', error);
-                // Handle the error if the document could not be saved
-            });
-                } catch (error) {
-                    
-                    console.error('Error registering user:', error);
-                    res.status(500).send('Error registering user.');
-                }
-
-});
-
-
-
-
-
 app.get('/home', async (req, res) => {
     const maxTextLength = 100;
 
@@ -124,6 +86,41 @@ app.get('/home', async (req, res) => {
     } catch(error){
         console.log(error);
     }
+});
+
+//for register
+app.post('/', async (req, res) =>{
+    try {
+        const { username, email_reg, password_reg } = req.body;
+    
+        //Check if the user already exists 
+        //will make frontend for this
+        const existingUser = await Account.findOne({ email_reg });
+        if (existingUser) {
+          return res.status(400).send('User already exists');
+        }
+    
+        // Create a new account document
+        const newAccount = new Account({
+          username: username,
+          email: email_reg,
+          password: password_reg
+        });
+    
+        newAccount.save()
+            .then(savedAccount => {
+                console.log('New Account created:', savedAccount);
+                return res.json({ message: 'Successfully registered! You will be redirected shortly.', username: username });
+            })
+            .catch(error => {
+                console.error('Error creating Account:', error);
+            });
+                } catch (error) {
+                    
+                    console.error('Error registering user:', error);
+                    return res.status(500).send('Error registering user.');
+                }
+
 });
 
 app.all('*', (req, res) => {

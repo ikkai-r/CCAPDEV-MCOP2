@@ -105,7 +105,10 @@ $('#password-reg, #confirm-password').on('keyup', function () {
           method: 'POST',
           data: formData,
           success: function(data) {
-            $('#pass-msg').text('Successfully registered! You will be redirected shortly.');
+            $('#pass-msg').text(data.message); // Use data.message to access the success message in the JSON response
+            setTimeout(function() {
+              window.location = "/user/"+data.username;
+            }, 2000);
           },
           error: function(error) {
             console.error('Error submitting form:', error);
