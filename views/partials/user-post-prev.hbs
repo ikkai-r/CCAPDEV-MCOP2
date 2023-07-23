@@ -1,0 +1,34 @@
+<div class="row post-user">
+
+    <!-- Post Proper -->
+    <div class="d-flex justify-content-between">
+        <h5 class="post-title"><b><a href="/post/{{post_id}}">{{{post_title}}}</a></b></h5>
+    </div>
+    
+    <span class="post-info">posted by <a href="deeznuts.html">{{{username.username}}}</a> on {{{post_date}}}</span>
+    <p class="post-content pt-2">(Copy paste the lyrics of the Da Coconut Nut)</p>
+    <div class="d-flex justify-content-between">
+        {{#each tags}}
+        <span class="postcom-tags post-tags-cont"><a href="tags/{{this.tag_name}}">#{{tag_name}}</a></span>
+        {{/each}}
+        
+    </div>
+        <div class="actions-cont d-flex">
+            <div class="share-cont">
+                <i class="fa-regular fa-share-from-square"></i>
+            </div>
+            <div class="votes-cont">
+                <i class="fa-solid fa-circle-up"></i>
+                <span style="font-size:smaller; margin-right: 0.5vh;"><b>{{upvotes}}</b></span>
+                <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
+                <i class="fa-regular fa-circle-down"></i>
+                <span style="font-size:smaller"><b>{{downvotes}}</b></span>
+            </div>
+            <div class="comments-cont">
+                <i class="fa-regular fa-comment-dots"></i>
+                <span style="font-size:smaller"><b>0</b></span>
+            </div>
+        </div>
+    </div>
+
+</div>

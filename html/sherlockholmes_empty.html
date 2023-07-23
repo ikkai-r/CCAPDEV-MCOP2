@@ -7,13 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- Favicon -->
-    <link rel ="icon" href="img/favicon.png">
-    <link rel ="apple-touch-icon" href="img/favicon.png">
+    <link rel ="icon" href="../public/img/favicon.png">
+    <link rel ="apple-touch-icon" href="../public/img/favicon.png">
     
     <!-- Custom Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Shrikhand&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
@@ -22,14 +21,15 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="../public/css/style.css">
 
-    <title>Discusso</title>
+    <title>Profile | Discusso</title>
 </head>
 <body>
-     <!-- Navbar -->
-     <nav class="navbar navbar-expand-lg sticky-top">
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container-fluid" style="padding-left: 50px; padding-right: 50px">
             <a class="navbar-brand" href="index.html">
-                <img src="img/logo.png" alt="Discusso" width = "170">
+                <img src="../public/img/logo.png" alt="Discusso" width = "170">
               </a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -56,7 +56,7 @@
         </div>
       </nav>
 
-    <!-- Search Modal -->
+      <!-- Search Modal -->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModal" aria-hidden="true" style="width: 100%;">
         <div class="modal-dialog">
             <div class="container">
@@ -64,8 +64,8 @@
                     <div class="modal-body search-modal-body">
                         <form>
                             <div class="d-flex justify-content-between">
-                                <input class="search-input" type="text" name="text" aria-placeholder="Search..." placeholder="Search...">
-                                <button type="submit" class="search-confirm" formaction="search.html"><i class="nav-icons fa-solid fa-magnifying-glass"></i></button>
+                                <input class="search-input"type="text" aria-placeholder="Search..." placeholder="Search...">
+                                <button type="submit" class="search-confirm"><i class="nav-icons fa-solid fa-magnifying-glass"></i></button>
                             </div>
                         </form>
                     </div>
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <!-- Login Modal -->
+      <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="width: 40vh;">
             <div class="container">
@@ -97,18 +97,18 @@
                     <div class="modal-body">
                         <form>
                             <div class="mb-3">
-                            <label for="email" class="col-form-label"><b>email</b></label>
-                            <input type="email" class="form-control" id="email" name="email">
+                              <label for="email" class="col-form-label"><b>email</b></label>
+                              <input type="email" class="form-control" id="email" name="email">
                             </div>
                             <div class="mb-3">
-                            <label for="message-text" class="col-form-label"><b>password</b></label>
-                            <input type="password" class="form-control" id="password" name="password">
+                              <label for="message-text" class="col-form-label"><b>password</b></label>
+                              <input type="password" class="form-control" id="password" name="password">
                             </div>
                             <div class="d-flex align-items-center justify-content-start" style="margin-top: -1vh">
                                 <input type="checkbox" value="rememberMe" id="rememberMe" name="rememberMe"> <p style="font-size: smaller; margin-left: 0.4vh !important" class="pt-3"><b>remember me</b></p>
                             </div>
                             <p style="margin-top: -1vh;"><span class="reg-mod">don't have an account yet?</span> <a class="form-btn reg-btn" data-bs-toggle="modal" data-bs-target="#regModal" data-bs-dismiss="modal">register</a>.</p>
-                        </form>
+                          </form>
                     </div>
                         <button type="button" class="btn btn-loginreg" style="margin-right: 2vh; margin-left: 2vh; margin-top: -1vh;">login</button>
                 </div>
@@ -125,15 +125,40 @@
                     <div class="modal-body">
                         <form>
                             <div class="mb-3">
-                            <label for="email" class="col-form-label"><b>email</b></label>
-                            <input type="email" class="form-control" id="email" name="email">
+                              <label for="email" class="col-form-label"><b>email</b></label>
+                              <input type="email" class="form-control" id="email" name="email">
                             </div>
                             <div class="mb-3">
-                            <label for="password" class="col-form-label"><b>password</b></label>
-                            <input type="password" class="form-control" id="password" name="password">
+                              <label for="password" class="col-form-label"><b>password</b></label>
+                              <input type="password" class="form-control" id="password" name="password">
                             </div>
                             <p><span class="reg-mod">already have an account?</span> <a class="form-btn reg-btn" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">login</a>.</p>
-                        </form>
+                          </form>
+                    </div>
+                        <button type="button" class="btn btn-loginreg" style="margin-right: 2vh; margin-left: 2vh; margin-top: -1vh;">register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="edProfModal" tabindex="-1" aria-labelledby="edProfModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="width: 40vh;">
+            <div class="container">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="width: 75vh; font-size: 1.3rem; opacity: 1;"></button>
+                <div class="modal-content logreg-modal">
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                              <label for="email" class="col-form-label"><b>email</b></label>
+                              <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="mb-3">
+                              <label for="password" class="col-form-label"><b>password</b></label>
+                              <input type="password" class="form-control" id="password" name="password">
+                            </div>
+                            <p><span class="reg-mod">already have an account?</span> <a class="form-btn reg-btn" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">login</a>.</p>
+                          </form>
                     </div>
                         <button type="button" class="btn btn-loginreg" style="margin-right: 2vh; margin-left: 2vh; margin-top: -1vh;">register</button>
                 </div>
@@ -145,88 +170,96 @@
         <i class="fa-solid fa-circle-plus create-post-style" style="margin-right: 15px"></i>
         <h4 class="create-post-style mt-2"><b>Post</b></h4>
     </div></a>
+
       <!-- Content Body -->
       <div class="container mt-4 pt-3">
         <div class="container d-flex content-container mt-4">
 
-            
-            <!-- View Post Container -->
-            <div class="container viewed-post">
-                <div class="viewed-post-container mb-4">
-                    <h2>undertale sans is so cool</h2>
-                    <p class="post-creator-posted-by">posted by <a href="sansfangirlxoxo.html">sansfangirlxoxo</a> on May 1, 2023</p>
-                    <p>
-                        omg pls be my boyfriend like look at him, why is he so cool???? i can't exist without him, why does he not exist irl? like ugh, i can't stop thinking about him, i'd laugh at his jokes and chill with his bro papyrus
-                        comic sans is soooo cool too
-                    </p>
-                    <p>
-                        btw if you mess with him, you're gonna have a bad time with me
-                    </p>
-                    <div style="display: flex; justify-content: center;" class="mb-4">
-                        <img src="img/sans.png" class="viewed-post-img">
-                    </div>
-                        <div class="d-flex">
-                            <a href="tag.html" class="postcom-tags post-tags-cont">#sans</a>
-                            <a href="tag-lorem.html" class="postcom-tags post-tags-cont">#lorem</a>
-                             <a href="tag-ipsum.html" class="postcom-tags post-tags-cont">#ipsum</a>
-                             <a href="tag-mybrainisdying.html" class="postcom-tags post-tags-cont">#mybrainisdying</a>
-                             <a href="tag-brainrot.html" class="postcom-tags post-tags-cont">#brainrot</a>
-                             <a href="tag-undertale.html" class="postcom-tags post-tags-cont">#undertale</a>
-                             <a href="tag-sansismyboyfriend.html" class="postcom-tags post-tags-cont">#sansismyboyfriend</a>
-                             <a href="tag-donttouchhim.html" class="postcom-tags post-tags-cont">#donttouchhim</a>
-                         </div>
-                    <div class="actions-cont viewed-post-actions mb-3 mt-3">
-                        <div class="share-cont" id="share-btn" onclick="copyLink('view-post.html')">
-                            <i class="fa-regular fa-share-from-square"></i>
-                        </div>
-                        <div class="votes-cont">
-                            <i class="fa-regular fa-circle-up" id="upvote-btn"></i>
-                            <span style="font-size:smaller; margin-right: 0.5vh;" id="upvote-amnt"><b>0</b></span>
-                            <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
-                            <i class="fa-regular fa-circle-down" id="downvote-btn"></i>
-                            <span style="font-size:smaller"  id="downvote-amnt"><b>23</b></span>
-                        </div>
-                        <div class="comments-cont">
-                            <i class="fa-regular fa-comment-dots"></i>
-                            <span style="font-size:smaller" id="comment-amnt"><b>1</b></span>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                <h3>Comments (<span id="comment-bar-amnt">1</span>)</h3>
-                <!-- Comment portion -->
+            <!-- Profile Container -->
+            <div class="container flex-grow-1 profile">
 
-                <div class="comment-container">
-                    <div class="all-comment">
-                        <div class="row comment" id="comment">
-                            <!-- Votes -->
-                            <div class="col-1 com-votes-cont" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                                <div><i class="fa-regular fa-circle-up comment-proper-votes" style="color: #292F33; font-size: x-large"></i></div>
-                                <div class="comment-vote-cont"><span class="com-prop-amnt">2</span></div>
-                                <div><i class="fa-regular fa-circle-down comment-proper-votes" style="color: #292F33; font-size: x-large"></i></div>
-                            </div>
-                            <div class="col-11">
-                                <!-- Username and Date Commented -->
-                                <div class="row">
-                                    <div class="col-1">
-                                        <img src="img/deeznuts.jpg" class="comment-profile-pic">
-                                    </div>
-                                    <div class="col-11">
-                                        <div class="comment-username"><a href="deeznuts.html">DeezNuts</a></div>
-                                        <div class="comment-username">May 1, 2023</div>
-                                    </div>
-                                </div>
-                                <!-- Comment contents -->
-                                <div class="comment-content">
-                                    umm are you sure you're old enough to be on this site
-                                </div>
-                                <span class="comment-reply" onclick="onClickRep(event)">reply</span>
-                                <span class="comment-time-reply">10h ago</span>
-                            </div>
-                        </div>
+                <!-- Profile Proper -->
+                <div class="row">
+                </div>
+                <div class="row d-flex align-items-center">
+                    <div class="col-3">
+                        <img src="../public/img/sherlockholmes.png" class="user-profile-pic">
+                    </div>
+                    <div class="col-9" style="padding: 2.5vh;">
+                        <h3><strong>SherlockHolmes</strong></h3>
+                        <span></span>
                     </div>
                 </div>
+
+                <div class="profile-user-line mt-4"></div>
+
+                <!-- User's Comments and Posts -->
+                <div class="row mt-5">
+                    <nav>
+                        <div class="nav nav-tabs d-flex justify-content-center" id="nav-tab" role="tablist">
+                                <button class="nav-link active profile-btn" id="nav-posts-tab" data-bs-toggle="tab" data-bs-target="#nav-posts" type="button" role="tab" aria-controls="nav-posts" aria-selected="true">
+                                    posts
+                                    <div class="profile-line"></div>
+                                </button>                          
+                              <button class="nav-link profile-btn" id="nav-comments-tab" data-bs-toggle="tab" data-bs-target="#nav-comments" type="button" role="tab" aria-controls="nav-comments" aria-selected="false">
+                                comments
+                                <div class="profile-line"></div>
+                            </button>    
+                            <button class="nav-link profile-btn" id="nav-tags-tab" data-bs-toggle="tab" data-bs-target="#nav-tags" type="button" role="tab" aria-controls="nav-comments" aria-selected="false">
+                                subscribed
+                                <div class="profile-line"></div>
+                            </button>                 
+                            </div>
+                      </nav>
+
+                      <!-- Tab Contents -->
+
+                      <div class="tab-content mt-4" id="nav-tabContent">
+                        
+                        <!-- Posts Content Tab -->
+                        <div class="tab-pane fade show active" id="nav-posts" role="tabpanel" aria-labelledby="nav-posts-tab">
+                            <div class="container">
+                                    
+                                <!-- Post Container -->
+                                    <div class="row post-user">
+                                        <!-- Post Proper -->
+                                            <div class="text-center">
+                                                <h5><b>It's empty...</b></h5>
+                                                <p>Looks like the user hasn't done any of the sort.</p>
+                                            </div>
+                                    </div>
+                            </div>
+                        </div>
+
+                        <!-- User Comments Tab -->
+                        <div class="tab-pane fade" id="nav-comments" role="tabpanel" aria-labelledby="nav-comments-tab">
+                            <div class="container">                                
+                       
+                                <!-- Comment Container -->
+                                <div class="row post-comment">
+                                    <div class="text-center">
+                                            <h5><b>It's empty...</b></h5>
+                                            <p>Looks like the user hasn't done any of the sort.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                          <!-- Subscribed Tags Tab -->
+                        <div class="tab-pane fade" id="nav-tags" role="tabpanel" aria-labelledby="nav-tags-tab">
+                            <div class="container">
+                                <div class="row post-comment">
+                                    <div class="text-center">
+                                            <h5><b>It's empty...</b></h5>
+                                            <p>Looks like the user hasn't done any of the sort.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                </div>
+
             </div>
             
             <!-- Side Container -->
@@ -269,8 +302,8 @@
 
                 </div>
 
-                <!-- Latest Posts -->
-                <div class="container side-cont mt-4 pt-4">
+                 <!-- Latest Posts -->
+                 <div class="container side-cont mt-4 pt-4">
                     <h5 class="side-text">latest posts</h5>
                     <div class="line"></div>
 
@@ -335,18 +368,18 @@
 
             </div>
         
-        </div>
-
 
       </div>
-        
+
     <!-- JQuery JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <!-- Fontawesome JS -->
     <script src="https://kit.fontawesome.com/8fc6c81a17.js" crossorigin="anonymous"></script>
+    
     <script type="text/javascript" src="js/staple.js"></script>
-    <script src="js/view-post.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+ 
 </body>
 </html>
