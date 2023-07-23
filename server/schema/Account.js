@@ -36,4 +36,8 @@ const accountSchema = new mongoose.Schema({
 })
 
 
+accountSchema.virtual('voteCount').get(function() {
+    return this.username.length
+});
+
 module.exports = mongoose.model('Account', accountSchema);

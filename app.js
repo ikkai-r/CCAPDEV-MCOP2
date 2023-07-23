@@ -15,6 +15,7 @@ app.use('/user', userRouter);
 app.use('/user', express.static(__dirname + "/public"));
 
 const tagRouter = require('./routes/tag');
+const Tag = require('./server/schema/Tag');
 app.use('/tag', tagRouter);
 app.use('/tag', express.static(__dirname + "/public"));
 
@@ -119,7 +120,15 @@ app.get('/', (req, res) =>{
 app.get('/home', async (req, res) => {
     try
     {
-        var listofposts = await Post.find();
+        // not finished, still figuring out how to do this
+        const listofposts = await Post.find().populate({
+            path: 'username',
+            select: 'username'
+        }).populate({
+            path:'tags',
+            select: 'tag_name'
+        // need to add more populate methods and call functions para malimit ung text
+        }).lean();
         res.render("index", {
         header: "Hot Posts",
         script: 'js/index.js',
@@ -135,3 +144,8 @@ app.all('*', (req, res) => {
     res.status(404);
     res.render("404")
 });
+
+function limitPreview (string, limit = 0){
+    string = string.replace(/&lt;br&gt;/g, ' ');
+    return (string.substring(0, 50)).concat("...");
+}
