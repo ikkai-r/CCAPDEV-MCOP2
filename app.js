@@ -26,7 +26,7 @@ app.use('/search', express.static(__dirname + "/public"));
 const postRouter = require('./routes/post');
 const Post = require('./server/schema/Post');
 app.use('/post', postRouter);
-app.use('/user', express.static(__dirname + "/public"));
+app.use('/post', express.static(__dirname + "/public"));
 
 connecttoDB();
 
@@ -128,7 +128,3 @@ app.all('*', (req, res) => {
     res.render("404")
 });
 
-function limitPreview (string, limit = 0){
-    string = string.replace(/&lt;br&gt;/g, ' ');
-    return (string.substring(0, 50)).concat("...");
-}
