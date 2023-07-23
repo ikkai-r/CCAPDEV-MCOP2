@@ -95,12 +95,12 @@
                         <form>
                             <div class="mb-3">
                               <label for="email" class="col-form-label"><b>email</b></label>
-                              <input type="email" class="form-control" id="email" name="email">
+                              <input type="email" class="form-control" id="email-log" name="email-log">
                             </div>
-                             <label for="email" class="col-form-label"><b>password</b></label>
+                             <label for="password" class="col-form-label"><b>password</b></label>
                             <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="password"  aria-label="password">
-                            <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass"></i></span>
+                            <input type="password" class="form-control" id="password-log"  aria-label="password">
+                            <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-log"></i></span>
                             </div>
                             <div class="d-flex align-items-center justify-content-start" style="margin-top: -1vh">
                                 <input type="checkbox" value="rememberMe" id="rememberMe" name="rememberMe"> <p style="font-size: smaller; margin-left: 0.4vh !important" class="pt-3"><b>remember me</b></p>
@@ -142,21 +142,19 @@
                             </div>
                             <div class="mb-3">
                               <label for="email" class="col-form-label"><b>email</b></label>
-                              <input type="email" class="form-control" id="email" name="email">
+                              <input type="email" class="form-control" id="email-reg" name="email-reg">
                             </div>
-                            <div class="mb-3">
-                              <label for="password" class="col-form-label"><b>password</b></label>
-                              <input type="password" class="form-control" id="password" name="password">
+                            <label for="password" class="col-form-label"><b>password</b></label>
+                            <div class="input-group mb-3">
+                            <input type="password" class="form-control" id="password-reg"  aria-label="password">
+                            <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-reg"></i></span>
                             </div>
-                            <div class="mb-3">
-                                 <label for="password" class="col-form-label"><b>confirm password</b></label>
-                            <div class="input-group d-flex align-items-center">
-                              <input type="password" class="form-control" id="con-password" name="con-password">
-                              <div class="input-group-addon">
-                                <i class="fa-solid fa-eye-slash" id="toggle-pass"></i>
-                              </div>
-                                </div>
+                            <label for="password" class="col-form-label"><b>confirm password</b></label>
+                            <div class="input-group mb-3">
+                            <input type="password" class="form-control" id="confirm-password"  aria-label="confirm-password">
+                            <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-con"></i></span>
                             </div>
+                            <div class="alert" id="pass-msg" role="alert"></div>
                             <p><span class="reg-mod">already have an account?</span> <a class="form-btn reg-btn" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">login</a>.</p>
                           </form>
                     </div>
