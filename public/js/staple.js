@@ -87,10 +87,30 @@ $('#password-reg, #confirm-password').on('keyup', function () {
     }
   });
 
+ 
+
   $("#register-btn").click(function (e) {
     if ($('#password-reg').val() != $('#confirm-password').val() && $('#password-reg').val() != "") {
+        e.preventDefault();
         $('#pass-msg').addClass('alert-danger');
         $('#pass-msg').removeClass('alert-success');
         $('#pass-msg').text('Ensure your passwords are the same/you inputted a password before registering.');
+    } else {
+        console.log('here');
+        const formData = $('#register-user').serialize();
+
+        // Send the form data to the server using AJAX
+        $.ajax({
+          url: '/', 
+          method: 'POST',
+          data: formData,
+          success: function(data) {
+            $('#pass-msg').text('Successfully registered! You will be redirected shortly.');
+          },
+          error: function(error) {
+            console.error('Error submitting form:', error);
+          }
+        });
+     
     }
 });

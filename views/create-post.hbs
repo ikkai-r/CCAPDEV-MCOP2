@@ -5,9 +5,27 @@
     <div class="post-creator-delete"><a href="index.html"><i class="fa-regular fa-trash-can"></i></a></div>
     <textarea class="post-creator-title" rows="1" placeholder="type your title here"></textarea>
     <p class="post-creator-posted-by">posted by helpvirus on <span id="date"></span></p>
-    <div class="textarea post-creator-description" contenteditable="true" placeholder="Enter your description here" oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''"></div>
+    
+    <!-- Creating a post with attachments -->
+    <div class="post-creator-content">
+        <!-- Text area -->
+        <div class="textarea post-creator-description" contenteditable="true" placeholder="Enter your description here" oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''"></div>
+        <!-- Icon to attach files in creating a post -->
+        <div class="post-creator-attach">
+            <!-- File upload -->
+            <input type="file" id="file" name="file" style="display:none;" multiple>
+            <!-- File upload label -->
+            <label for="file" class="fa-solid fa-paperclip"></label>
+        </div>
+    </div>
+
+    <!-- Attachment Container -->
+    <div class="d-flex attachment-container" id="attachment-container"></div>
+    
     <div id="add-tag-area" class="post-creator-add-tag" contenteditable="true" placeholder="#add your tags here" oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''"></div>
+    
     <div class="d-flex" id="tag-grp"></div>
+    
     <div class="post-creator-buttons mt-3">
         <a href="home">
             <button class="pill post-creator-cancel">cancel</button>
