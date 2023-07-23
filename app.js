@@ -58,6 +58,7 @@ app.get('/home', async (req, res) => {
             select: 'tag_name'
         }).lean();
 
+
         listofposts.forEach((post) => {
             
             if (post.post_title && post.post_title.length > maxTextLength) {
@@ -69,12 +70,19 @@ app.get('/home', async (req, res) => {
               }
         });
 
+        const latest_posts = await Post.find().populate('username').sort({date:'asc'}).limit(5);
+        console.log(latest_posts);
+        latest_posts.forEach((post) => {
+            post.post_date = post.post_date.toDateString();
+        });
+
+
         res.render("index", {
         header: "Hot Posts",
         script: 'js/index.js',
         posts: listofposts,
+        posts_latest: latest_posts
         });
-        console.log(listofposts);
     } catch(error){
         console.log(error);
     }

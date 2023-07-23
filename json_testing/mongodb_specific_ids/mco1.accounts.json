@@ -6,7 +6,13 @@
   "email": "smanssssss@mail.com",
   "password": "undertalesans123",
   "profile_pic": "img/sansfangirlxoxo.png",
-  "profile_desc": "sans is my senpai desu :3"
+  "profile_desc": "sans is my senpai desu :3",
+  "subscribed_tags": [{
+    "$oid": "64b7dff723b197fa3cd75377"
+  },
+  {
+    "$oid": "64b7dff723b197fa3cd7538d"
+  }]
 },
 {
   "_id": {
@@ -16,7 +22,16 @@
   "email": "tempmail@gmail.com",
   "password": "password12345",
   "profile_pic": "img/profile.png",
-  "profile_desc": "i'm a great placeholder, just like how i am easily replaced"
+  "profile_desc": "i'm a great placeholder, just like how i am easily replaced",
+  "subscribed_tags": [{
+    "$oid": "64bcec56e1d38fe2365cd637"
+  },
+  {
+    "$oid": "64b7dff723b197fa3cd7538f"
+  },
+  {
+    "$oid": ""
+  }]
 },
 {
   "_id": {
@@ -25,7 +40,16 @@
   "username": "SherlockHolmes",
   "email": "logicalities@email.com",
   "password": "221BBakerStreet",
-  "profile_pic": "img/sherlockholmes.png"
+  "profile_pic": "img/sherlockholmes.png",
+  "subscribed_tags": [{
+    "$oid": "64b7dff723b197fa3cd75390"
+  },
+  {
+    "$oid": "64b7dff723b197fa3cd75391"
+  },
+  {
+    "$oid": "64b7dff723b197fa3cd75381"
+  }]
 },
 {
   "_id": {
@@ -35,7 +59,10 @@
   "email": "thequeen@email.com",
   "password": "OffWithTheirHeads!!",
   "profile_pic": "img/redqueen.png",
-  "profile_desc": "The truth is what I make it. I could set this world on fire and call it rain."
+  "profile_desc": "The truth is what I make it. I could set this world on fire and call it rain.",
+  "subscribed_tags": {
+    "$oid": "64b7dff723b197fa3cd75390"
+  }
 },
 {
   "_id": {
@@ -45,7 +72,16 @@
   "email": "hahagotu@mail.com",
   "password": "thenutbutton!!",
   "profile_pic": "img/deeznuts.jpg",
-  "profile_desc": "these nuts are pretty good"
+  "profile_desc": "these nuts are pretty good",
+  "subscribed_tags": [{
+    "$oid": "64b7dff723b197fa3cd75394"
+  },
+  {
+    "$oid": "64b7dff723b197fa3cd75395"
+  },
+  {
+    "$oid": "64b7dff723b197fa3cd75396"
+  }]
 },
 {
   "_id": {
@@ -55,5 +91,14 @@
   "email": "cooliobeans@mail.com",
   "password": "*MC_StoryModeRIP*",
   "profile_pic": "img/coolbeans.png",
-  "profile_desc": "lukas is precious"
+  "profile_desc": "lukas is precious",
+  "subscribed_tags": [{
+    "$oid": "64b7dff723b197fa3cd7538c"
+  },
+  {
+    "$oid": "64b7dff723b197fa3cd75397"
+  },
+  {
+    "$oid": "64b7dff723b197fa3cd7538f"
+  }]
 }]

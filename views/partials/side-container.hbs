@@ -6,8 +6,9 @@
         <a href="tags" class="side-text"><h5 class="side-txt">popular tags</h5></a>
         <div class="line"></div>
 
-        {{> popular-tags-inner}}
-
+        {{#each tags}}
+        {{> popular-tags-inner this}}
+        {{/each}}
     </div>
 
         <!-- Latest Posts -->
@@ -15,7 +16,9 @@
             <h5 class="side-text">latest posts</h5>
             <div class="line"></div>
         
-        {{> latest-posts-inner}}
+        {{#each posts_latest}}
+        {{> latest-posts-inner this}}
+        {{/each}}
            
     </div>
 </div>
