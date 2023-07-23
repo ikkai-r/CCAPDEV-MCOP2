@@ -37,6 +37,8 @@ function convertDateToTxt() {
 
 }
 
+
+
 $("#toggle-pass-log").click(function () {
     if($("#password-log").prop('type') == 'text'){
         $("#password-log").prop("type", "password");
