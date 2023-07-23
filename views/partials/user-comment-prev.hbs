@@ -1,0 +1,36 @@
+<div class="row post-comment">
+
+    <!-- Comment Proper -->
+    <div class="d-flex justify-content-between">
+        <h6 class="comment-title"><b><a href="{{post_id}}">{{{post_title}}}</a></b></h6> 
+        <div class="d-flex">
+            {{#each tags}}
+            <span class="postcom-tags post-tags-cont"><a href="tag/{{this.tag_name}}">#{{this.tag_name}}</a></span>
+            {{/each}}
+        </div>
+        
+    </div>
+    
+    <span class="comment-info"><a href="user/{{{username.username}}}">{{{username.username}}}</a> commented on {{comment_date}}</span>
+    <p class="post-content pt-2">{{{comment_content}}}</p>
+    <div class="d-flex justify-content-between">
+        <div>
+            
+        </div>
+        <div class="actions-cont d-flex">
+            <div>
+            </div>
+            <div class="votes-cont">
+                <i class="fa-solid fa-circle-up"></i>
+                <span style="font-size:smaller; margin-right: 0.5vh;"><b>{{{upvotes}}}</b></span>
+                <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
+                <i class="fa-regular fa-circle-down"></i>
+                <span style="font-size:smaller"><b>{{{downvotes}}}</b></span>
+            </div>
+            <div class="comments-cont">
+                <i class="fa-regular fa-comment-dots"></i>
+                <span style="font-size:smaller"><b>Reply</b></span>
+            </div>
+        </div>
+    </div>
+</div>
