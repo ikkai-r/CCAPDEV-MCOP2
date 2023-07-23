@@ -135,23 +135,23 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="width: 75vh; font-size: 1.3rem; opacity: 1;"></button>
                 <div class="modal-content logreg-modal">
                     <div class="modal-body">
-                        <form>
+                        <form method="post" id="register-user">
                             <div class="mb-3">
                               <label for="username" class="col-form-label"><b>username</b></label>
                               <input type="username" class="form-control" id="username" name="username">
                             </div>
                             <div class="mb-3">
                               <label for="email" class="col-form-label"><b>email</b></label>
-                              <input type="email" class="form-control" id="email-reg" name="email-reg">
+                              <input type="email" class="form-control" id="email-reg" name="email_reg">
                             </div>
                             <label for="password" class="col-form-label"><b>password</b></label>
                             <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="password-reg"  aria-label="password">
+                            <input type="password" class="form-control" id="password-reg"  aria-label="password" name="password_reg">
                             <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-reg"></i></span>
                             </div>
                             <label for="password" class="col-form-label"><b>confirm password</b></label>
                             <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="confirm-password"  aria-label="confirm-password">
+                            <input type="password" class="form-control" id="confirm-password"  aria-label="confirm-password" name="confirm_password">
                             <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-con"></i></span>
                             </div>
                             <div class="alert" id="pass-msg" role="alert" style="display: none;"></div>
