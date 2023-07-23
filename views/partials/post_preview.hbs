@@ -9,12 +9,12 @@
     <!-- Post Proper -->
     <div class="col-11">
         <h5 class="post-title"><b><a href="{{post_id}}">{{{post_title}}}</a></b></h5>
-        <span class="post-info">posted by <a href="user/{{{username}}}">{{{username}}}</a> on {{{post_date}}}</span>
+        <span class="post-info">posted by <a href="user/{{{username.username}}}">{{{username.username}}}</a> on {{{post_date}}}</span>
         <p class="post-content pt-2">{{{post_content}}}</p>
         <div class="d-flex justify-content-between">
             <div class="d-flex">
                 {{#each tags}}
-                <a href="tag/{{this}}" class="postcom-tags post-tags-cont">{{this}}</a>
+                <a href="tag/{{this.tag_name}}" class="postcom-tags post-tags-cont">#{{this.tag_name}}</a>
                 {{/each}}
             </div>
             <div class="actions-cont d-flex">
@@ -30,7 +30,7 @@
                 </div>
                 <div class="comments-cont" onclick="redirectToPage('view-post.html')">
                     <i class="fa-regular fa-comment-dots"></i>
-                    <span style="font-size:smaller"><b>{{{comments_cont}}}</b></span>
+                    <span style="font-size:smaller"><b>{{{comments}}}</b></span>
                 </div>
             </div>
         </div>
