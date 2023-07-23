@@ -135,7 +135,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="width: 75vh; font-size: 1.3rem; opacity: 1;"></button>
                 <div class="modal-content logreg-modal">
                     <div class="modal-body">
-                        <form action="POST">
+                        <form>
                             <div class="mb-3">
                               <label for="username" class="col-form-label"><b>username</b></label>
                               <input type="username" class="form-control" id="username" name="username">
@@ -154,11 +154,11 @@
                             <input type="password" class="form-control" id="confirm-password"  aria-label="confirm-password">
                             <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-con"></i></span>
                             </div>
-                            <div class="alert" id="pass-msg" role="alert"></div>
+                            <div class="alert" id="pass-msg" role="alert" style="display: none;"></div>
                             <p><span class="reg-mod">already have an account?</span> <a class="form-btn reg-btn" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">login</a>.</p>
+                            <button type="button" class="btn btn-loginreg" style="width:100%" id="register-btn">register</button>
                           </form>
                     </div>
-                        <button type="button" class="btn btn-loginreg" style="margin-right: 2vh; margin-left: 2vh; margin-top: -1vh;" id="register-btn">register</button>
                 </div>
             </div>
         </div>

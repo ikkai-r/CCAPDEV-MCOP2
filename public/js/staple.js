@@ -74,7 +74,9 @@ $("#toggle-pass-con").click(function () {
 });
 
 $('#password-reg, #confirm-password').on('keyup', function () {
-    if ($('#password-reg').val() == $('#confirm-password').val()) {
+
+    if ($('#password-reg').val() == $('#confirm-password').val() && $('#password-reg').val() != "") {
+        $('#pass-msg').css('display', 'block');
         $('#pass-msg').removeClass('alert-danger');
         $('#pass-msg').addClass('alert-success');
         $('#pass-msg').text('Matching password');
@@ -86,10 +88,9 @@ $('#password-reg, #confirm-password').on('keyup', function () {
   });
 
   $("#register-btn").click(function (e) {
-    if ($('#password-reg').val() != $('#confirm-password').val()) {
-        e.preventDefault();
+    if ($('#password-reg').val() != $('#confirm-password').val() && $('#password-reg').val() != "") {
         $('#pass-msg').addClass('alert-danger');
         $('#pass-msg').removeClass('alert-success');
-        $('#pass-msg').text('Ensure your passwords are the same before registering.');
+        $('#pass-msg').text('Ensure your passwords are the same/you inputted a password before registering.');
     }
 });

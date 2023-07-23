@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const PORT = 3000 || process.env.PORT;
 const connecttoDB = require('./server/config/db');
 
+
 const userRouter = require('./routes/user');
 const Account = require('./server/schema/Account');
 app.use('/user', userRouter);
@@ -116,6 +117,8 @@ app.listen(PORT, () => {
 app.get('/', (req, res) =>{
     res.redirect('/home');
 });
+
+
 
 app.get('/home', async (req, res) => {
     const maxTextLength = 100;
