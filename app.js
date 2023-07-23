@@ -102,7 +102,7 @@ app.post('/', async (req, res) =>{
     
         // Create a new account document
         const newAccount = new Account({
-          username: username,
+          username: username.toLowerCase(),
           email: email_reg,
           password: password_reg
         });
@@ -110,7 +110,7 @@ app.post('/', async (req, res) =>{
         newAccount.save()
             .then(savedAccount => {
                 console.log('New Account created:', savedAccount);
-                return res.json({ message: 'Successfully registered! You will be redirected shortly.', username: username });
+                return res.json({ message: 'Successfully registered! You will be redirected shortly.', username: username.toLowerCase() });
             })
             .catch(error => {
                 console.error('Error creating Account:', error);

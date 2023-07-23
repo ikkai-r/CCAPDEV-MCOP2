@@ -9,6 +9,7 @@ $(".add-tag").click(function () {
     
 });
 
+
 function copyLink(url) {
     navigator.clipboard.writeText(url);
     $('#copyLinkModal').modal('show');
@@ -90,13 +91,12 @@ $('#password-reg, #confirm-password').on('keyup', function () {
  
 
   $("#register-btn").click(function (e) {
-    if ($('#password-reg').val() != $('#confirm-password').val() && $('#password-reg').val() != "") {
-        e.preventDefault();
+    e.preventDefault();
+    if ($('#password-reg').val() != $('#confirm-password').val() && $('#password-reg').val() != "" || $('#password-reg').val() == "") {
         $('#pass-msg').addClass('alert-danger');
         $('#pass-msg').removeClass('alert-success');
         $('#pass-msg').text('Ensure your passwords are the same/you inputted a password before registering.');
     } else {
-        console.log('here');
         const formData = $('#register-user').serialize();
 
         // Send the form data to the server using AJAX
@@ -105,7 +105,7 @@ $('#password-reg, #confirm-password').on('keyup', function () {
           method: 'POST',
           data: formData,
           success: function(data) {
-            $('#pass-msg').text(data.message); // Use data.message to access the success message in the JSON response
+            $('#pass-msg').text(data.message); 
             setTimeout(function() {
               window.location = "/user/"+data.username;
             }, 2000);
