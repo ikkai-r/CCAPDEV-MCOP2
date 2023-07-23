@@ -35,3 +35,15 @@ function convertDateToTxt() {
     return formattedDate;
 
 }
+
+$("#toggle-pass").click(function () {
+    if($("#password").prop('type') == 'text'){
+        $("#password").prop("type", "password");
+        $('#toggle-pass').addClass( "fa-eye-slash" );
+        $('#toggle-pass').removeClass( "fa-eye" );
+    }else if($("#password").prop('type') == 'password'){
+        $("#password").prop("type", "text");
+        $('#toggle-pass').removeClass( "fa-eye-slash" );
+        $('#toggle-pass').addClass( "fa-eye" );
+    }
+});

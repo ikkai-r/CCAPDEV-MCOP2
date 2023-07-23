@@ -18,10 +18,15 @@ const tagRouter = require('./routes/tag');
 app.use('/tag', tagRouter);
 app.use('/tag', express.static(__dirname + "/public"));
 
+const searchRouter = require('./routes/search');
+app.use('/search', searchRouter);
+app.use('/search', express.static(__dirname + "/public"));
+
 const postRouter = require('./routes/post');
 const Post = require('./server/schema/Post');
 app.use('/post', postRouter);
 app.use('/user', express.static(__dirname + "/public"));
+
 
 connecttoDB();
 
@@ -112,12 +117,12 @@ app.get('/', (req, res) =>{
 });
 
 app.get('/home', async (req, res) => {
-    
     try
     {
         var listofposts = await Post.find();
         res.render("index", {
         header: "Hot Posts",
+        script: 'js/index.js',
         posts: listofposts,
         });
         console.log(listofposts);
@@ -125,13 +130,6 @@ app.get('/home', async (req, res) => {
         console.log(error);
     }
 });
-
-app.get('/search', (req, res) =>{
-    res.render("search");
-});
-
-
-
 
 app.all('*', (req, res) => {
     res.status(404);

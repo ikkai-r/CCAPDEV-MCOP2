@@ -3,7 +3,8 @@ const router = express.Router();
 
 router.get('/', (req, res) =>{
     res.render("create-post", {
-        header: "Create a new post"
+        header: "Create a new post",
+        script: "js/post.js"
     });
 });
 
