@@ -7,9 +7,17 @@ router.get("/:name", async (req, res)=>{
     const getName = req.params.name;
     try{
         const user = await Account.find().where("username").equals(getName);
-        // currently stuck on displaying the stuff from the query
+
+        if (!user) {
+            // Handle the case when the user is not found
+            return res.status(404).send("User not found.");
+        }
+
         res.render("user", {
-            "profile_pic": user.profile_pic
+            "username": user[0].username,
+            "profile_desc": user[0].profile_desc,
+            "profile_pic": user[0].profile_pic,
+            script: "js/profile.js"
         });
         
     } catch(error){
