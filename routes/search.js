@@ -12,12 +12,12 @@ router.get('/', async (req, res) =>{
         $or: [
             { post_title: {$regex: new RegExp(search, 'i')}},
             { post_content: {$regex: new RegExp(search, 'i')}}]
-    })
+    }).populate('username').populate('tags').lean();
 
     const searchResults_Account = await Account.find({
         $or: [
             { username: {$regex: new RegExp(search, 'i')}},
-            { profile_desc: {$regex: new RegExp(search, 'i')}}]
+            ]
     });
 
     const searchResults_Tag = await Tag.find({
@@ -33,6 +33,7 @@ router.get('/', async (req, res) =>{
     // need to output the results to here
     res.render("search", {
         header: "Search Results for " + searchTerm,
+        searched_post: searchResults_Post,
         script: 'js/index.js',
         add_style: '<link rel="stylesheet" type="text/css" href="css/style1.css">'
         });
