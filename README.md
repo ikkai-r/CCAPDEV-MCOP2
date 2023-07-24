@@ -19,4 +19,4 @@ After confirming that the server is running, open your browser and type the foll
 ```bash
 http://localhost:3000/home
 ```
-The site should now be displayed.
+The site should now be displayed and you're automatically logged in as helpvirus.

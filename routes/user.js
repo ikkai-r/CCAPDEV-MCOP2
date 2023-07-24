@@ -77,6 +77,37 @@ router.get("/:name", async (req, res)=> {
 
           const subscribedTags = user[0].subscribed_tags;
           const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
+
+         // start for side-container content
+
+         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+         const tagCounts = await Post.aggregate([
+             {
+               $unwind: '$tags' 
+             },
+             {
+               $group: {
+                 _id: '$tags', 
+                 count: { $sum: 1 } 
+               }
+             }
+           ]).sort({count: 'desc'}).limit(6);
+ 
+           
+           const getPopularTags = [];
+ 
+         for (var i = 0; i < tagCounts.length; i++){
+             var newTag = await Tag.findById(tagCounts[i]._id).lean();
+             console.log(tagCounts[i].count);
+             var tag = ({
+                 tag_name: newTag.tag_name,
+                 count: tagCounts[i].count
+             });
+            getPopularTags.push(tag);
+ 
+         }
         
       //if not logged in / not helpvirus
       if(user[0].username != "helpvirus") {
@@ -86,6 +117,8 @@ router.get("/:name", async (req, res)=> {
           "profile_pic": user[0].profile_pic,
           user_posts: listofposts,
           user_comments: listofcomments,
+          posts_latest: latest_posts,
+          popular_tags: getPopularTags,
           sub_tags: listofTags,
           script: "js/profile.js",
           add_script: "js/index.js"
