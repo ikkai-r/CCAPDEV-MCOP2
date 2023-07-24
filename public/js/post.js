@@ -171,7 +171,6 @@ $("#delete-post-btn").click(function(e) {
     method: 'DELETE',
     success: function(data) {
       // Handle the success response (e.g., show a success message or refresh the page)
-      alert(data.message);
       window.location.href = '/home'; 
     },
     error: function(error) {
@@ -186,29 +185,3 @@ $("#delete-post-btn").click(function(e) {
   
 });
 });
-
-
-$(document).ready(function() {
-
-  $("#edit-comment-btn").click(function(e) {
-    e.preventDefault();
-      
-    // Send the form data to the server using AJAX
-    const formData = $('#edit-comment-form').serialize();
-
-    // Send the form data to the server using AJAX
-    $.ajax({
-      url: '/post/editc-'+$('#comment_id').val(), 
-      method: 'POST',
-      data: formData,
-      success: function(data) {
-        window.location = 'post/'+$('#comment_id').val(); 
-      },
-      error: function(error) {
-        console.error('Error submitting form:', error);
-      }
-    });
-
-});
-});
-  

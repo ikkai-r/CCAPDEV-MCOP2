@@ -95,6 +95,24 @@ router.get('/edit-:id', async (req, res) =>{
    
 });
 
+//delete comment
+router.delete('/:id', async (req, res) =>{
+    const postId = req.params.id;
+    try {
+
+        const result = await Comment.findByIdAndDelete(postId);
+
+        if (result) {
+          res.status(200).json({ message: 'Successfully deleted.' });
+        } else {
+          res.status(404).json({ message: 'Document not found.' });
+        }
+      } catch (error) {
+        console.error('Error deleting document:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+      }
+});
+
 
 router.delete('/edit-:id', async (req, res) =>{
     const postId = req.params.id;

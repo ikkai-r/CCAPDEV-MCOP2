@@ -36,7 +36,8 @@
                     </button>
                     <div class="comment-options-menu dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="/post/editc-{{_id}}" id="edit-comment">Edit comment</a>
-                        <a class="dropdown-item" href="#" id="delete-comment" onclick="onClickDeleteComment(event)">Delete comment</a>
+                        <input type="hidden" value="{{_id}}" id="comment_id">
+                        <button class="dropdown-item" id="delete-comment-btn">Delete comment</button>
                     </div>
                 </div>
                             </div>
