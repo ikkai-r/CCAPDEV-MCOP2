@@ -34,34 +34,6 @@ $(document).on("click", ".fa-xmark", function () {
   $(this).parent().remove();
 });
 
-// $("#create-post-btn").click(function(e) {
-//   e.preventDefault();
-
-//   var tags = $("#tag-grp div span").map(function() {
-//     return $(this).text();
-//   }).get().join(",");
-
-//   const formData = $('#create-post-form').serializeArray();
-
-//   formData.push({ name: "tags", value: tags });
-
-//   // Send the form data to the server using AJAX
-//   $.ajax({
-//     url: '/post', 
-//     method: 'POST',
-//     data: formData,
-//     success: function(data) {     
-//       console.log(data.message);
-//        window.location = "/post/" + data.id;
-//          },
-//     error: function(error) {
-//       console.error('Error submitting form:', error);
-//     }
-//   });
-
-//   console.log(formData);
-
-// });
 
 $("#create-post-btn").click(function(e) {
   e.preventDefault();
@@ -143,4 +115,45 @@ fileInput.addEventListener("change", function(e) {
 // For removing attachments
 $(document).on("click", ".post-attachment-delete", function () {
   $(this).parent().remove();
+});
+
+
+$("#edit-post-btn").click(function(e) {
+  e.preventDefault();
+
+  var formData = new FormData();
+
+  var tags = $("#tag-grp div span").map(function() {
+    return $(this).text();
+  }).get().join(",");
+
+  formData.append('post_title', $('#post_title').val());
+  formData.append('post_content', $('#post_content').val());
+  formData.append('tags', tags);
+  formData.append('post_id', $('#post_id').val());
+  formData.append('action', $('#action').val()); // Updated this line
+  
+  var fileInput = $('#file')[0].files[0];
+  if (fileInput) {
+    formData.append('post_attachment', fileInput);
+  } 
+
+  // Send the form data to the server using AJAX
+    $.ajax({
+        url: '/post/edit-'+$('#post_id').val(), 
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+         console.log(data.message);
+         window.location = "/post/" + data.id;
+        },
+        error: function(error) {
+          console.error('Error submitting form:', error);
+      }
+
+});
+
+
 });

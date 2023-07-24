@@ -18,9 +18,12 @@ const postSchema = new mongoose.Schema({
         type: String,
         max: 1
     },
+    post_edited: {
+        type:Boolean,
+        default: false
+    },
     post_date: {
-        type: Date,
-        default: () => Date.now().toString,
+        type: String
     },
     post_date_modified: Date,
     comments: [{

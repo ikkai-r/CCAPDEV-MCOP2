@@ -22,9 +22,18 @@
     </div>
 
     <!-- Attachment Container -->
-    <div class="d-flex attachment-container" id="attachment-container"></div>
+    <div class="d-flex attachment-container" id="attachment-container">
+        {{#if post_attachment}}
+            <div class="post-attachment" id="post-attachment">
+                 {{post_attachment}}
+                 <div class="post-attachment-delete" id="post-attachment-delete">
+                    <i class="fa-regular fa-trash-can"></i>
+                 </div>
+            </div>
+        {{/if}}
+    </div>
      <input type="hidden" value="post-act" name="action" id="action">
-    
+    <input type="hidden" value="{{id}}" name="post_id" id="post_id">
     <div id="add-tag-area" class="post-creator-add-tag" contenteditable="true" placeholder="#add your tags here" oninput="if(this.innerHTML.trim()==='<br>')this.innerHTML=''"></div>
     
     <div class="d-flex" id="tag-grp" name="tag_groups">
@@ -41,5 +50,4 @@
     </div>
     </form>
 </div>
-
 {{> side-container}}
