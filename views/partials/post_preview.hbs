@@ -23,10 +23,10 @@
                 </div>
                 <div class="votes-cont" data-bs-toggle="modal" data-bs-target="#loginModal">
                     <i class="fa-regular fa-circle-up"></i>
-                <span style="font-size:smaller; margin-right: 0.5vh;"><b>{{{upvotes}}}</b></span>
-                    <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
+                    <span style="font-size:smaller; margin-right: 0.5vh;" id="upvote-amnt"><b>{{{upvotes}}}</b></span>
+                    <span style="fontWeight:bold; font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
                     <i class="fa-regular fa-circle-down"></i>
-                    <span style="font-size:smaller"><b>{{{downvotes}}}</b></span>
+                    <span style="fontWeight:bold; font-size:smaller" id="downvote-amnt"><b>{{{downvotes}}}</b></span>
                 </div>
                 <div class="comments-cont" onclick="redirectToPage('view-post.html')">
                     <i class="fa-regular fa-comment-dots"></i>

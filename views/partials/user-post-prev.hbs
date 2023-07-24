@@ -1,20 +1,4 @@
-    <!-- Link Copy Modal -->
-    <div class="modal fade" id="copyLinkModal" tabindex="-1" aria-labelledby="copyLinkModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="width: 40vh;">
-            <div class="container">
-                <div class="modal-content logreg-modal" style="display: flex; align-items: center; text-align: center;">
-                    <div class="modal-body">
-                        <h1 class="logging-out">link copied successfully</h1>
-                        <h4 class="mt-3">share it with anyone!</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 <div class="row post-user">
-
   <!-- Post Proper -->
 
   <div class="d-flex justify-content-between">
@@ -33,23 +17,16 @@
           <div class="share-cont" id="share-btn" onclick="copyLink('post/{{_id}}')">
             <i class="fa-regular fa-share-from-square"></i>
           </div>
-          <div class="votes-cont">
-            <i class="fa-solid fa-circle-up"></i>
-            <span style="font-size:smaller; margin-right: 0.5vh;"><b>{{{upvotes}}}</b></span>
-            <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
-            <i class="fa-regular fa-circle-down"></i>
-            <span style="font-size:smaller"><b>{{{downvotes}}}</b></span>
-          </div>
           <div class="votes-cont profile-post">
             <i class="fa-regular fa-circle-up upvote-btn"></i>
-            <span style="font-size:smaller; margin-right: 0.5vh;" class="upvote-amnt"><b>101</b></span>
+            <span style="fontWeight:bold; font-size:smaller; margin-right: 0.5vh;" class="upvote-amnt" id="upvote-amnt"><b>101</b></span>
             <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
             <i class="fa-regular fa-circle-down downvote-btn"></i>
-            <span style="font-size:smaller" class="downvote-amnt"><b>100</b></span>
+            <span style="fontWeight:bold; font-size:smaller" class="downvote-amnt" id="downvote-amnt"><b>100</b></span>
           </div>
         <div class="comments-cont">
           <i class="fa-regular fa-comment-dots"></i>
-          <span style="font-size:smaller"><b>{{{comments}}}</b></span>
+          <span style="font-size:smaller"><b>30</b></span>
         </div>
       </div>
     </div>
