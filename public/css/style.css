@@ -445,25 +445,6 @@ body::-webkit-scrollbar{
     cursor: pointer;
 }
 
-/* Subscribe Tag Styles in Popular Tags */
-.tag-subscribe {
-    background-color: #8D5821;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 10px;
-    padding: 0.5vh;
-    font-size: 0.9rem;
-    font-weight: bold;
-    margin-left: 1vh;
-    margin-right: 1vh;
-}
-
-.tag-subscribe:hover {
-    background-color:#543515;
-    color: #FFFFFF;
-    cursor: pointer;
-}
-
 /* View Tag Styles */
 .tag-group-row{
     justify-content: space-between;
@@ -711,6 +692,19 @@ body::-webkit-scrollbar{
 
 .viewed-post-container {
     border-bottom: 2px solid #919191;
+}
+
+/* Edited Post */
+.edited-tag-post{
+    background-color: #dbdbdb;
+    margin-left: 1vh;
+    border-radius: 10px;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    color: #000000;
+    font-size: 1.2vh;
+    display: inline;
+    visibility: hidden;
 }
 
 /* Commenting */

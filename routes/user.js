@@ -1,6 +1,7 @@
 const express = require ("express");
 const Account = require('../server/schema/Account');
 const Post = require('../server/schema/Post');
+const Tag = require('../server/schema/Tag');
 const Comment = require('../server/schema/Comment');
 const router = express.Router();
 
@@ -48,23 +49,25 @@ router.get("/:name", async (req, res)=>{
             select: 'username'
         }).lean();
 
-        listofcomments.forEach((comment) => {
+
+          listofcomments.forEach((comment) => {
 
             if (comment.post_title && comment.comment_content.length > maxTextLength) {
               comment.comment_content = comment.comment_content.substring(0, maxTextLength) + '...';
             }
-          
-            if (comment.post_commented.tags && comment.post_commented.tags.length > 3) {
+            
+            if (comment.post_commented && comment.post_commented.tags && comment.post_commented.tags.length > 3) {
               comment.post_commented.tags = comment.post_commented.tags.slice(0, 3);
             }
           });
 
-          const listofsubs = await Account.find().where('username').equals(getName).populate({
-            path: 'subscribed_tags',
-            select: 'tag_name',
-          }).lean();
+          const subscribedTags = user[0].subscribed_tags;
 
-            console.log(listofsubs);
+          console.log(subscribedTags);
+
+          const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
+          console.log(listofTags); // This should give you an array of tags that match the subscribed_tags array of the user
 
         res.render("user", {
             "username": user[0].username,
@@ -72,7 +75,7 @@ router.get("/:name", async (req, res)=>{
             "profile_pic": user[0].profile_pic,
             user_posts: listofposts,
             user_comments: listofcomments,
-            sub_tags: listofsubs,
+            sub_tags: listofTags,
             script: "js/profile.js"
         });
         
