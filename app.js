@@ -86,9 +86,7 @@ app.get('/home', async (req, res) => {
 
         const allTags = await Tag.find();
         var numTags;
-        for (var i = 0; i < allTags.length; i++){
-            numTags[i] = await Post.aggregate();
-        }
+       
 
         res.render("index", {
         header: "Hot Posts",
