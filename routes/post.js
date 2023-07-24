@@ -80,12 +80,19 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) =>{
     const getName = req.params.id;
     try{
-        const getPost = await Post.find({_id: getName});
-        console.log(getPost);[
-        ]
+        const getPost = await Post.findOne({_id: getName}).populate({
+            path: "username"
+        }).populate({
+            path: 'tags'
+        }).lean();
+        console.log(getPost);
         // stuck here again
         res.render("view-post", {
+            post_title: getPost.post_title,
             post_content: getPost.post_content,
+            username: getPost.username,
+            post_date: getPost.post_date,
+            tags_post: getPost.tags,
             script: "js/view-post.js"
         });
     } catch(error){

@@ -1,20 +1,23 @@
 <div class="viewed-post-container mb-4">
-                    <h2>Get Coconut'd</h2> 
+                    <h2>{{post_title}}</h2> 
                     
                     <div class="d-flex">
-                        <p class="post-creator-posted-by">posted by <a href="deeznuts.html">DeezNuts</a> on May 10, 2023</p>
-                        
+                        {{#if post_date_modified.length}}
                         <!-- Indicate if post is edited -->
-                        <p class="edited-tag-post" id="edited-tag-post">edited</p>
+                        <p class="post-creator-posted-by">posted by <a href="/user/{{username.username}}">{{username.username}}</a> on {{post_date_modified}}</p>
+                        <p class="edited-tag-post" id="edited-tag-post">(edited)</p>
+                        {{else}}
+                        <p class="post-creator-posted-by">posted by <a href="/user/{{username.username}}">{{username.username}}</a> on {{post_date}}</p>
+                        {{/if}}
                     </div>
                 
                     <p>
                        {{post_content}}
                     </p>
                     <div class="d-flex">
-                        <a href="view-tags.html" class="postcom-tags post-tags-cont">#coconut</a>
-                        <a href="view-tags.html" class="postcom-tags post-tags-cont">#morenuts</a>
-                        <a href="view-tags.html" class="postcom-tags post-tags-cont">#deeznuts</a>
+                        {{#each tags_post}}
+                        <a href="/tag/{{tag_name}}" class="postcom-tags post-tags-cont">#{{tag_name}}</a>
+                        {{/each}}
                     </div>
 
                     <div class="actions-cont viewed-post-actions mb-3 mt-3">
