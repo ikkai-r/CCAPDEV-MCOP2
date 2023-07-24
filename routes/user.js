@@ -6,7 +6,7 @@ const Comment = require('../server/schema/Comment');
 const router = express.Router();
 
 
-router.get("/:name", async (req, res)=>{
+router.get("/:name", async (req, res)=> {
     const getName = req.params.name;
     const maxTextLength = 50;
 
@@ -63,17 +63,34 @@ router.get("/:name", async (req, res)=>{
 
           const subscribedTags = user[0].subscribed_tags;
           const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
-
+        
+      //if not logged in / not helpvirus
+      if(user[0].username != "helpvirus") {
         res.render("user", {
-            "username": user[0].username,
-            "profile_desc": user[0].profile_desc,
-            "profile_pic": user[0].profile_pic,
-            user_posts: listofposts,
-            user_comments: listofcomments,
-            sub_tags: listofTags,
-            script: "js/profile.js",
-            add_script: "js/index.js"
-        });
+          "username": user[0].username,
+          "profile_desc": user[0].profile_desc,
+          "profile_pic": user[0].profile_pic,
+          user_posts: listofposts,
+          user_comments: listofcomments,
+          sub_tags: listofTags,
+          script: "js/profile.js",
+          add_script: "js/index.js"
+      });
+      } else if(user[0].username == "helpvirus") {
+
+        const editIconPr = '<i class="fa-regular fa-pen-to-square edit-profile-icon" data-bs-toggle="modal" data-bs-target="#edProfModal"></i>';
+        res.render("user", {
+          "username": user[0].username,
+          "profile_desc": user[0].profile_desc,
+          "profile_pic": user[0].profile_pic,
+          user_posts: listofposts,
+          user_comments: listofcomments,
+          sub_tags: listofTags,
+          edit_profile: editIconPr,
+          script: "js/profile.js",
+          add_script: "js/index.js"
+      });
+      }
         
     } catch(error){
         console.log(error);
