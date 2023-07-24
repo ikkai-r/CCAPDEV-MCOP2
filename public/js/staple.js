@@ -140,16 +140,21 @@ $("#login-btn").click(function (e) {
           }
         });
      
-    });
-
-
-
-$(".add-tag").click(function () {
-    if( document.getElementById("subs").innerHTML == "Subscribe") {
-        document.getElementById("subs").innerHTML = "Unsubscribe";
-    } else {
-        document.getElementById("subs").innerHTML = "Subscribe";
-    }
-    
 });
 
+
+// Get all popular tag containers
+const popularTagContainers = document.querySelectorAll(".popular-taglist");
+
+popularTagContainers.forEach((container) => {
+    const tag = container.querySelector(".tag-subscribe");
+
+    tag.addEventListener("click", function () {
+        if (tag.textContent === "Subscribe") {
+            tag.textContent = "Unsubscribe";
+        }
+        else {
+            tag.textContent = "Subscribe";
+        }
+    });
+});
