@@ -24,45 +24,18 @@
             <div class="tab-content search-tab-content" id="nav-search-tab-content">
                 <div class="tab-pane fade show active" id="nav-search-posts" role="tabpanel" aria-labelledby="nav-search-posts-tab-pane">
                 
-                        <!-- Post Container -->
-                        <div class="row post" onclick="redirectToPage('sherlockholmes_post.html')">
-    
-                            <!-- Profile Picture -->
-                            <div class="col-1">
-                                <img src="img/sherlockholmes.png" class="profile-pic">
-                            </div>
-    
-                            <!-- Post Proper -->
-                            <div class="col-11">
-                                <h5 class="post-title"><b><a href="sherlockholmes_post.html">A POST</a></b></h5>
-                                <span class="post-info">posted by <a href="sherlockholmes.html">SherlockHolmes</a> on May 20, 2023</span>
-                                <p class="post-content pt-2">Posting a text.</p>
-                                <div class="d-flex justify-content-between">
-                                    <div class="d-flex">
-                                    <span class="postcom-tags post-tags-cont">#minds</span>
-                                    <span class="postcom-tags post-tags-cont">#consulting</span>
-                                        <span class="postcom-tags post-tags-cont">#detective</span>
-                                    </div>
-                                    <div class="actions-cont d-flex">
-                                        <div class="share-cont">
-                                            <i class="fa-regular fa-share-from-square"></i>
-                                        </div>
-                                        <div class="votes-cont">
-                                            <i class="fa-solid fa-circle-up"></i>
-                                            <span style="font-size:smaller; margin-right: 0.5vh;"><b>100</b></span>
-                                            <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
-                                            <i class="fa-regular fa-circle-down"></i>
-                                            <span style="font-size:smaller"><b>12</b></span>
-                                        </div>
-                                        <div class="comments-cont">
-                                            <i class="fa-regular fa-comment-dots"></i>
-                                            <span style="font-size:smaller"><b>1</b></span>
-                                        </div>
-                                    </div>
+                        {{#if searched_post.length}}
+                            {{#each searched_post}}
+                            {{> post_preview}}
+                            {{/each}}
+                        {{else}}
+                            
+                                <div class="text-center">
+                                        <h5><b>It's empty...</b></h5>
+                                        <p>Try searching for something else.</p>
                                 </div>
-                            </div>
-                
-                        </div>
+                        
+                        {{/if}}
     
                     </div>
                
@@ -70,7 +43,10 @@
                 <div class="tab-pane fade" id="nav-search-tags" role="tabpanel"aria-labelledby="nav-search-tags-tab-pane">
                     <!-- Tags Container -->
                     <div class="container">
-                        <div class="row" style="display: flex; justify-content: center;">
+                        <div class="row" style="display: flex; justify-content: center;"></div>
+                    {{#each searched_tags}}
+                    
+                        
                             <div class="tag-group col-md-3" style="margin-right: 5vh;">
                                 <div><h6 class="tag-group-name">#virus</h4></div>
                                 <div class="tag-group-img" style="background-image:url(img/virus.png);"></div>
@@ -86,6 +62,9 @@
                                 <div class="tag-group-img" style="background-image:url(img/techsupport.png);"></div>
                                 <div><h6 class="tag-group-count">5.3k posts</h4></div>
                             </div>
+                       
+                    
+                    {{/each}}
                         </div>
                     </div>
                 </div>
