@@ -13,6 +13,11 @@
                 
                     <p>
                        {{post_content}}
+                       {{#if post_attachment.length}}
+                        <div style="display: flex; justify-content: center;" class="mb-4">
+                            <img src="img/{{post_attachment}}" class="viewed-post-img">
+                        </div>
+                       {{/if}}
                     </p>
                     <div class="d-flex">
                         {{#each tags_post}}
