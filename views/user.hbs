@@ -7,26 +7,27 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" style="width: 160vh; font-size: 1.3rem; opacity: 1;"></button>
                 <div class="modal-content edit-modal">
                     <div class="modal-body">
-                        <form style="text-align: center;" method="post" enctype="multipart/form-data">
+                        <form style="text-align: center;" method="post" enctype="multipart/form-data" id="edit-profile-form">
                            <h3 class="mb-3"><b>Edit Profile</b></h3>
                            <div class="edit-profile-cont mb-4">
                             <div class="edit-profile-bg" id="edit-pfp-bg" style="background-image:url(../{{profile_pic}});">
                             </div>
                             <img src="{{profile_pic}}" class="edit-profile-pic" id="edit-pfp">
                             <div class="pen-circle"  onclick="document.getElementById('getImg').click()">
-                                <input type="file" id="getImg" name="profile-img" accept="image/*" style="display: none;" onchange="loadFile(event)">
+                                <input type="file" id="getImg" name="profile-img" accept=".png, .jpg, .jpeg" style="display: none;" onchange="loadFile(event)">
                                 <i class="fa-solid fa-pencil pen-style"></i>
                             </div>
                             </div>
 
                             <h3><b>{{username}}</b></h3>
+                            <input type="hidden" value="{{username}}" name="username-edit" id="username-edit">
                             <label for="bio-area"></label>
                             <textarea class="form-control mb-3" id="bio-area" rows="10" name="bio-area">{{profile_desc}}</textarea>
                           </form>
                     </div>
                     <div style="display: flex; justify-content: center;">
                         <button type="button" class="btn btn-loginreg" style="margin-right: 2vh; margin-left: 2vh; margin-top: -1vh; width: 30vh;" data-bs-dismiss="modal" onclick="backLoad(event)">cancel</button>
-                        <button type="button" class="btn btn-loginreg" style="margin-right: 2vh; margin-left: 2vh; margin-top: -1vh; width: 30vh;" type="submit" data-bs-dismiss="modal" onclick="saveChanges()">save changes</button>
+                        <button id="edit-profile-btn"class="btn btn-loginreg" style="margin-right: 2vh; margin-left: 2vh; margin-top: -1vh; width: 30vh;" type="submit" data-bs-dismiss="modal">save changes</button>
                     </div>
                 </div>
             </div>
@@ -72,7 +73,7 @@
                     </div>
                     <div class="col-9" style="padding: 2.5vh;">
                         <h3><strong>{{username}}</strong></h3>
-                        <span>{{profile_desc}}</span>
+                        <span id="bio-user">{{profile_desc}}</span>
                     </div>
                 </div>
 

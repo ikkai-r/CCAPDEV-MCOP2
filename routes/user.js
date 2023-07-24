@@ -1,10 +1,24 @@
 const express = require ("express");
+
 const Account = require('../server/schema/Account');
 const Post = require('../server/schema/Post');
 const Tag = require('../server/schema/Tag');
 const Comment = require('../server/schema/Comment');
 const router = express.Router();
 
+const multer  = require('multer')
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/img/'); 
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
+const bodyParser = require('body-parser');
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
 
 router.get("/:name", async (req, res)=> {
     const getName = req.params.name;
@@ -100,5 +114,37 @@ router.get("/:name", async (req, res)=> {
 router.get("/", (req, res)=>{
     res.redirect('/');
 });
+
+router.post('/:name', upload.single('getImg'), async function (req, res) {
+
+  try {
+
+    const getName = req.params.name;
+  const user = await Account.findOne({ username: getName });
+  const { bio_area } = req.body;
+
+  if(req.file) {
+    const newImg = "img/"+req.file.originalname;
+    user.profile_pic = newImg;
+  }
+
+  if (bio_area === '') {
+    user.profile_desc = null;
+  } else {
+    user.profile_desc = bio_area;
+  }
+
+  await user.save();
+
+  return res.json({ message: 'success', profile_image: user.profile_pic, profile_bio: user.profile_desc} );
+
+
+  } catch(error) {
+    console.error('Error updating profile:', error);
+    return res.status(500).send('Error updating profile.');
+  }
+  
+});
+
 
 module.exports = router;
