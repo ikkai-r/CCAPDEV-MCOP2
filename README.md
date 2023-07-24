@@ -11,7 +11,7 @@ node -v
 ```
 
 ## Setup
-Open your command prompt and navigate to the directory where you downloaded it. At the root of the folder, type the following to launch your local NodeJS server.
+Open your command prompt and navigate to the directory where you downloaded it. At the root folder, type the following to launch your local NodeJS server.
 ```bash
 npm start
 ```
