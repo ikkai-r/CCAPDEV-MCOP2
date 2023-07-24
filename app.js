@@ -69,12 +69,8 @@ app.get('/home', async (req, res) => {
               }
         });
 
-        const latest_posts = await Post.find().populate('username').sort({date:'asc'}).limit(5);
-        console.log(listofposts);
-
-        latest_posts.forEach((post) => {
-            post.post_date = post.post_date.toDateString();
-        });
+        const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+        console.log(latest_posts);
 
 
         res.render("index", {

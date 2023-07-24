@@ -20,7 +20,7 @@ const postSchema = new mongoose.Schema({
     },
     post_date: {
         type: Date,
-        default: () => Date.now(),
+        default: () => Date.now().toString,
     },
     post_date_modified: Date,
     comments: [{

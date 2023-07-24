@@ -25,7 +25,7 @@ router.get("/:name", async (req, res)=> {
     const maxTextLength = 50;
 
     try{
-        const user = await Account.find().where("username").equals(getName);
+        const user = await Account.find({ "username" : { $regex : new RegExp(getName, "i") } });
 
         if (!user) {
             // Handle the case when the user is not found
