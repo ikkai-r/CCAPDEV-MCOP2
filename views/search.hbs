@@ -43,28 +43,16 @@
                 <div class="tab-pane fade" id="nav-search-tags" role="tabpanel"aria-labelledby="nav-search-tags-tab-pane">
                     <!-- Tags Container -->
                     <div class="container">
-                        <div class="row" style="display: flex; justify-content: center;"></div>
-                    {{#each searched_tags}}
-                            {{#each_upto 3, }}
-                        
-                            <div class="tag-group col-md-3" style="margin-right: 5vh;">
-                                <div><h6 class="tag-group-name">#virus</h4></div>
-                                <div class="tag-group-img" style="background-image:url(img/virus.png);"></div>
-                                <div><h6 class="tag-group-count">523 posts</h4></div>
-                            </div>
-                            <div class="tag-group mr-5 col-md-3" style="margin-right: 5vh;">
-                                <div><h6 class="tag-group-name">#help</h4></div>
-                                <div class="tag-group-img" style="background-image:url(img/help.jpg);"></div>
-                                <div><h6 class="tag-group-count">5k posts</h4></div>
-                            </div>
-                            <div class="tag-group mr-5 col-md-3">
-                                <div><h6 class="tag-group-name">#techsupport</h4></div>
-                                <div class="tag-group-img" style="background-image:url(img/techsupport.png);"></div>
-                                <div><h6 class="tag-group-count">5.3k posts</h4></div>
-                            </div>
-                       
-                    
-                    {{/each}}
+                        <div class="row d-flex justify-content-center">
+                                       
+                            {{#each searched_tags}}
+                            <!-- change placeholders in partial -->
+                             {{> search-result-tags this}}
+                              {{else}}
+                            <!-- change to <no results> -->
+                                        {{> user-pane-empty this}}
+                            {{/each}}
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -72,34 +60,14 @@
                 <div class="tab-pane fade" id="nav-search-accounts" role="tabpanel"aria-labelledby="nav-search-accounts-tab-pane">
                     <!-- Accounts Container -->
                     <div class="container">
+                        
                         <div class="row" style="display: flex; justify-content: center;">
-                            <div class="search-account card col-md-3">    
-                                <div class="card-head">
-                                    <div class="account-card-img" style="background-image:url(img/redqueen.png);"></div>
-                                    <a href="redqueen.html"><div class="account-card-username">RedQueen</div></a>
-                                </div>
-                                <div class="card-body">
-                                    <div class="account-card-bio">The truth is what I make it. I could set this world on fire and call it rain.</div>
-                                </div>
-                            </div>
-                            <div class="search-account card col-md-3">
-                                <div class="card-head">
-                                    <div class="account-card-img" style="background-image:url(img/sansfangirlxoxo.png);"></div>
-                                    <a href="sansfangirlxoxo.html"><div class="account-card-username">sansfangirlxoxo</div></a>
-                                </div>
-                                <div class="card-body">
-                                    <div class="account-card-bio">sans is my senpai desu :3</div>
-                                </div>
-                            </div>
-                            <div class="search-account card col-md-3">
-                                <div class="card-head">
-                                    <div class="account-card-img" style="background-image:url(img/sherlockholmes.png);"></div>
-                                    <a href="sherlockholmes.html"><div class="account-card-username">SherlockHolmes</div></a>
-                                </div>
-                                <div class="card-body">
-                                    <div class="account-card-bio"></div>
-                                </div>
-                            </div>
+                            {{#each searched_tags}}
+                                        {{> search-result-accounts this}}
+                            {{else}}
+                            <!-- change to <no results> -->
+                                        {{> user-pane-empty this}}
+                            {{/each}}
                         </div>
                     </div>
                 </div>
