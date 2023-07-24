@@ -34,7 +34,19 @@ app.use('/', accountAuthRouter);
 connecttoDB();
 
 app.use(express.static(__dirname + "/public"));
-app.engine("hbs", exphbs.engine({extname:'hbs'}));
+app.engine("hbs", exphbs.engine({
+    extname:'hbs',
+    helpers: {
+        each_upto: (n, block) => 
+        {
+            var x = '';
+            for(var i = 0; i < n; i++)
+                x+= block.fn(i)
+            return x;
+        }
+    }
+    }
+));
 app.set("view engine", "hbs");
 app.set("views", "./views");
 
@@ -72,6 +84,11 @@ app.get('/home', async (req, res) => {
         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
         console.log(latest_posts);
 
+        const allTags = await Tag.find();
+        var numTags;
+        for (var i = 0; i < allTags.length; i++){
+            numTags[i] = await Post.aggregate();
+        }
 
         res.render("index", {
         header: "Hot Posts",
