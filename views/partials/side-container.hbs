@@ -3,10 +3,10 @@
 
         <!-- Popular Tags -->
     <div class="container side-cont pt-4">
-        <a href="tags" class="side-text"><h5 class="side-txt">popular tags</h5></a>
+        <a href="/tag" class="side-text"><h5 class="side-txt">popular tags</h5></a>
         <div class="line"></div>
 
-        {{#each tags}}
+        {{#each popular_tags}}
         {{> popular-tags-inner this}}
         {{/each}}
     </div>

@@ -62,7 +62,6 @@ app.get('/home', async (req, res) => {
     const maxTextLength = 100;
 
     try {
-        // not finished, still figuring out how to do this
         const listofposts = await Post.find().populate({
             path: 'username',
         }).populate({
@@ -81,8 +80,9 @@ app.get('/home', async (req, res) => {
               }
         });
 
+        // start for side-container content
+
         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
-        console.log(latest_posts);
 
         const tagCounts = await Post.aggregate([
             {
@@ -94,17 +94,28 @@ app.get('/home', async (req, res) => {
                 count: { $sum: 1 } 
               }
             }
-          ]);
+          ]).sort({count: 'desc'}).limit(6);
+
           
-          console.log(tagCounts);
+          const getPopularTags = [];
 
+        for (var i = 0; i < tagCounts.length; i++){
+            var newTag = await Tag.findById(tagCounts[i]._id).lean();
+            console.log(tagCounts[i].count);
+            var tag = ({
+                tag_name: newTag.tag_name,
+                count: tagCounts[i].count
+            });
+           getPopularTags.push(tag);
 
+        }
 
         res.render("index", {
         header: "Hot Posts",
         script: 'js/index.js',
         posts: listofposts,
-        posts_latest: latest_posts
+        posts_latest: latest_posts,
+        popular_tags: getPopularTags
         });
     } catch(error){
         console.log(error);

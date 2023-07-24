@@ -18,12 +18,45 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.get('/', (req, res) =>{
+router.get('/', async (req, res) =>{
+
+     // start for side-container content
+
+     const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+     const tagCounts = await Post.aggregate([
+         {
+           $unwind: '$tags' 
+         },
+         {
+           $group: {
+             _id: '$tags', 
+             count: { $sum: 1 } 
+           }
+         }
+       ]).sort({count: 'desc'}).limit(6);
+
+       
+       const getPopularTags = [];
+
+     for (var i = 0; i < tagCounts.length; i++){
+         var newTag = await Tag.findById(tagCounts[i]._id).lean();
+         console.log(tagCounts[i].count);
+         var tag = ({
+             tag_name: newTag.tag_name,
+             count: tagCounts[i].count
+         });
+        getPopularTags.push(tag);
+
+     }
+
     res.render("create-post", {
         header: "Create a new post",
         script: "js/post.js",
         post_username: "helpvirus",
         post_date: new Date(),
+        posts_latest: latest_posts,
+        popular_tags: getPopularTags,
         button_type: "create-post-btn"
     });
 });
@@ -175,12 +208,45 @@ router.get('/:id', async (req, res) =>{
         }).lean();
         console.log(getPost);
         // stuck here again
+
+        // start for side-container content
+
+        const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+        const tagCounts = await Post.aggregate([
+            {
+              $unwind: '$tags' 
+            },
+            {
+              $group: {
+                _id: '$tags', 
+                count: { $sum: 1 } 
+              }
+            }
+          ]).sort({count: 'desc'}).limit(6);
+
+          
+          const getPopularTags = [];
+
+        for (var i = 0; i < tagCounts.length; i++){
+            var newTag = await Tag.findById(tagCounts[i]._id).lean();
+            console.log(tagCounts[i].count);
+            var tag = ({
+                tag_name: newTag.tag_name,
+                count: tagCounts[i].count
+            });
+           getPopularTags.push(tag);
+
+        }
+
         res.render("view-post", {
             post_title: getPost.post_title,
             post_content: getPost.post_content,
             username: getPost.username,
             post_date: getPost.post_date,
             tags_post: getPost.tags,
+            posts_latest: latest_posts,
+            popular_tags: getPopularTags,
             script: "js/view-post.js"
         });
     } catch(error){
