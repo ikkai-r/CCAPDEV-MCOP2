@@ -85,8 +85,20 @@ app.get('/home', async (req, res) => {
         console.log(latest_posts);
 
         const allTags = await Tag.find();
-        var numTags;
-       
+    
+        var numTags = [];
+        for (var i = 0; i < allTags.length; i++){
+            numTags[i] = await Post.aggregate([{
+                $match: {tags: allTags[i]._id}
+            },
+            {
+                $group: {_id: "$_id", count: {$sum: 1} }
+            }
+            ]);
+        }
+
+        console.log(numTags);
+
 
         res.render("index", {
         header: "Hot Posts",
