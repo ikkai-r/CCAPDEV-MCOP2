@@ -471,14 +471,6 @@ body::-webkit-scrollbar{
     margin-bottom: 4vh;
 }
 
-/* View Tag Styles */
-.tag-group-row{
-    justify-content: space-between;
-    display: flex;
-
-    margin-bottom: 4vh;
-}
-
 .tag-group {
     background-color:#FFF6EB;
     border: solid 1px #000000;
@@ -489,6 +481,9 @@ body::-webkit-scrollbar{
 
     padding: 2vh 1vh 2vh 1vh;
     margin-right: 2vh;
+    margin-bottom: 2vh;
+
+    width: 20vh;
 }
 
 .tag-group-info {
@@ -521,8 +516,6 @@ body::-webkit-scrollbar{
     background-position:top; 
     background-size:cover; 
     background-repeat:no-repeat;
-    background-image:url(img/sans.png);
-
 
     background-color:#DBBFA4;
 
