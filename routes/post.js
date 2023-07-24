@@ -77,6 +77,11 @@ router.get('/edit-:id', async (req, res) =>{
     const getPost = await Post.findOne({_id: getId});
     const getUser = await Account.findOne({_id: getPost.username});
     const getTags = await Tag.find({ _id: { $in: getPost.tags } }).lean();
+    let post_attachment = "";
+
+    if(getPost.post_attachment) {
+        post_attachment = getPost.post_attachment.replace("img/", "");
+    }
  
     try{
         res.render("create-post", {
@@ -86,7 +91,7 @@ router.get('/edit-:id', async (req, res) =>{
             post_content:  getPost.post_content,
             post_date:  getPost.post_date,
             post_username: getUser.username,
-            post_attachment: getPost.post_attachment.replace("img/", ""),
+            post_attachment: post_attachment,
             tags: getTags,
             id: getId,
             button_type: "edit-post-btn"
@@ -96,6 +101,36 @@ router.get('/edit-:id', async (req, res) =>{
     }
    
 });
+
+
+router.delete('/edit-:id', async (req, res) =>{
+    const postId = req.params.id;
+    try {
+
+        const getPost = await Post.findOne({_id: postId});
+        const getTags = await Tag.find({ _id: { $in: getPost.tags } }).lean();
+
+        for (const originalTag of getTags) {
+                const postCountWithCurrentTag = await Post.countDocuments({ tags: originalTag._id });
+                if (postCountWithCurrentTag === 0) {
+                    //delete the tag
+                    await Tag.findByIdAndDelete({ _id: originalTag._id });
+                  }
+        }
+
+        const result = await Post.findByIdAndDelete(postId);
+
+        if (result) {
+          res.status(200).json({ message: 'Successfully deleted.' });
+        } else {
+          res.status(404).json({ message: 'Document not found.' });
+        }
+      } catch (error) {
+        console.error('Error deleting document:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+      }
+});
+
 
 router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
     const getId = req.params.id;
@@ -108,33 +143,12 @@ router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
             post_attachment = "img/"+req.file.originalname;
         }
             const { post_title, post_content, tags } = req.body;
-            console.log(post_title);
-            console.log(post_content);
-            console.log(tags);
             
             const getPost = await Post.findOne({_id: getId});
             const unchangedTags = [];
-            const unusedTags = [];
 
             //get the names of the tags
             const getTags = await Tag.find({ _id: { $in: getPost.tags } }).lean();
-
-            const date = new Date();
-            const monthNames = [
-                "January", "February", "March", "April", "May", "June", 
-                "July", "August", "September", "October", "November", "December"
-              ];
-            
-            let day = date.getDate();
-            let month = date.getMonth();
-            let year = date.getFullYear();
-        
-            // Format the date
-            let formattedDate = monthNames[month] + " " + day + ", " + year;
-            
-            console.log(formattedDate);
-            const post_date = formattedDate;
-
             const tagNames = tags.split(',').map(tag => tag.trim());
             const tagIds = [];
 
@@ -161,7 +175,7 @@ router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
                     const postCountWithCurrentTag = await Post.countDocuments({ tags: originalTag._id });
                     if (postCountWithCurrentTag === 0) {
                         //delete the tag
-                        await Tag.deleteOne({ _id: originalTag._id });
+                        await Tag.findByIdAndDelete({ _id: originalTag._id });
                       }
                 }
             }
@@ -194,8 +208,83 @@ router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
 
 });
 
+// router.delete('/api/your_resource/:id', async (req, res) => {
+//     try {
+//       const id = req.params.id;
+//       const result = await YourModel.findByIdAndDelete(id);
+  
+//       if (result) {
+//         res.status(200).json({ message: 'Successfully deleted.' });
+//       } else {
+//         res.status(404).json({ message: 'Document not found.' });
+//       }
+//     } catch (error) {
+//       console.error('Error deleting document:', error);
+//       res.status(500).json({ message: 'Internal server error.' });
+//     }
+//   });
+  
 
 
+
+
+// add viewing of page for a specific post
+router.get('/:id', async (req, res) =>{
+    const getName = req.params.id;
+    try{
+        const getPost = await Post.findOne({_id: getName}).populate({
+            path: "username"
+        }).populate({
+            path: 'tags'
+        }).lean();
+        console.log(getPost);
+        // stuck here again
+
+        // start for side-container content
+
+        const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+        const tagCounts = await Post.aggregate([
+            {
+              $unwind: '$tags' 
+            },
+            {
+              $group: {
+                _id: '$tags', 
+                count: { $sum: 1 } 
+              }
+            }
+          ]).sort({count: 'desc'}).limit(6);
+
+          
+          const getPopularTags = [];
+
+        for (var i = 0; i < tagCounts.length; i++){
+            var newTag = await Tag.findById(tagCounts[i]._id).lean();
+            console.log(tagCounts[i].count);
+            var tag = ({
+                tag_name: newTag.tag_name,
+                count: tagCounts[i].count
+            });
+           getPopularTags.push(tag);
+
+        }
+
+        res.render("view-post", {
+            post_title: getPost.post_title,
+            post_content: getPost.post_content,
+            username: getPost.username,
+            post_date: getPost.post_date,
+            tags_post: getPost.tags,
+            posts_latest: latest_posts,
+            popular_tags: getPopularTags,
+            script: "js/view-post.js"
+        });
+    } catch(error){
+        console.log(error);
+    }
+   
+});
 
 // add viewing of page for a specific post
 router.get('/:id', async (req, res) =>{

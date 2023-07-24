@@ -157,3 +157,26 @@ $("#edit-post-btn").click(function(e) {
 
 
 });
+
+$(document).ready(function() {
+
+$("#delete-post-btn").click(function(e) {
+  e.preventDefault();
+  const postId = $("#post_id").val();
+
+  $.ajax({
+    url: `/post/edit-${postId}`,
+    method: 'DELETE',
+    success: function(data) {
+      // Handle the success response (e.g., show a success message or refresh the page)
+      alert(data.message);
+      window.location.href = '/home'; // Corrected the line to use "href"
+    },
+    error: function(error) {
+      // Handle the error response (e.g., show an error message)
+      console.error('Error deleting post:', error);
+      alert('An error occurred while deleting the post.');
+    },
+  });
+});
+});
