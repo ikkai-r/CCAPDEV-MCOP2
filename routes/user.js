@@ -62,12 +62,7 @@ router.get("/:name", async (req, res)=>{
           });
 
           const subscribedTags = user[0].subscribed_tags;
-
-          console.log(subscribedTags);
-
           const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
-
-          console.log(listofTags); // This should give you an array of tags that match the subscribed_tags array of the user
 
         res.render("user", {
             "username": user[0].username,
@@ -76,7 +71,8 @@ router.get("/:name", async (req, res)=>{
             user_posts: listofposts,
             user_comments: listofcomments,
             sub_tags: listofTags,
-            script: "js/profile.js"
+            script: "js/profile.js",
+            add_script: "js/index.js"
         });
         
     } catch(error){
