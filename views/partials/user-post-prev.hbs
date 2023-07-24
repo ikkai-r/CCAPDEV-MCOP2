@@ -1,34 +1,41 @@
-  <div class="row post-user">
+<div class="row post-user">
 
-    <!-- Post Proper -->
+  <!-- Post Proper -->
 
+  <div class="d-flex justify-content-between">
+    <h5 class="post-title"><b><a href="post/{{_id}}">{{{post_title}}}</a></b></h5>
+    </div>
+      
+    <span class="post-info">posted by <a href="user/{{{username.username}}}">{{{username.username}}}</a> on {{{post_date}}}</span>
+    <p class="post-content pt-2">{{post_content}}</p>
     <div class="d-flex justify-content-between">
-            <h5 class="post-title"><b><a href="/post/{{_id}}">{{{post_title}}}</a></b></h5>
-        </div>
-       
-        <span class="post-info">posted by <a href="deeznuts.html">{{{username.username}}}</a> on {{{post_date}}}</span>
-        <p class="post-content pt-2">{{post_content}}</p>
-        <div class="d-flex justify-content-between">
-        <div class="d-flex">
-             {{#each tags}}
-            <span class="postcom-tags post-tags-cont"><a href="tags/{{this.tag_name}}">#{{tag_name}}</a></span>
-            {{/each}}
+      <div class="d-flex">
+            {{#each tags}}
+          <span class="postcom-tags post-tags-cont"><a href="tags/{{this.tag_name}}">#{{tag_name}}</a></span>
+          {{/each}}
+      </div>
+        <div class="actions-cont d-flex">
+          <div class="share-cont" id="share-btn" onclick="copyLink('post/{{_id}}')">
+            <i class="fa-regular fa-share-from-square"></i>
           </div>
-              <div class="actions-cont d-flex">
-                  <div class="share-cont">
-                      <i class="fa-regular fa-share-from-square"></i>
-                  </div>
-                  <div class="votes-cont">
-                      <i class="fa-solid fa-circle-up"></i>
-                      <span style="font-size:smaller; margin-right: 0.5vh;"><b>{{upvotes}}</b></span>
-                      <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
-                      <i class="fa-regular fa-circle-down"></i>
-                      <span style="font-size:smaller"><b>{{downvotes}}</b></span>
-               </div>
-             <div class="comments-cont">
-                 <i class="fa-regular fa-comment-dots"></i>
-                 <span style="font-size:smaller"><b>1</b></span>
-             </div>
-                    </div>
-                                      </div>
-                              </div>
+          <div class="votes-cont">
+            <i class="fa-solid fa-circle-up"></i>
+            <span style="font-size:smaller; margin-right: 0.5vh;"><b>{{{upvotes}}}</b></span>
+            <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
+            <i class="fa-regular fa-circle-down"></i>
+            <span style="font-size:smaller"><b>{{{downvotes}}}</b></span>
+          </div>
+          <div class="votes-cont profile-post">
+            <i class="fa-regular fa-circle-up upvote-btn"></i>
+            <span style="font-size:smaller; margin-right: 0.5vh;" class="upvote-amnt"><b>101</b></span>
+            <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
+            <i class="fa-regular fa-circle-down downvote-btn"></i>
+            <span style="font-size:smaller" class="downvote-amnt"><b>100</b></span>
+          </div>
+        <div class="comments-cont">
+          <i class="fa-regular fa-comment-dots"></i>
+          <span style="font-size:smaller"><b>{{{comments}}}</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
