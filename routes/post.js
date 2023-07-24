@@ -66,14 +66,6 @@ router.get('/', async (req, res) =>{
 router.get('/edit-:id', async (req, res) =>{
     const getId = req.params.id;
 
-    console.log(getId);
-
-    // const getPost = await Post.findOne({_id: getId}).populate({
-    //     path: "username"
-    // }).populate({
-    //     path: 'tags'
-    // }).lean();
-
     const getPost = await Post.findOne({_id: getId});
     const getUser = await Account.findOne({_id: getPost.username});
     const getTags = await Tag.find({ _id: { $in: getPost.tags } }).lean();
@@ -208,25 +200,6 @@ router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
 
 });
 
-// router.delete('/api/your_resource/:id', async (req, res) => {
-//     try {
-//       const id = req.params.id;
-//       const result = await YourModel.findByIdAndDelete(id);
-  
-//       if (result) {
-//         res.status(200).json({ message: 'Successfully deleted.' });
-//       } else {
-//         res.status(404).json({ message: 'Document not found.' });
-//       }
-//     } catch (error) {
-//       console.error('Error deleting document:', error);
-//       res.status(500).json({ message: 'Internal server error.' });
-//     }
-//   });
-  
-
-
-
 
 // add viewing of page for a specific post
 router.get('/:id', async (req, res) =>{
@@ -237,8 +210,6 @@ router.get('/:id', async (req, res) =>{
         }).populate({
             path: 'tags'
         }).lean();
-        console.log(getPost);
-        // stuck here again
 
         // start for side-container content
 
@@ -270,62 +241,12 @@ router.get('/:id', async (req, res) =>{
 
         }
 
-        res.render("view-post", {
-            post_title: getPost.post_title,
-            post_content: getPost.post_content,
-            username: getPost.username,
-            post_date: getPost.post_date,
-            tags_post: getPost.tags,
-            posts_latest: latest_posts,
-            popular_tags: getPopularTags,
-            script: "js/view-post.js"
-        });
-    } catch(error){
-        console.log(error);
-    }
-   
-});
+        let logged_in = "";
 
-// add viewing of page for a specific post
-router.get('/:id', async (req, res) =>{
-    const getName = req.params.id;
-    try{
-        const getPost = await Post.findOne({_id: getName}).populate({
-            path: "username"
-        }).populate({
-            path: 'tags'
-        }).lean();
-        console.log(getPost);
-        // stuck here again
-
-        // start for side-container content
-
-        const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
-
-        const tagCounts = await Post.aggregate([
-            {
-              $unwind: '$tags' 
-            },
-            {
-              $group: {
-                _id: '$tags', 
-                count: { $sum: 1 } 
-              }
-            }
-          ]).sort({count: 'desc'}).limit(6);
-
-          
-          const getPopularTags = [];
-
-        for (var i = 0; i < tagCounts.length; i++){
-            var newTag = await Tag.findById(tagCounts[i]._id).lean();
-            console.log(tagCounts[i].count);
-            var tag = ({
-                tag_name: newTag.tag_name,
-                count: tagCounts[i].count
-            });
-           getPopularTags.push(tag);
-
+        if(getPost.username.username == "helpvirus") {
+            logged_in = true;
+        } else {
+            logged_in = false;
         }
 
         res.render("view-post", {
@@ -336,6 +257,9 @@ router.get('/:id', async (req, res) =>{
             tags_post: getPost.tags,
             posts_latest: latest_posts,
             popular_tags: getPopularTags,
+            post_edited: getPost.post_edited,
+            id: getName,
+            logged_in: logged_in,
             script: "js/view-post.js"
         });
     } catch(error){

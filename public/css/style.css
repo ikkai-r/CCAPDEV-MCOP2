@@ -696,6 +696,8 @@ body::-webkit-scrollbar{
 /* View Post */
 .viewed-post{
     width: 270vh;
+    max-width: 270vh;
+    overflow: nowrap;
     height: fit-content;
     
     background-color: #FFFFFF;
@@ -737,7 +739,6 @@ body::-webkit-scrollbar{
     color: #000000;
     font-size: 1.2vh;
     display: inline;
-    visibility: hidden;
 }
 
 /* Commenting */

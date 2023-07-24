@@ -162,7 +162,9 @@ $(document).ready(function() {
 
 $("#delete-post-btn").click(function(e) {
   e.preventDefault();
-  const postId = $("#post_id").val();
+
+  if($("#post_id").val() !== "") {
+    const postId = $("#post_id").val();
 
   $.ajax({
     url: `/post/edit-${postId}`,
@@ -170,7 +172,7 @@ $("#delete-post-btn").click(function(e) {
     success: function(data) {
       // Handle the success response (e.g., show a success message or refresh the page)
       alert(data.message);
-      window.location.href = '/home'; // Corrected the line to use "href"
+      window.location.href = '/home'; 
     },
     error: function(error) {
       // Handle the error response (e.g., show an error message)
@@ -178,5 +180,9 @@ $("#delete-post-btn").click(function(e) {
       alert('An error occurred while deleting the post.');
     },
   });
+  } else {
+    window.location.href = '/home'; 
+  }
+  
 });
 });
