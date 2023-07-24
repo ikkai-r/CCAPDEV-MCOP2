@@ -525,6 +525,12 @@ body::-webkit-scrollbar{
 
 .post-creator-delete{
     float: right;
+    padding: 1vh 1.5vh;
+    border-radius: 50%;
+}
+
+.post-creator-delete:hover{
+    background-color: #cecece;
 }
 
 .post-creator-title, .post-creator-title::placeholder{
@@ -597,6 +603,10 @@ body::-webkit-scrollbar{
     cursor:pointer;
 }
 
+.pill:hover{
+    filter:brightness(0.8);
+}
+
 .comment-pill {
     width: 8vh;
     height:3.5vh;
@@ -657,6 +667,11 @@ body::-webkit-scrollbar{
 
 .post-attachment-delete {
     padding: 0.5vh;
+}
+
+.post-attachment-delete:hover{
+    cursor: pointer;
+    color: #ffffff;
 }
 
 
