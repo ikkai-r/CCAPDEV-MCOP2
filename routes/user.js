@@ -93,6 +93,37 @@ router.get("/:name", async (req, res)=> {
       } else if(user[0].username == "helpvirus") {
 
         const editIconPr = '<i class="fa-regular fa-pen-to-square edit-profile-icon" data-bs-toggle="modal" data-bs-target="#edProfModal"></i>';
+        
+        // start for side-container content
+
+        const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+        const tagCounts = await Post.aggregate([
+            {
+              $unwind: '$tags' 
+            },
+            {
+              $group: {
+                _id: '$tags', 
+                count: { $sum: 1 } 
+              }
+            }
+          ]).sort({count: 'desc'}).limit(6);
+
+          
+          const getPopularTags = [];
+
+        for (var i = 0; i < tagCounts.length; i++){
+            var newTag = await Tag.findById(tagCounts[i]._id).lean();
+            console.log(tagCounts[i].count);
+            var tag = ({
+                tag_name: newTag.tag_name,
+                count: tagCounts[i].count
+            });
+           getPopularTags.push(tag);
+
+        }
+        
         res.render("user", {
           "username": user[0].username,
           "profile_desc": user[0].profile_desc,
@@ -101,6 +132,8 @@ router.get("/:name", async (req, res)=> {
           user_comments: listofcomments,
           sub_tags: listofTags,
           edit_profile: editIconPr,
+          posts_latest: latest_posts,
+          popular_tags: getPopularTags,
           script: "js/profile.js",
           add_script: "js/index.js"
       });

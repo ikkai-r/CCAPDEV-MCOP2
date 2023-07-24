@@ -80,6 +80,8 @@ app.get('/home', async (req, res) => {
               }
         });
 
+        // start for side-container content
+
         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
 
         const tagCounts = await Post.aggregate([
@@ -113,7 +115,7 @@ app.get('/home', async (req, res) => {
         script: 'js/index.js',
         posts: listofposts,
         posts_latest: latest_posts,
-        tags: getPopularTags
+        popular_tags: getPopularTags
         });
     } catch(error){
         console.log(error);
