@@ -84,20 +84,20 @@ app.get('/home', async (req, res) => {
         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
         console.log(latest_posts);
 
-        const allTags = await Tag.find();
-    
-        var numTags = [];
-        for (var i = 0; i < allTags.length; i++){
-            numTags[i] = await Post.aggregate([{
-                $match: {tags: allTags[i]._id}
+        const tagCounts = await Post.aggregate([
+            {
+              $unwind: '$tags' 
             },
             {
-                $group: {_id: "$_id", count: {$sum: 1} }
+              $group: {
+                _id: '$tags', 
+                count: { $sum: 1 } 
+              }
             }
-            ]);
-        }
+          ]);
+          
+          console.log(tagCounts);
 
-        console.log(numTags);
 
 
         res.render("index", {
