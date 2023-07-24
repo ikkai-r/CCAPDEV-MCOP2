@@ -62,7 +62,7 @@
                     </div>
                     <div class="col-9" style="padding: 2.5vh;">
                         <h3><strong>{{username}}</strong></h3>
-                        <span>{{profile_dec}}</span>
+                        <span>{{profile_desc}}</span>
                     </div>
                 </div>
 
@@ -120,11 +120,32 @@
                          <!-- Subscribed Tags Tab -->
                          <div class="tab-pane fade" id="nav-tags" role="tabpanel" aria-labelledby="nav-tags-tab">
                             <div class="container">
+
+                                <div class="row" style="display: flex; justify-content: center;">
+                                {{!-- <div class="row" style="display: flex; justify-content: center;">
+                                    <div class="tag-group col-md-3" style="margin-right: 5vh;">
+                                        <div><h6 class="tag-group-name"><a href="view-tags.html">#nou</a></h4></div>
+                                        <div class="tag-group-img" style="background-image:url(img/nou.jpg);"></div>
+                                        <div><h6 class="tag-group-count">702 posts</h4></div>
+                                    </div>
+                                    <div class="tag-group mr-5 col-md-3" style="margin-right: 5vh;">
+                                        <div><h6 class="tag-group-name"><a href="view-tags.html">#hahafunny</a></h4></div>
+                                        <div class="tag-group-img" style="background-image:url(img/hahafunny.jpg);"></div>
+                                        <div><h6 class="tag-group-count">4.3k posts</h4></div>
+                                    </div>
+                                    <div class="tag-group mr-5 col-md-3">
+                                        <div><h6 class="tag-group-name"><a href="view-tags.html">#meme</a></h4></div>
+                                        <div class="tag-group-img" style="background-image:url(img/meme.jpg);"></div>
+                                        <div><h6 class="tag-group-count">8k posts</h4></div>
+                                    </div>
+                                --}}
+                                
                                 {{#each sub_tags}}
                                 {{> user-subtags this}}
                                 {{else}}
                                 {{> user-pane-empty this}}
                                 {{/each}}
+                                 </div>
                             </div>
                         </div>
                       </div>
