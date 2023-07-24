@@ -181,19 +181,38 @@ upvote.addEventListener("click", function(){
     if (downvoteAlready && !upvoteAlready){
         
         document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) - 1;
-        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) + 1;
+        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
         upvoteAlready = true;
         downvoteAlready = false;
+
+        upvote.classList.remove("fa-regular");
+        upvote.classList.add("fa-solid");
+        downvote.classList.add("fa-regular");
+        downvote.classList.remove("fa-solid");
+
+        document.getElementById("upvote-amnt").style.fontWeight = "bold";
     }
     else if (!upvoteAlready){
         
-        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) + 1;        upvoteAlready = true;
-    }
+        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) + 1;
+        upvoteAlready = true;
 
-    upvote.classList.remove("fa-regular");
-    upvote.classList.add("fa-solid");
-    downvote.classList.add("fa-regular");
-    downvote.classList.remove("fa-solid");
+        upvote.classList.remove("fa-regular");
+        upvote.classList.add("fa-solid");
+        downvote.classList.add("fa-regular");
+        downvote.classList.remove("fa-solid");
+
+        document.getElementById("upvote-amnt").style.fontWeight = "bold";
+    }
+    else {
+        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
+        upvoteAlready = false;
+
+        upvote.classList.remove("fa-solid");
+        upvote.classList.add("fa-regular");
+
+        document.getElementById("upvote-amnt").style.fontWeight = "bold";
+    }
     
     
 });
@@ -211,23 +230,34 @@ downvote.addEventListener("click", function(){
         downvoteAlready = true;
         upvoteAlready = false;
 
+        downvote.classList.remove("fa-regular");
+        downvote.classList.add("fa-solid");
+        upvote.classList.add("fa-regular");
+        upvote.classList.remove("fa-solid");
+
+        document.getElementById("downvote-amnt").style.fontWeight = "bold";
     }
     else if (!downvoteAlready){
         document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) + 1;
         console.log(downvoteNumber + " prior downvotes - downvoted the post!");
         downvoteAlready = true;
-    }
 
+        downvote.classList.remove("fa-regular");
+        downvote.classList.add("fa-solid");
+        upvote.classList.add("fa-regular");
+        upvote.classList.remove("fa-solid");
+
+        document.getElementById("downvote-amnt").style.fontWeight = "bold";
+    }
     else{
-        console.log("post has been already downvoted");
-    }
+        document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) - 1;
+        downvoteAlready = false;
 
-    downvote.classList.remove("fa-regular");
-    downvote.classList.add("fa-solid");
-    upvote.classList.add("fa-regular");
-    upvote.classList.remove("fa-solid");
-    
-    
+        downvote.classList.remove("fa-solid");
+        downvote.classList.add("fa-regular");
+
+        document.getElementById("downvote-amnt").style.fontWeight = "bold";
+    }
 });
 
 $(document).on("click", ".comment-proper-votes", function () {
