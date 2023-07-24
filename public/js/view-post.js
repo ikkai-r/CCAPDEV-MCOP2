@@ -382,6 +382,32 @@ function onClickCancelEdit(e){
     isEditing = 0;
 }
     
+$(document).ready(function() {
+
+    $("#comment-send-btn").click(function(e) {
+      e.preventDefault();
+        
+      // Send the form data to the server using AJAX
+      const formData = $('#comment-form').serialize();
+
+      // Send the form data to the server using AJAX
+      $.ajax({
+        url: '/post/comment', 
+        method: 'POST',
+        data: formData,
+        success: function(data) {
+          console.log(data.message);
+          location.reload(); // Refresh the page to get the updated comments
+
+        },
+        error: function(error) {
+          console.error('Error submitting form:', error);
+        }
+      });
+
+});
+});
+
 function onClickSubmitEdit(e){
     let parentComment = e.target.closest(".row.comment");
     let commenting = $(".commenting");
