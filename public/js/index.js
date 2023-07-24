@@ -26,6 +26,8 @@ postContainers.forEach((container) => {
     const downvoteBtn = container.querySelector(".downvote-btn");
     const upvoteAmnt = container.querySelector(".upvote-amnt");
     const downvoteAmnt = container.querySelector(".downvote-amnt");
+    const styleUpvoteAmnt = container.querySelector(".upvote-amnt");
+    const styleDownvoteAmnt = container.querySelector(".downvote-amnt");
 
     let upvoteAlready = false;
     let downvoteAlready = false;
@@ -58,7 +60,7 @@ postContainers.forEach((container) => {
             upvoteBtn.classList.add("fa-regular");
         }
 
-        
+        styleUpvoteAmnt.style.fontWeight = "bold";
     });
 
     downvoteBtn.addEventListener("click", function () {
@@ -72,8 +74,6 @@ postContainers.forEach((container) => {
             downvoteBtn.classList.add("fa-solid");
             upvoteBtn.classList.add("fa-regular");
             upvoteBtn.classList.remove("fa-solid");
-            
-            document.getElementById("upvote-amnt").style.fontWeight = "bold";
         } else if (!downvoteAlready) {
             downvoteAmnt.textContent = parseInt(downvoteAmnt.textContent) + 1;
             downvoteAlready = true;
@@ -82,8 +82,6 @@ postContainers.forEach((container) => {
             downvoteBtn.classList.add("fa-solid");
             upvoteBtn.classList.add("fa-regular");
             upvoteBtn.classList.remove("fa-solid");
-            
-            document.getElementById("upvote-amnt").style.fontWeight = "bold";
         }
         else {
             downvoteAmnt.textContent = parseInt(downvoteAmnt.textContent) - 1;
@@ -91,9 +89,8 @@ postContainers.forEach((container) => {
 
             downvoteBtn.classList.remove("fa-solid");
             downvoteBtn.classList.add("fa-regular");
-        
-            document.getElementById("upvote-amnt").style.fontWeight = "bold";
         }
         
+        styleDownvoteAmnt.style.fontWeight = "bold";
     });
 });
