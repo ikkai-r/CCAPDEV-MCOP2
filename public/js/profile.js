@@ -14,13 +14,49 @@ var backLoad = function (event) {
     document.getElementById("bio-area").value = "i'm a great placeholder, just like how i am easily replaced";
 };
 
-var saveChanges = function () {
-    if (imageSrc !== "") {  // Check if an image URL is present
-        var image = document.getElementById("upfp");
-        image.src = imageSrc;  // Set the image source to the stored URL
-      }
-      document.getElementById("bio-user").textContent = document.getElementById("bio-area").value;
-}
+$("#edit-profile-btn").click(function (e) {
+    // if (imageSrc !== "") {  // Check if an image URL is present
+    //     var image = document.getElementById("upfp");
+    //     image.src = imageSrc;  // Set the image source to the stored URL
+    //   }
+    //   document.getElementById("bio-user").textContent = document.getElementById("bio-area").value;
+
+    e.preventDefault();
+
+    // Create a new FormData object
+    var formData = new FormData();
+
+    formData.append('bio_area', $('#bio-area').val());
+  
+    var fileInput = $('#getImg')[0].files[0];
+    if (fileInput) {
+      formData.append('getImg', fileInput);
+    }
+      // Send the form data to the server using AJAX
+      $.ajax({
+        url: '/user/'+$('#username-edit').val(), 
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+         if(data.message == 'success') {
+            if (data.profile_image) {
+                $('#upfp').attr('src', data.profile_image);
+              }
+        
+              // Update the profile bio if it exists in the response
+              if (data.profile_bio) {
+                $('#bio-user').text(data.profile_bio);
+              }
+         } 
+        },
+        error: function(error) {
+          console.error('Error submitting form:', error);
+        }
+      });
+   
+});
 
 var logoutButton = document.getElementById("logout-btn");
 
