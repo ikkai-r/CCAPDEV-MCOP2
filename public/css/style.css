@@ -756,9 +756,21 @@ body::-webkit-scrollbar{
 
 .comment-textarea {
     background-color: #EBEBEB;
-    /* margin-top: 2vh; */
-    margin-bottom: 2vh;
-    height: 10vh;
+    border: 0px;
+    height: fit-content;
+    margin: none;
+}
+
+.comment-textarea-holder {
+    background-color:#EBEBEB;
+    height: fit-content;
+    overflow-y: auto;
+    justify-content: center;
+    margin: 0vh .5vh;
+}
+
+.comment-send:hover{
+    color:#D4A373;
 }
 
 .all-comment>.all-comment{

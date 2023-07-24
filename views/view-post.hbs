@@ -8,6 +8,17 @@
         {{> post}}
     
         <h3>Comments (<span id="comment-bar-amnt">0</span>)</h3>
+        
+        <div class="row comment-textarea-holder">
+                <div class="col-11 d-flex justify-content-center">
+                        <textarea class="comment-textarea" contenteditable="true" placeholder="add text here" ></textarea>
+                </div>
+                <div class="col-1 d-flex comment-send">
+                        <i class="fa-solid fa-paper-plane" style="margin:auto"></i>
+                </div>
+
+        </div>
+        
         <!-- Comment portion -->
         {{#each comment}}
         {{> comments}}
