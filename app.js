@@ -62,7 +62,6 @@ app.get('/home', async (req, res) => {
     const maxTextLength = 100;
 
     try {
-        // not finished, still figuring out how to do this
         const listofposts = await Post.find().populate({
             path: 'username',
         }).populate({
@@ -108,9 +107,6 @@ app.get('/home', async (req, res) => {
            getPopularTags.push(tag);
 
         }
-            console.log(getPopularTags);
-
-
 
         res.render("index", {
         header: "Hot Posts",
