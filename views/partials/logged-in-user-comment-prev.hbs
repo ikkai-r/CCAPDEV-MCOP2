@@ -29,7 +29,7 @@
     <span class="comment-info"><a href="user/{{{username.username}}}">{{{username.username}}}</a> commented on {{comment_date}}</span>
     <p class="post-content pt-2">{{{comment_content}}}</p>
     <div class="d-flex justify-content-between">
-        <div>{{edit_comment}}</div>
+        <div><a><i class="fa-regular fa-pen-to-square"></i></a></div>
         <div class="actions-cont d-flex">
             <div class="share-cont" id="share-btn" onclick="copyLink('post/{{post_commented._id}}')">
                 <i class="fa-regular fa-share-from-square"></i>

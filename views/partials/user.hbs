@@ -10,7 +10,7 @@
                         <form style="text-align: center;" method="post" enctype="multipart/form-data">
                            <h3 class="mb-3"><b>Edit Profile</b></h3>
                            <div class="edit-profile-cont mb-4">
-                            <div class="edit-profile-bg" id="edit-pfp-bg" style="background-image:url(../{{profile_pic}});">
+                            <div class="edit-profile-bg" id="edit-pfp-bg">
                             </div>
                             <img src="{{profile_pic}}" class="edit-profile-pic" id="edit-pfp">
                             <div class="pen-circle"  onclick="document.getElementById('getImg').click()">
@@ -19,7 +19,7 @@
                             </div>
                             </div>
 
-                            <h3><b>{{username}}</b></h3>
+                            <h3><b>helpvirus</b></h3>
                             <label for="bio-area"></label>
                             <textarea class="form-control mb-3" id="bio-area" rows="10" name="bio-area">{{profile_desc}}</textarea>
                           </form>
@@ -104,19 +104,11 @@
                         <!-- Posts Content Tab -->
                         <div class="tab-pane fade show active" id="nav-posts" role="tabpanel" aria-labelledby="nav-posts-tab">
                             <div class="container">
-                                {{#if edit_profile}}
-                                    {{#each user_posts}}
-                                        {{> logged-in-user-post-prev this}}
-                                    {{else}}
-                                        {{> user-pane-empty this}}
-                                    {{/each}}
-                                    {{else}}
-                                    {{#each user_posts}}
-                                        {{> user-post-prev this}}
-                                    {{else}}
-                                        {{> user-pane-empty this}}
-                                    {{/each}}
-                                {{/if}}
+                                {{#each user_posts}}
+                                {{> user-post-prev this}}
+                                {{else}}
+                                {{> user-pane-empty this}}
+                                {{/each}}
 
                             </div>
                         </div>
@@ -126,20 +118,11 @@
                             <div class="container">                                
                                  <!-- Comment Container -->
                                  
-                               {{#if edit_profile}}
-                                    {{#each user_comments}}
-                                        {{> logged-in-user-comment-prev this}}
-                                    {{else}}
-                                        {{> user-pane-empty this}}
-                                    {{/each}}
-                                    {{else}}
-                                    {{#each user_comments}}
-                                        {{> user-comment-prev this}}
-                                    {{else}}
-                                        {{> user-pane-empty this}}
-                                    {{/each}}
-                                {{/if}}
-
+                                {{#each user_comments}}
+                                {{> user-comment-prev this}}
+                                {{else}}
+                                {{> user-pane-empty this}}
+                                {{/each}}
 
                             </div>
                         </div>
