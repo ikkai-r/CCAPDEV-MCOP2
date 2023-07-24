@@ -445,6 +445,24 @@ body::-webkit-scrollbar{
     cursor: pointer;
 }
 
+/* Popular Tags */
+.tag-subscribe {
+    background-color: #8D5821;
+    color: #dbdbdb;
+    font-weight: bolder;
+    font-size: 1.5vh;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    border-radius: 5px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.tag-subscribe:hover {
+    background-color: #543515;
+    cursor: pointer;
+}
+
 /* View Tag Styles */
 .tag-group-row{
     justify-content: space-between;
