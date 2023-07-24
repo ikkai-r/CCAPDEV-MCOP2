@@ -25,7 +25,7 @@ const postSchema = new mongoose.Schema({
     post_date: {
         type: String
     },
-    post_date_modified: Date,
+    post_date_modified: String,
     comments: [{
         type: mongoose.Schema.Types.ObjectId, ref:'Comment',
     }],
