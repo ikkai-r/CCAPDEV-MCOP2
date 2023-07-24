@@ -120,8 +120,8 @@ router.post('/:name', upload.single('getImg'), async function (req, res) {
   try {
 
     const getName = req.params.name;
-  const user = await Account.findOne({ username: getName });
-  const { bio_area } = req.body;
+    const user = await Account.findOne({ username: getName });
+    const { bio_area } = req.body;
 
   if(req.file) {
     const newImg = "img/"+req.file.originalname;
