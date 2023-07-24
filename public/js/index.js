@@ -36,15 +36,29 @@ postContainers.forEach((container) => {
             upvoteAmnt.textContent = parseInt(upvoteAmnt.textContent) + 1;
             upvoteAlready = true;
             downvoteAlready = false;
+
+            upvoteBtn.classList.remove("fa-regular");
+            upvoteBtn.classList.add("fa-solid");
+            downvoteBtn.classList.add("fa-regular");
+            downvoteBtn.classList.remove("fa-solid");
         } else if (!upvoteAlready) {
             upvoteAmnt.textContent = parseInt(upvoteAmnt.textContent) + 1;
             upvoteAlready = true;
+
+            upvoteBtn.classList.remove("fa-regular");
+            upvoteBtn.classList.add("fa-solid");
+            downvoteBtn.classList.add("fa-regular");
+            downvoteBtn.classList.remove("fa-solid");
+        }
+        else {
+            upvoteAmnt.textContent = parseInt(upvoteAmnt.textContent) - 1;
+            upvoteAlready = false;
+
+            upvoteBtn.classList.remove("fa-solid");
+            upvoteBtn.classList.add("fa-regular");
         }
 
-        upvoteBtn.classList.remove("fa-regular");
-        upvoteBtn.classList.add("fa-solid");
-        downvoteBtn.classList.add("fa-regular");
-        downvoteBtn.classList.remove("fa-solid");
+        
     });
 
     downvoteBtn.addEventListener("click", function () {
@@ -53,14 +67,33 @@ postContainers.forEach((container) => {
             downvoteAmnt.textContent = parseInt(downvoteAmnt.textContent) + 1;
             downvoteAlready = true;
             upvoteAlready = false;
+
+            downvoteBtn.classList.remove("fa-regular");
+            downvoteBtn.classList.add("fa-solid");
+            upvoteBtn.classList.add("fa-regular");
+            upvoteBtn.classList.remove("fa-solid");
+            
+            document.getElementById("upvote-amnt").style.fontWeight = "bold";
         } else if (!downvoteAlready) {
             downvoteAmnt.textContent = parseInt(downvoteAmnt.textContent) + 1;
             downvoteAlready = true;
-        }
 
-        downvoteBtn.classList.remove("fa-regular");
-        downvoteBtn.classList.add("fa-solid");
-        upvoteBtn.classList.add("fa-regular");
-        upvoteBtn.classList.remove("fa-solid");
+            downvoteBtn.classList.remove("fa-regular");
+            downvoteBtn.classList.add("fa-solid");
+            upvoteBtn.classList.add("fa-regular");
+            upvoteBtn.classList.remove("fa-solid");
+            
+            document.getElementById("upvote-amnt").style.fontWeight = "bold";
+        }
+        else {
+            downvoteAmnt.textContent = parseInt(downvoteAmnt.textContent) - 1;
+            downvoteAlready = false;
+
+            downvoteBtn.classList.remove("fa-solid");
+            downvoteBtn.classList.add("fa-regular");
+        
+            document.getElementById("upvote-amnt").style.fontWeight = "bold";
+        }
+        
     });
 });
