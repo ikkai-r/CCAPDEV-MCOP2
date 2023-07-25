@@ -16,18 +16,20 @@ let downvote = document.querySelector(".votes-cont i.fa-circle-down");
 
 let shareButton = document.querySelector(".share-cont");
 
-
-function createTextarea () {
+function createTextarea (commentId) {
     let div = document.createElement("div");
     div.setAttribute("class", "commenting mt-2");
     div.setAttribute("id", "commenting");
 
     div.innerHTML += `
-    <textarea class="comment-textarea" contenteditable="true" placeholder="add text here" ></textarea>
+    <form id="reply-form" method="post">
+    <input type="hidden" id="parent_comment_id" name="parent_comment_id" value="`+commentId+`">
+    <textarea class="reply-textarea comment-textarea" contenteditable="true" placeholder="add text here" name="reply_content"></textarea>
     <div class="d-flex justify-content-between">
         <button class="cancel-comment pill" id="comment-cancel" style="background-color: #DBDBDB;">cancel</button>
-        <button class="submit-comment pill" id="submit-comment" style="background-color: #D4A373;">send</button>
-    </div>`;
+        <button class="submit-comment pill" id="submit_comment" style="background-color: #D4A373;">send</button>
+    </div>
+    </form>`;
 
     return div;
 }
@@ -81,7 +83,7 @@ function addReply(text) {
             <span class="comment-time-reply">1s ago</span>
             <!-- Write a comment -->
             <!-- <div class="comment-writer">
-                <div class="comment-textarea" contenteditable="true" placeholder="add text here" ></div>
+                <div class="reply-textarea" contenteditable="true" placeholder="add text here" ></div>
                 <div class="d-flex justify-content-between">
                     <button class="submit comment-pill " style="background-color: #DBDBDB;">cancel</button>
                     <button class="submit comment-pill" style="background-color: #D4A373;">send</button>
@@ -118,9 +120,9 @@ function addReply(text) {
 
 function onClickRep(e) {
     let closest = e.target.closest(".all-comment");
-    
+    const commentId = $(e.target).closest(".all-comment").find("#comment_id").val();
     if (isCommenting == 0) {
-        closest.appendChild(createTextarea ());
+        closest.appendChild(createTextarea (commentId));
         element = document.getElementById("comment-cancel");
         isCommenting = 1;
         element.addEventListener("click", onClickCancel);
@@ -135,28 +137,33 @@ function onClickCancel(e) {
     isCommenting = 0;
 }
 
-function copyComment(text){
-    let div = document.createElement("div");
-    div.setAttribute("class", "commenting mt-2");
-    div.setAttribute("id", "commenting");
-
-    div.innerHTML += `
-    <textarea class="comment-textarea" contenteditable="true" placeholder="add text here" >${text}</textarea>
-    <div class="d-flex justify-content-between">
-        <button class="cancel-comment pill" id="edit-cancel" style="background-color: #DBDBDB;">cancel</button>
-        <button class="submit-comment pill" id="edit-submit" style="background-color: #D4A373;">edit</button>
-    </div>`;
-
-    return div;
-}
-
+$(document).ready(function() {
 $(".comment-container").click(function (e) {
     let closest = e.target.closest(".all-comment");
-    console.log(closest);
 
-    $(".submit-comment").unbind().click(function () {
-        const commentTextarea = $(".comment-textarea");
-        if (commentTextarea.val) {
+    $(".submit-comment").unbind().click(function (e) {
+        e.preventDefault();
+        console.log("HEREEE");
+
+        const commentTextarea = $(".reply-textarea");
+
+        if (commentTextarea.val()) {
+            // Send the form data to the server using AJAX
+            const formData = $('#reply-form').serialize();
+            console.log(formData);
+
+            // Send the form data to the server using AJAX
+            $.ajax({
+                url: '/post/reply', 
+                method: 'POST',
+                data: formData,
+                success: function(data) {
+                console.log(data.message);
+                },
+                error: function(error) {
+                console.error('Error submitting form:', error);
+                }
+            });
 
             if(commentTextarea.val() !== "") {
                 if(closest != null){
@@ -165,14 +172,15 @@ $(".comment-container").click(function (e) {
                     const commentContainer = document.querySelector(".comment-container");
                     commentContainer.appendChild(addReply(commentTextarea.val()));
                 }
-                $(".commenting").remove();
+                $(".commenting").hide();
             } else {
                 const commentTextarea = $(".commenting");
-                commentTextarea.remove();
+                commentTextarea.hide();
             }
             isCommenting = 0;
-        } 
+        }
      });
+});
 });
 
 upvote.addEventListener("click", function(){
@@ -441,6 +449,31 @@ $(document).ready(function() {
 
 });
 });
+
+
+// $(document).ready(function() {
+
+//     $("#submit_comment").click(function(e) {
+//       e.preventDefault();
+//       console.log("HEREEE");
+//     //   // Send the form data to the server using AJAX
+//     //   const formData = $('#reply-form').serialize();
+
+//     //   // Send the form data to the server using AJAX
+//     //   $.ajax({
+//     //     url: '/post/reply', 
+//     //     method: 'POST',
+//     //     data: formData,
+//     //     success: function(data) {
+//     //       console.log(data.message);
+//     //     },
+//     //     error: function(error) {
+//     //       console.error('Error submitting form:', error);
+//     //     }
+//     //   });
+
+// });
+// });
   
   $(document).ready(function() {
   
