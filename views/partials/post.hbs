@@ -35,7 +35,7 @@
             <i class="fa-regular fa-share-from-square"></i>
         </div>
         <div class="votes-cont">
-            <form id = "upvoteForm">
+            <form id = "upvoteForm" style="display:inline">
                  <input type="hidden" value="upvoted" name="action" id="action">
                 <input type="hidden" value="{{id}}" name="post_id" id="post_id">
             {{#if is_upvoted}}
@@ -46,7 +46,7 @@
             </form>
             <span style="fontWeight:bold; font-size:smaller; margin-right: 0.5vh;" id="upvote-amnt"><b>{{upvote_count}}</b></span>
             <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
-            <form id = "downvoteForm">
+            <form id = "downvoteForm" style="display:inline">
                  <input type="hidden" value="downvoted" name="action" id="action">
                 <input type="hidden" value="{{id}}" name="post_id" id="post_id">
             {{#if is_downvoted}}
