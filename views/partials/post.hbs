@@ -29,15 +29,24 @@
         {{/each}}
     </div>
 
+  
     <div class="actions-cont viewed-post-actions mb-3 mt-3">
         <div class="share-cont" id="share-btn" onclick="copyLink('post/{{id}}')">
             <i class="fa-regular fa-share-from-square"></i>
         </div>
         <div class="votes-cont">
+            <form id = "upvoteForm">
+                 <input type="hidden" value="upvoted" name="action" id="action">
+                <input type="hidden" value="{{id}}" name="post_id" id="post_id">
             <i class="fa-regular fa-circle-up" id="upvote-btn"></i>
+            </form>
             <span style="fontWeight:bold; font-size:smaller; margin-right: 0.5vh;" id="upvote-amnt"><b>3</b></span>
             <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
+            <form id = "downvoteForm">
+                 <input type="hidden" value="downvoted" name="action" id="action">
+                <input type="hidden" value="{{id}}" name="post_id" id="post_id">
             <i class="fa-regular fa-circle-down" id="downvote-btn"></i>
+            </form>
             <span style="fontWeight:bold; font-size:smaller" id="downvote-amnt"><b>0</b></span>
         </div>
         <div class="comments-cont">

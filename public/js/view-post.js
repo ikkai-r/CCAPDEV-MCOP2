@@ -175,43 +175,67 @@ $(".comment-container").click(function (e) {
 });
 
 upvote.addEventListener("click", function(){
-    let upvoteNumber = document.querySelectorAll(".votes-cont span")[0].innerText;
-    let downvoteNumber = document.querySelectorAll(".votes-cont span")[2].innerText;
-    
-    if (downvoteAlready && !upvoteAlready){
-        
-        document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) - 1;
-        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
-        upvoteAlready = true;
-        downvoteAlready = false;
 
-        upvote.classList.remove("fa-regular");
-        upvote.classList.add("fa-solid");
-        downvote.classList.add("fa-regular");
-        downvote.classList.remove("fa-solid");
+    try{
+        // check if upvoted already?
+        var voteForm = $('#upvoteForm').serialize();
 
-        document.getElementById("upvote-amnt").style.fontWeight = "bold";
-    }
-    else if (!upvoteAlready){
-        
-        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) + 1;
-        upvoteAlready = true;
+        $.ajax({
+            url: '/post/' + $('#post_id').val(), 
+            method: 'POST',
+            data: voteForm,
+            success: function(data) {
+                console.log(data.message);
+                location.reload(); // Refresh the page to get the updated comments
+            },
+            error: function(error) {
+              console.error('Error submitting form:', error);
+            }
+          
+        });
+            
+       
 
-        upvote.classList.remove("fa-regular");
-        upvote.classList.add("fa-solid");
-        downvote.classList.add("fa-regular");
-        downvote.classList.remove("fa-solid");
+        /* let upvoteNumber = document.querySelectorAll(".votes-cont span")[0].innerText;
+            let downvoteNumber = document.querySelectorAll(".votes-cont span")[2].innerText;
+            
+            if (downvoteAlready && !upvoteAlready){
+                
+                document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) - 1;
+                document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
+                upvoteAlready = true;
+                downvoteAlready = false;
 
-        document.getElementById("upvote-amnt").style.fontWeight = "bold";
-    }
-    else {
-        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
-        upvoteAlready = false;
+                upvote.classList.remove("fa-regular");
+                upvote.classList.add("fa-solid");
+                downvote.classList.add("fa-regular");
+                downvote.classList.remove("fa-solid");
 
-        upvote.classList.remove("fa-solid");
-        upvote.classList.add("fa-regular");
+                document.getElementById("upvote-amnt").style.fontWeight = "bold";
+            }
+            else if (!upvoteAlready){
+                
+                document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) + 1;
+                upvoteAlready = true;
 
-        document.getElementById("upvote-amnt").style.fontWeight = "bold";
+                upvote.classList.remove("fa-regular");
+                upvote.classList.add("fa-solid");
+                downvote.classList.add("fa-regular");
+                downvote.classList.remove("fa-solid");
+
+                document.getElementById("upvote-amnt").style.fontWeight = "bold";
+            }
+            else {
+                document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
+                upvoteAlready = false;
+
+                upvote.classList.remove("fa-solid");
+                upvote.classList.add("fa-regular");
+
+                document.getElementById("upvote-amnt").style.fontWeight = "bold";
+            }*/
+    }catch(error){
+        console.log(error);
     }
     
     
@@ -220,7 +244,28 @@ upvote.addEventListener("click", function(){
 
 downvote.addEventListener("click", function(){
 
-    let upvoteNumber = document.querySelectorAll(".votes-cont span")[0].innerText;
+    try{
+        // check if upvoted already?
+        var voteForm = $('#downvoteForm').serialize();
+
+        $.ajax({
+            url: '/post/' + $('#post_id').val(), 
+            method: 'POST',
+            data: voteForm,
+            success: function(data) {
+                console.log(data.message);
+                location.reload(); // Refresh the page to get the updated comments
+            },
+            error: function(error) {
+              console.error('Error submitting form:', error);
+            }
+          
+        });
+    } catch(error){
+        console.log(error);
+    }
+
+    /*let upvoteNumber = document.querySelectorAll(".votes-cont span")[0].innerText;
     let downvoteNumber = document.querySelectorAll(".votes-cont span")[2].innerText;
     
     if (upvoteAlready && !downvoteAlready){
@@ -257,7 +302,7 @@ downvote.addEventListener("click", function(){
         downvote.classList.add("fa-regular");
 
         document.getElementById("downvote-amnt").style.fontWeight = "bold";
-    }
+    }*/
 });
 
 $(document).on("click", ".comment-proper-votes", function () {

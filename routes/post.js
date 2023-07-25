@@ -2,6 +2,7 @@ const express = require ("express");
 const Post = require('../server/schema/Post');
 const Tag = require('../server/schema/Tag');
 const Account = require('../server/schema/Account');
+const Vote = require('../server/schema/Vote');
 const router = express.Router();
 
 const multer  = require('multer')
@@ -262,6 +263,48 @@ router.get('/:id', async (req, res) =>{
             logged_in: logged_in,
             script: "js/view-post.js"
         });
+    } catch(error){
+        console.log(error);
+    }
+   
+});
+
+router.post('/:id', async (req, res) =>{
+    const getId = req.params.id;
+  
+    try{
+        const {action} = req.body;
+        var isUpvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
+        var isDownvoted = await  Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
+        if (action === 'upvoted' && !isUpvoted && !isDownvoted){
+            const newUpvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'up'});
+            await newUpvote.save();
+            console.log("User upvoted successfully");
+        }
+        else if (action === 'upvoted' && isUpvoted){
+            console.log("User already upvoted");
+        }
+        else if (action === 'upvoted' && isDownvoted){
+            await Vote.findByIdAndDelete(isDownvoted._id);
+            const editedUpvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'up'});
+            await editedUpvote.save();
+            console.log("User previously downvoted, removing downvote for upvote");
+        }
+        else if (action === 'downvoted' && !isUpvoted && !isDownvoted){
+            const newDownvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'down'});
+            await newDownvote.save();
+            console.log("User downvoted successfully");
+        }
+        else if (action === 'downvoted' && isDownvoted){
+            console.log("User already downvoted");
+        }
+        else if(action === 'downvoted' && isUpvoted){
+            await Vote.findOneAndDelete(isUpvoted._id);
+            const editedDownvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'down'});
+           await editedDownvote.save();
+            console.log("User previously upvoted, removing upvote for downvote");
+        }
+        
     } catch(error){
         console.log(error);
     }
