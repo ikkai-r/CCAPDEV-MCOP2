@@ -34,34 +34,45 @@ $(document).on("click", ".fa-xmark", function () {
   $(this).parent().remove();
 });
 
+
 $("#create-post-btn").click(function(e) {
   e.preventDefault();
+
+  var formData = new FormData();
 
   var tags = $("#tag-grp div span").map(function() {
     return $(this).text();
   }).get().join(",");
 
-  const formData = $('#create-post-form').serializeArray();
-
-  formData.push({ name: "tags", value: tags });
+  formData.append('post_title', $('#post_title').val());
+  formData.append('date', $('#date').val());
+  formData.append('post_content', $('#post_content').val());
+  formData.append('action', $('#action').val());
+  formData.append('tags', tags);
+  
+  var fileInput = $('#file')[0].files[0];
+  if (fileInput) {
+    formData.append('post_attachment', fileInput);
+  }
 
   // Send the form data to the server using AJAX
-  $.ajax({
-    url: '/post', 
-    method: 'POST',
-    data: formData,
-    success: function(data) {     
-      console.log(data.message);
-       window.location = "/post/" + data.id;
-         },
-    error: function(error) {
-      console.error('Error submitting form:', error);
-    }
-  });
+    $.ajax({
+        url: '/post', 
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+         console.log(data.message);
+         window.location = "/post/" + data.id;
+        },
+        error: function(error) {
+          console.error('Error submitting form:', error);
+      }
 
-  console.log(formData);
+});
+});
 
-})
 
 // For attaching files
 const fileInput = document.getElementById("file");
@@ -105,3 +116,71 @@ fileInput.addEventListener("change", function(e) {
 $(document).on("click", ".post-attachment-delete", function () {
   $(this).parent().remove();
 });
+
+
+$("#edit-post-btn").click(function(e) {
+  e.preventDefault();
+
+  var formData = new FormData();
+
+  var tags = $("#tag-grp div span").map(function() {
+    return $(this).text();
+  }).get().join(",");
+
+  formData.append('post_title', $('#post_title').val());
+  formData.append('post_content', $('#post_content').val());
+  formData.append('tags', tags);
+  formData.append('post_id', $('#post_id').val());
+  formData.append('action', $('#action').val()); // Updated this line
+  
+  var fileInput = $('#file')[0].files[0];
+  if (fileInput) {
+    formData.append('post_attachment', fileInput);
+  } 
+
+  // Send the form data to the server using AJAX
+    $.ajax({
+        url: '/post/edit-'+$('#post_id').val(), 
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+         console.log(data.message);
+         window.location = "/post/" + data.id;
+        },
+        error: function(error) {
+          console.error('Error submitting form:', error);
+      }
+
+});
+
+
+});
+
+
+
+
+
+  $("#edit-comment-btn").click(function(e) {
+    e.preventDefault();
+      
+    // Send the form data to the server using AJAX
+    const formData = $('#edit-comment-form').serialize();
+
+    // Send the form data to the server using AJAX
+    $.ajax({
+      url: '/post/editc-'+$('#comment_id').val(), 
+      method: 'POST',
+      data: formData,
+      success: function(data) {
+          console.log(data);
+        window.location.href = '/home'; 
+      },
+      error: function(error) {
+        console.error('Error submitting form:', error);
+      }
+    });
+
+});
+

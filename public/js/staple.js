@@ -7,6 +7,8 @@ function copyLink(url) {
     }, 1500)
 }
 
+
+
 function convertDateToTxt() {
     const date = new Date();
     const monthNames = [
@@ -78,7 +80,17 @@ $('#password-reg, #confirm-password').on('keyup', function () {
     }
   });
 
- 
+
+  $("#logout-btn").click(function (e) {
+    e.preventDefault();
+
+    $("#logoutModal").modal('show');
+
+    setTimeout(function() {
+        window.location.href = "/home";
+      }, 2000);
+});
+
 
   $("#register-btn").click(function (e) {
     e.preventDefault();
@@ -109,6 +121,41 @@ $('#password-reg, #confirm-password').on('keyup', function () {
     }
 });
 
+function subUnsub(tagIdValue, action) {
+    const user_id = "64b7e12123b197fa3cd7539b";
+
+    $.ajax({
+        url: '/subscribe',
+        method: 'POST',
+        data: { user_id: user_id, 
+                subscribe: tagIdValue, 
+                action: action},
+        success: function(data) {
+          console.log(data.message); // Optionally, handle success response
+          window.location.reload();
+        },
+        error: function(error) {
+          console.error('Error subscribing:', error); // Optionally, handle error response
+        }
+      });
+}
+
+$(".tag-subscribe").click(function (e) {
+    e.preventDefault();
+    
+    const tagIdValue = $(this).closest(".tag-subscribe").prev(".tag_pop_id").val();
+    const action = $(this).text();
+    
+    subUnsub(tagIdValue, action);
+});
+
+$("#tag-specific-subs").click(function (e) {
+    e.preventDefault();
+    
+    const tagIdValue = $("#header-tag-specific").text().replace("#", "");
+    const action = $(this).text();
+    subUnsub(tagIdValue, action);
+});
 
 
 $("#login-btn").click(function (e) {
@@ -140,16 +187,21 @@ $("#login-btn").click(function (e) {
           }
         });
      
-    });
-
-
-
-$(".add-tag").click(function () {
-    if( document.getElementById("subs").innerHTML == "Subscribe") {
-        document.getElementById("subs").innerHTML = "Unsubscribe";
-    } else {
-        document.getElementById("subs").innerHTML = "Subscribe";
-    }
-    
 });
 
+
+// Get all popular tag containers
+const popularTagContainers = document.querySelectorAll(".popular-taglist");
+
+popularTagContainers.forEach((container) => {
+    const tag = container.querySelector(".tag-subscribe");
+
+    tag.addEventListener("click", function () {
+        if (tag.textContent === "Subscribe") {
+            tag.textContent = "Unsubscribe";
+        }
+        else {
+            tag.textContent = "Subscribe";
+        }
+    });
+});

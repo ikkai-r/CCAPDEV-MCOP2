@@ -26,6 +26,8 @@ router.get("/:name", async (req, res)=> {
 
     try{
         const user = await Account.find({ "username" : { $regex : new RegExp(getName, "i") } });
+        const user1 = await Account.find({ "username" : "helpvirus" } );
+
 
         if (!user) {
             // Handle the case when the user is not found
@@ -56,13 +58,12 @@ router.get("/:name", async (req, res)=> {
             select: 'post_id tags post_title',
             populate: {
               path: 'tags',
-              select: 'tag_name',
+              select: '_id tag_name',
             },
           }).populate({
             path:'username',
             select: 'username'
         }).lean();
-
 
           listofcomments.forEach((comment) => {
 
@@ -76,35 +77,62 @@ router.get("/:name", async (req, res)=> {
           });
 
           const subscribedTags = user[0].subscribed_tags;
-          const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
-        
-      //if not logged in / not helpvirus
-      if(user[0].username != "helpvirus") {
-        res.render("user", {
-          "username": user[0].username,
-          "profile_desc": user[0].profile_desc,
-          "profile_pic": user[0].profile_pic,
-          user_posts: listofposts,
-          user_comments: listofcomments,
-          sub_tags: listofTags,
-          script: "js/profile.js",
-          add_script: "js/index.js"
-      });
-      } else if(user[0].username == "helpvirus") {
+          const subscribedTagsLogged = user1[0].subscribed_tags;
 
-        const editIconPr = '<i class="fa-regular fa-pen-to-square edit-profile-icon" data-bs-toggle="modal" data-bs-target="#edProfModal"></i>';
-        res.render("user", {
-          "username": user[0].username,
-          "profile_desc": user[0].profile_desc,
-          "profile_pic": user[0].profile_pic,
-          user_posts: listofposts,
-          user_comments: listofcomments,
-          sub_tags: listofTags,
-          edit_profile: editIconPr,
-          script: "js/profile.js",
-          add_script: "js/index.js"
-      });
+          const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+          const listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
+
+         // start for side-container content
+
+         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+         const tagCounts = await Post.aggregate([
+             {
+               $unwind: '$tags' 
+             },
+             {
+               $group: {
+                 _id: '$tags', 
+                 count: { $sum: 1 } 
+               }
+             }
+           ]).sort({count: 'desc'}).limit(6);
+ 
+           
+           const getPopularTags = [];
+ 
+         for (var i = 0; i < tagCounts.length; i++){
+             var newTag = await Tag.findById(tagCounts[i]._id).lean();
+             console.log(tagCounts[i]._id);
+             var tag = ({
+                 tag_name: newTag.tag_name,
+                 tag_id: newTag._id,
+                 count: tagCounts[i].count
+             });
+             getPopularTags.push(tag);
+         }
+
+         let editIconPr = "";
+      //if not logged in / not helpvirus
+     if(user[0].username == "helpvirus") {
+         editIconPr = '<i class="fa-regular fa-pen-to-square edit-profile-icon" data-bs-toggle="modal" data-bs-target="#edProfModal"></i>';
       }
+
+      res.render("user", {
+        "username": user[0].username,
+        "profile_desc": user[0].profile_desc,
+        "profile_pic": user[0].profile_pic,
+        user_posts: listofposts,
+        user_comments: listofcomments,
+        user_sub_tags: listofTags,
+        sub_tags: listofTagsLogged,
+        edit_profile: editIconPr,
+        posts_latest: latest_posts,
+        popular_tags: getPopularTags,
+        script: "js/profile.js",
+        add_script: "js/index.js",
+        navbar: 'logged-navbar'
+    });
         
     } catch(error){
         console.log(error);
@@ -120,8 +148,8 @@ router.post('/:name', upload.single('getImg'), async function (req, res) {
   try {
 
     const getName = req.params.name;
-  const user = await Account.findOne({ username: getName });
-  const { bio_area } = req.body;
+    const user = await Account.findOne({ username: getName });
+    const { bio_area } = req.body;
 
   if(req.file) {
     const newImg = "img/"+req.file.originalname;

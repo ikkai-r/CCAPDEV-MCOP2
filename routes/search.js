@@ -11,31 +11,45 @@ router.get('/', async (req, res) =>{
     const searchResults_Post = await Post.find({
         $or: [
             { post_title: {$regex: new RegExp(search, 'i')}},
-            { post_content: {$regex: new RegExp(search, 'i')}}]
-    }).populate('username').populate('tags').lean();
+            { post_content: {$regex: new RegExp(search, 'i')}},
+    ]}).populate('username').populate('tags').lean();
 
     const searchResults_Account = await Account.find({
         $or: [
             { username: {$regex: new RegExp(search, 'i')}},
             ]
-    });
+    }).lean();
 
-    const searchResults_Tag = await Tag.find({
+    const searchTag = await Tag.find({
         tag_name: {$regex: new RegExp(search, 'i')}
-    });
+    }).lean();
+    var searchResults_Tag = [];
 
-    console.log('Search term:', searchTerm);
+
+    // UNFINISHED
+    const tagCounts = await Post.aggregate([
+        {
+          $unwind: '$tags' 
+        },
+        {
+          $group: {
+            _id: '$tags', 
+            count: { $sum: 1 } 
+          }
+        }
+      ]);
+
     
-    console.log(searchResults_Post);
-    console.log(searchResults_Account);
-    console.log(searchResults_Tag);
 
     // need to output the results to here
     res.render("search", {
         header: "Search Results for " + searchTerm,
         searched_post: searchResults_Post,
+        searched_accounts: searchResults_Account,
+        searched_tags: searchResults_Tag,
         script: 'js/index.js',
-        add_style: '<link rel="stylesheet" type="text/css" href="css/style1.css">'
+        add_style: '<link rel="stylesheet" type="text/css" href="css/style1.css">',
+        navbar: 'logged-navbar'
         });
 });
 

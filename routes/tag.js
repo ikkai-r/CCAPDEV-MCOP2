@@ -1,5 +1,6 @@
 const express = require ("express");
 const router = express.Router();
+const Account = require('../server/schema/Account');
 const Tag = require('../server/schema/Tag');
 const Post = require('../server/schema/Post');
 const Account = require('../server/schema/Account');
@@ -9,6 +10,12 @@ router.get("/:tagname", async (req, res)=>{
     try {
         //gets the list of posts that contains tag
         const getTagName = req.params.tagname;
+
+        const user1 = await Account.find({ "username" : "helpvirus" } );
+        const subscribedTagsLogged = user1[0].subscribed_tags;
+
+        const listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
+
         const getTag = await Tag.find({
             tag_name: getTagName
         }).lean();
@@ -19,7 +26,7 @@ router.get("/:tagname", async (req, res)=>{
             path: 'username'
         }).populate({
             path: 'tags',
-            select: 'tag_name'
+            select: 'tag_name _id'
         }).lean();
 
         //list of accounts
@@ -29,9 +36,13 @@ router.get("/:tagname", async (req, res)=>{
 
         res.render("tag-posts", {
             tag_name: getTagName,
+            tag_id: getTag[0]._id,
             post_cnt: postListLength, 
             post:postList,
-            upvotes:'0'
+            upvotes:'0',
+            sub_tags: listofTagsLogged,
+            script: "js/tag.js",
+            navbar: 'logged-navbar'
         })
     } catch (error){
         console.log(error);

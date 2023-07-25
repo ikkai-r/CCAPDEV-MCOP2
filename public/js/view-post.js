@@ -22,11 +22,14 @@ function createTextarea () {
     div.setAttribute("id", "commenting");
 
     div.innerHTML += `
-    <textarea class="comment-textarea" contenteditable="true" placeholder="add text here" ></textarea>
+    <form id="reply-form" method="post">
+    <input type="hidden" id="parent-comment-id" name="parent_comment_id" value="`+commentId+`">
+    <textarea class="reply-textarea comment-textarea" contenteditable="true" placeholder="add text here" name="reply_content"></textarea>
     <div class="d-flex justify-content-between">
         <button class="cancel-comment pill" id="comment-cancel" style="background-color: #DBDBDB;">cancel</button>
-        <button class="submit-comment pill" id="submit-comment" style="background-color: #D4A373;">send</button>
-    </div>`;
+        <button class="submit-comment pill" id="submit_comment" style="background-color: #D4A373;">send</button>
+    </div>
+    </form>`;
 
     return div;
 }
@@ -80,7 +83,7 @@ function addReply(text) {
             <span class="comment-time-reply">1s ago</span>
             <!-- Write a comment -->
             <!-- <div class="comment-writer">
-                <div class="comment-textarea" contenteditable="true" placeholder="add text here" ></div>
+                <div class="reply-textarea" contenteditable="true" placeholder="add text here" ></div>
                 <div class="d-flex justify-content-between">
                     <button class="submit comment-pill " style="background-color: #DBDBDB;">cancel</button>
                     <button class="submit comment-pill" style="background-color: #D4A373;">send</button>
@@ -117,9 +120,10 @@ function addReply(text) {
 
 function onClickRep(e) {
     let closest = e.target.closest(".all-comment");
-    
+    const commentId = $(e.target).closest(".all-comment").find("#comment_id").text();
+
     if (isCommenting == 0) {
-        closest.appendChild(createTextarea ());
+        closest.appendChild(createTextarea (commentId));
         element = document.getElementById("comment-cancel");
         isCommenting = 1;
         element.addEventListener("click", onClickCancel);
@@ -134,29 +138,31 @@ function onClickCancel(e) {
     isCommenting = 0;
 }
 
-function copyComment(text){
-    let div = document.createElement("div");
-    div.setAttribute("class", "commenting mt-2");
-    div.setAttribute("id", "commenting");
-
-    div.innerHTML += `
-    <textarea class="comment-textarea" contenteditable="true" placeholder="add text here" >${text}</textarea>
-    <div class="d-flex justify-content-between">
-        <button class="cancel-comment pill" id="edit-cancel" style="background-color: #DBDBDB;">cancel</button>
-        <button class="submit-comment pill" id="edit-submit" style="background-color: #D4A373;">edit</button>
-    </div>`;
-
-    return div;
-}
-
+$(document).ready(function() {
 $(".comment-container").click(function (e) {
     let closest = e.target.closest(".all-comment");
-    console.log(closest);
 
-    $(".submit-comment").unbind().click(function () {
-        const commentTextarea = $(".comment-textarea");
+    $(".submit-comment").unbind().click(function (e) {
+        e.preventDefault();
+        console.log("HEREEE");
+        //   // Send the form data to the server using AJAX
+        //   const formData = $('#reply-form').serialize();
+    
+        //   // Send the form data to the server using AJAX
+        //   $.ajax({
+        //     url: '/post/reply', 
+        //     method: 'POST',
+        //     data: formData,
+        //     success: function(data) {
+        //       console.log(data.message);
+        //     },
+        //     error: function(error) {
+        //       console.error('Error submitting form:', error);
+        //     }
+        //   });
+        const commentTextarea = $(".reply-textarea");
         if (commentTextarea.val) {
-
+            console.log(commentTextarea.val());
             if(commentTextarea.val() !== "") {
                 if(closest != null){
                     closest.appendChild(addReply(commentTextarea.val()));
@@ -164,63 +170,110 @@ $(".comment-container").click(function (e) {
                     const commentContainer = document.querySelector(".comment-container");
                     commentContainer.appendChild(addReply(commentTextarea.val()));
                 }
-                $(".commenting").remove();
+                $(".commenting").hide();
             } else {
                 const commentTextarea = $(".commenting");
-                commentTextarea.remove();
+                commentTextarea.hide();
             }
             isCommenting = 0;
         } 
      });
+     $("#reply-form").trigger("reset");
+});
 });
 
 upvote.addEventListener("click", function(){
-    let upvoteNumber = document.querySelectorAll(".votes-cont span")[0].innerText;
-    let downvoteNumber = document.querySelectorAll(".votes-cont span")[2].innerText;
-    
-    if (downvoteAlready && !upvoteAlready){
-        
-        document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) - 1;
-        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
-        upvoteAlready = true;
-        downvoteAlready = false;
 
-        upvote.classList.remove("fa-regular");
-        upvote.classList.add("fa-solid");
-        downvote.classList.add("fa-regular");
-        downvote.classList.remove("fa-solid");
+    try{
+        // check if upvoted already?
+        var voteForm = $('#upvoteForm').serialize();
 
-        document.getElementById("upvote-amnt").style.fontWeight = "bold";
-    }
-    else if (!upvoteAlready){
-        
-        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) + 1;
-        upvoteAlready = true;
+        $.ajax({
+            url: '/post/' + $('#post_id').val(), 
+            method: 'POST',
+            data: voteForm,
+            success: function(data) {
+                console.log(data.message);
+                window.location.reload(); // Refresh the page to get the updated comments
+            },
+            error: function(error) {
+              console.error('Error submitting form:', error);
+            }
+          
+        });
+            
+       
 
-        upvote.classList.remove("fa-regular");
-        upvote.classList.add("fa-solid");
-        downvote.classList.add("fa-regular");
-        downvote.classList.remove("fa-solid");
+        /* let upvoteNumber = document.querySelectorAll(".votes-cont span")[0].innerText;
+            let downvoteNumber = document.querySelectorAll(".votes-cont span")[2].innerText;
+            
+            if (downvoteAlready && !upvoteAlready){
+                
+                document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) - 1;
+                document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
+                upvoteAlready = true;
+                downvoteAlready = false;
 
-        document.getElementById("upvote-amnt").style.fontWeight = "bold";
-    }
-    else {
-        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
-        upvoteAlready = false;
+                upvote.classList.remove("fa-regular");
+                upvote.classList.add("fa-solid");
+                downvote.classList.add("fa-regular");
+                downvote.classList.remove("fa-solid");
 
-        upvote.classList.remove("fa-solid");
-        upvote.classList.add("fa-regular");
+                document.getElementById("upvote-amnt").style.fontWeight = "bold";
+            }
+            else if (!upvoteAlready){
+                
+                document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) + 1;
+                upvoteAlready = true;
 
-        document.getElementById("upvote-amnt").style.fontWeight = "bold";
+                upvote.classList.remove("fa-regular");
+                upvote.classList.add("fa-solid");
+                downvote.classList.add("fa-regular");
+                downvote.classList.remove("fa-solid");
+
+                document.getElementById("upvote-amnt").style.fontWeight = "bold";
+            }
+            else {
+                document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
+                upvoteAlready = false;
+
+                upvote.classList.remove("fa-solid");
+                upvote.classList.add("fa-regular");
+
+                document.getElementById("upvote-amnt").style.fontWeight = "bold";
+            }*/
+    }catch(error){
+        console.log(error);
     }
     
     
 });
 
 
-downvote.addEventListener("click", function(){
+downvote.addEventListener("click", function(e){
+    e.preventDefault();
+    try{
+        // check if upvoted already?
+        var voteForm = $('#downvoteForm').serialize();
 
-    let upvoteNumber = document.querySelectorAll(".votes-cont span")[0].innerText;
+        $.ajax({
+            url: '/post/' + $('#post_id').val(), 
+            method: 'POST',
+            data: voteForm,
+            success: function(data) {
+                console.log(data.message);
+                window.location.reload(); // Refresh the page to get the updated comments
+            },
+            error: function(error) {
+              console.error('Error submitting form:', error);
+            }
+          
+        });
+    } catch(error){
+        console.log(error);
+    }
+
+    /*let upvoteNumber = document.querySelectorAll(".votes-cont span")[0].innerText;
     let downvoteNumber = document.querySelectorAll(".votes-cont span")[2].innerText;
     
     if (upvoteAlready && !downvoteAlready){
@@ -257,7 +310,7 @@ downvote.addEventListener("click", function(){
         downvote.classList.add("fa-regular");
 
         document.getElementById("downvote-amnt").style.fontWeight = "bold";
-    }
+    }*/
 });
 
 $(document).on("click", ".comment-proper-votes", function () {
@@ -359,18 +412,6 @@ function returnReply(){
     return span;
 }
 
-function insertEdited(){
-    // <span class="edited" title="This post has been edited.">edited</span>
-
-    let span = document.createElement("span");
-    span.setAttribute("class", "edited");
-    span.setAttribute("title", "This post has been edited.");
-
-    span.innerHTML += `edited`;
-
-    return span;
-}
-
 function onClickCancelEdit(e){
     let parentComment = e.target.closest(".row.comment");
     let commentTextarea = parentComment.querySelector(".commenting");
@@ -382,37 +423,83 @@ function onClickCancelEdit(e){
     isEditing = 0;
 }
     
-function onClickSubmitEdit(e){
-    let parentComment = e.target.closest(".row.comment");
-    let commenting = $(".commenting");
-    let commentContent = parentComment.querySelector(".comment-content");
-    let commentTimeReply = parentComment.querySelector(".comment-time-reply");
-    let commentOptions = parentComment.querySelector(".comment-options");
-    let commentTextarea = $(".comment-textarea");
+$(document).ready(function() {
 
-    if(commentTextarea.val() !== "") {
-        console.log("success");
+    $("#comment-send-btn").click(function(e) {
+      e.preventDefault();
         
-        commenting.remove();
-        commentContent.appendChild(returnCommentContentText(commentTextarea.val()));
+      // Send the form data to the server using AJAX
+      const formData = $('#comment-form').serialize();
 
-        if (!parentComment.querySelector(".edited") && prevCommentContent != commentTextarea.val()){
-            $(insertEdited()).insertBefore(commentOptions);
-        } 
-        
-        $(returnReply()).insertBefore(commentTimeReply);
-        isEditing = 0;
-    } else {
-        console.log("fail");
-        console.log(commentTextarea);
-    }
-}
+      // Send the form data to the server using AJAX
+      $.ajax({
+        url: '/post/comment', 
+        method: 'POST',
+        data: formData,
+        success: function(data) {
+          console.log(data.message);
+          location.reload(); // Refresh the page to get the updated comments
 
-function onClickDeleteComment(e){
-    let parentComment = e.target.closest(".row.comment");
-    let commentNumber = document.getElementById("comment-amnt").innerText;
-    document.getElementById("comment-amnt").innerHTML = parseInt(commentNumber) - 1;
-    document.getElementById("comment-bar-amnt").innerHTML = parseInt(commentNumber) - 1;
+        },
+        error: function(error) {
+          console.error('Error submitting form:', error);
+        }
+      });
 
-    parentComment.remove();
-}
+});
+});
+
+
+// $(document).ready(function() {
+
+//     $("#submit_comment").click(function(e) {
+//       e.preventDefault();
+//       console.log("HEREEE");
+//     //   // Send the form data to the server using AJAX
+//     //   const formData = $('#reply-form').serialize();
+
+//     //   // Send the form data to the server using AJAX
+//     //   $.ajax({
+//     //     url: '/post/reply', 
+//     //     method: 'POST',
+//     //     data: formData,
+//     //     success: function(data) {
+//     //       console.log(data.message);
+//     //     },
+//     //     error: function(error) {
+//     //       console.error('Error submitting form:', error);
+//     //     }
+//     //   });
+
+// });
+// });
+  
+  $(document).ready(function() {
+  
+    $("#delete-comment-btn").click(function(e) {
+  
+      console.log("HERE");
+      e.preventDefault();
+    
+      if($("#comment_id").val() !== "") {
+        const postId = $("#comment_id").val();
+    
+      $.ajax({
+        url: `/post/${postId}`,
+        method: 'DELETE',
+        success: function(data) {
+          // Handle the success response (e.g., show a success message or refresh the page)
+          window.location.reload(); 
+        },
+        error: function(error) {
+          // Handle the error response (e.g., show an error message)
+          console.error('Error deleting comment:', error);
+          alert('An error occurred while deleting the comment.');
+        },
+      });
+      } else {
+        window.location.reload(); 
+      }
+      
+    });
+    });

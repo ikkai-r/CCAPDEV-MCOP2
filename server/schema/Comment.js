@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const commentSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     // user connected to Account
     username: {
         type: mongoose.Schema.Types.ObjectId, ref:'Account'
@@ -14,10 +13,12 @@ const commentSchema = new mongoose.Schema({
         min: 1,
     },
     comment_date: {
-        type: Date,
-        default: () => Date.now(),
+        type: String
     },
-    comment_date_modified: Date,
+    is_edited: {
+        type: Boolean,
+        default: false
+    },
     replies: [mongoose.SchemaTypes.ObjectId]
 })
 

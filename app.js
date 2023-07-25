@@ -31,6 +31,12 @@ app.use('/post', express.static(__dirname + "/public"));
 const accountAuthRouter = require('./routes/account-auth');
 app.use('/', accountAuthRouter);
 
+const homeRouter = require('./routes/home');
+app.use('/home', homeRouter);
+
+const subscribeRouter = require('./routes/subscribe');
+app.use('/subscribe', subscribeRouter);
+
 connecttoDB();
 
 app.use(express.static(__dirname + "/public"));
@@ -58,61 +64,9 @@ app.get('/', (req, res) =>{
     res.redirect('/home');
 });
 
-app.get('/home', async (req, res) => {
-    const maxTextLength = 100;
-
-    try {
-        // not finished, still figuring out how to do this
-        const listofposts = await Post.find().populate({
-            path: 'username',
-        }).populate({
-            path:'tags',
-            select: 'tag_name'
-        }).sort({date: 'desc'}).lean();
-
-        listofposts.forEach((post) => {
-
-            if (post.post_title && post.post_title.length > maxTextLength) {
-              post.post_title = post.post_title.substring(0, maxTextLength) + '...';
-            }
-
-            if (post.tags && post.tags.length > 3) {
-                post.tags = post.tags.slice(0, 3);
-              }
-        });
-
-        const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
-        console.log(latest_posts);
-
-        const tagCounts = await Post.aggregate([
-            {
-              $unwind: '$tags' 
-            },
-            {
-              $group: {
-                _id: '$tags', 
-                count: { $sum: 1 } 
-              }
-            }
-          ]);
-          
-          console.log(tagCounts);
-
-
-
-        res.render("index", {
-        header: "Hot Posts",
-        script: 'js/index.js',
-        posts: listofposts,
-        posts_latest: latest_posts
-        });
-    } catch(error){
-        console.log(error);
-    }
-});
-
 app.all('*', (req, res) => {
     res.status(404);
     res.render("404")
 });
+
 

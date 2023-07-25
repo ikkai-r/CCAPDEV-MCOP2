@@ -445,6 +445,24 @@ body::-webkit-scrollbar{
     cursor: pointer;
 }
 
+/* Popular Tags */
+.tag-subscribe, .tag-subscribe-s {
+    background-color: #8D5821;
+    color: #dbdbdb;
+    font-weight: bolder;
+    font-size: 1.5vh;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    border-radius: 5px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.tag-subscribe:hover, .tag-subscribe-s:hover {
+    background-color: #543515;
+    cursor: pointer;
+}
+
 /* View Tag Styles */
 .tag-group-row{
     justify-content: space-between;
@@ -671,6 +689,8 @@ body::-webkit-scrollbar{
 /* View Post */
 .viewed-post{
     width: 270vh;
+    max-width: 270vh;
+    overflow: nowrap;
     height: fit-content;
     
     background-color: #FFFFFF;
@@ -712,7 +732,6 @@ body::-webkit-scrollbar{
     color: #000000;
     font-size: 1.2vh;
     display: inline;
-    visibility: hidden;
 }
 
 /* Commenting */
@@ -731,8 +750,8 @@ body::-webkit-scrollbar{
 }
 
 .comment-profile-pic {
-    width:5.3vh;
-    height: 5.3vh;
+    width: 5.3vh;
+    height:  5.3vh;
     border-radius: 50%;
 }
 
