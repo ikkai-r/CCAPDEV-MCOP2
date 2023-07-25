@@ -521,8 +521,6 @@ router.get('/:id', async (req, res) =>{
             path: 'tags'
         }).lean();
 
-        console.log(getPost.username);
-
         // start for side-container content
 
         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
@@ -573,69 +571,84 @@ router.get('/:id', async (req, res) =>{
         const listofcomments = await Comment.find({
             _id: { $in: getPost.comments },
           })
-            .populate("username") // Populate the 'username' field with the 'Account' documents
+            .populate("username")
             .populate({
-            path: "replies", 
-            model: 'Comment', 
-            populate: {
-              path: "username",
-                }})
+                path: "replies",
+                model: "Comment",
+                populate: {
+                  path: "username",
+                }}) // Populate the 'username' field with the 'Account' documents
             .lean();
+
+        //     const listofcom = await Comment.find({
+        //         _id: { $in: getPost.comments },
+        //       })
+        //         .populate("username")
+        //         .populate({
+        //             path: "replies",
+        //             model: "Comment",
+        //             populate: {
+        //               path: "username",
+        //             }}) // Populate the 'username' field with the 'Account' documents
+        //         .lean();
+
+         const newlist = [];
         
-        const newlist = [];
-
-        for(comment of listofcomments) {
-            if(comment.parent_comment_id == null) {
-                newlist.push(comment);
+            //remove the comments that's meant to be replies
+            for(comment of listofcomments) {
+                if(comment.parent_comment_id == null) {
+                    newlist.push(comment);
+                }
             }
-        }
 
-        console.log(newlist);
+            // const commentIds = listofcom.map(comment => comment._id);
+            
+            // // Create a mapping to store parent comment IDs for each reply ID
+            // const mapping = [];
 
+            // // Iterate through the comments to populate the mapping
+            // for (const comment of listofcom) {
+            //     if (comment.replies) {
+            //       for (const reply of comment.replies) {
+            //         // Check if the reply ID is equal to the comment ID
+            //             for (const newc of listofcom) {
+            //                 if (reply._id.equals(newc._id)) {
+            //           // Map the reply ID to the corresponding comment
+            //                 mapping.push(newc);
+            //             }
+            //         }
+            //       }
+            //     }
+            //   }
+
+            //   const commentsFinal=[]
+
+            //   // Create an empty object to store the mapping
+            //     let children = [];
+
+            //     // Iterate through the comments to populate the mapping
+            //        for(const comment of listofcomments) {
+            //         const com = {};
+            //         com.parent = comment;
+            //             for(const reply of mapping) {
+            //                 if(comment._id.equals(reply.parent_comment_id)) {
+            //                     console.log("pushed in", comment._id);
+            //                     children.push(reply);
+            //                 }
+            //             }
+   
+            //             if(children.length != 0) {
+            //                 com.children = children;
+            //             } 
+
+            //             commentsFinal.push(com);
+            //             children = [];
+            //        }
+
+            //        console.log(commentsFinal);
+                   
             const comment_amount = listofcomments.length;
 
-            // //start
-            // const populateRepliesRecursively = async (comment) => {
-            //     if (comment.replies.length === 0) {
-            //       return; // Base case: if the comment has no replies, return
-            //     }
-              
-            //     // Populate the replies for the current comment
-            //     comment.replies = await Comment.populate(comment.replies, {
-            //       path: "replies",
-            //       model: "Comment",
-            //       populate: {
-            //         path: "username",
-            //       },
-            //     });
-              
-            //     // Recursively populate replies for each nested reply
-            //     for (const reply of comment.replies) {
-            //       await populateRepliesRecursively(reply);
-            //     }
-            //   };
-
-            //   const getCommentsWithReplies = async (commentIds) => {
-            //     const comments = await Comment.find({ _id: { $in: commentIds } })
-            //       .populate("username")
-            //       .populate("replies") // Only populate immediate replies for the main comments
-            //       .lean();
-              
-            //     // Recursively populate replies for each comment
-            //     for (const comment of comments) {
-            //       await populateRepliesRecursively(comment);
-            //     }
-              
-            //     return comments;
-            //   };
-
-            // const commentIds = getPost.comments;
-            // const commentsWithReplies = await getCommentsWithReplies(commentIds);
-           
-            // console.log(commentsWithReplies);
-            //   //end
-
-            // console.log(listofcomments);
 
         res.render("view-post", {
             title: "post | " + getPost.post_title,
