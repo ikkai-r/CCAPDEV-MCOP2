@@ -2,6 +2,7 @@ const express = require ("express");
 const Post = require('../server/schema/Post');
 const Tag = require('../server/schema/Tag');
 const Account = require('../server/schema/Account');
+const Comment = require('../server/schema/Comment');
 const Vote = require('../server/schema/Vote');
 const router = express.Router();
 
@@ -39,6 +40,12 @@ router.get('/', async (req, res) =>{
        ]).sort({count: 'desc'}).limit(6);
 
        
+       const user = await Account.find({ "username" : "helpvirus" });
+
+       const subscribedTags = user[0].subscribed_tags;
+       const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
+       
        const getPopularTags = [];
 
      for (var i = 0; i < tagCounts.length; i++){
@@ -46,6 +53,7 @@ router.get('/', async (req, res) =>{
          console.log(tagCounts[i].count);
          var tag = ({
              tag_name: newTag.tag_name,
+             tag_id: newTag._id,
              count: tagCounts[i].count
          });
         getPopularTags.push(tag);
@@ -59,6 +67,7 @@ router.get('/', async (req, res) =>{
         post_date: new Date(),
         posts_latest: latest_posts,
         popular_tags: getPopularTags,
+        sub_tags: listofTags,
         button_type: "create-post-btn"
     });
 });
@@ -76,6 +85,41 @@ router.get('/edit-:id', async (req, res) =>{
     if(getPost.post_attachment) {
         post_attachment = getPost.post_attachment.replace("img/", "");
     }
+
+    // start for side-container content
+
+    const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+    const tagCounts = await Post.aggregate([
+        {
+          $unwind: '$tags' 
+        },
+        {
+          $group: {
+            _id: '$tags', 
+            count: { $sum: 1 } 
+          }
+        }
+      ]).sort({count: 'desc'}).limit(6);
+
+      const user = await Account.find({ "username" : "helpvirus" });
+
+      const subscribedTags = user[0].subscribed_tags;
+      const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
+      const getPopularTags = [];
+
+    for (var i = 0; i < tagCounts.length; i++){
+        var newTag = await Tag.findById(tagCounts[i]._id).lean();
+        console.log(tagCounts[i].count);
+        var tag = ({
+            tag_name: newTag.tag_name,
+            tag_id: newTag._id,
+            count: tagCounts[i].count
+        });
+       getPopularTags.push(tag);
+
+    }
  
     try{
         res.render("create-post", {
@@ -87,6 +131,9 @@ router.get('/edit-:id', async (req, res) =>{
             post_username: getUser.username,
             post_attachment: post_attachment,
             tags: getTags,
+            posts_latest: latest_posts,
+            sub_tags: listofTags,
+            popular_tags: getPopularTags,
             id: getId,
             button_type: "edit-post-btn"
         });
@@ -94,6 +141,24 @@ router.get('/edit-:id', async (req, res) =>{
         console.log(error);
     }
    
+});
+
+//delete comment
+router.delete('/:id', async (req, res) =>{
+    const postId = req.params.id;
+    try {
+
+        const result = await Comment.findByIdAndDelete(postId);
+
+        if (result) {
+          res.status(200).json({ message: 'Successfully deleted.' });
+        } else {
+          res.status(404).json({ message: 'Document not found.' });
+        }
+      } catch (error) {
+        console.error('Error deleting document:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+      }
 });
 
 
@@ -125,6 +190,63 @@ router.delete('/edit-:id', async (req, res) =>{
       }
 });
 
+//comment
+router.post('/comment', async (req, res) =>{
+
+    try {
+
+        const {comment_textarea, id} = req.body;
+
+        if(comment_textarea != "") {
+
+            
+        const date = new Date();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
+          ];
+        
+        let day = date.getDate();
+        let month = date.getMonth();
+        let year = date.getFullYear();
+    
+        // Format the date
+        let formattedDate = monthNames[month] + " " + day + ", " + year;
+        
+        const comment_date = formattedDate;
+    
+        //add comment in collection
+            const newComment = new Comment({
+                username: '64b7e12123b197fa3cd7539b',
+                post_commented: id,
+                comment_content: comment_textarea,
+                comment_date: comment_date
+            });
+
+            // Save the new comment to the database
+            const savedComment = await newComment.save();
+            
+            console.log('New Comment created:', savedComment._id);
+            console.log('New Comment created:', savedComment);
+
+            //update post
+            const updatedPost = await Post.findOneAndUpdate(
+                { _id: id },
+                { $push: { comments: savedComment._id } });
+
+            console.log('Saved', updatedPost);
+
+            return res.json({ message: 'Successfully commented!'});
+        }
+
+    } catch(error) {
+        console.error('Error creating comment:', error);
+        return res.status(500).send('Error creating comment.');
+    }
+
+
+
+});
 
 router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
     const getId = req.params.id;
@@ -202,6 +324,96 @@ router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
 
 });
 
+router.get('/editc-:id', async (req, res) =>{
+    const getId = req.params.id;
+
+    const getComment = await Comment.findOne({_id: getId}).populate({
+        path: "username",
+    }).lean();
+
+     // start for side-container content
+
+     const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+     const tagCounts = await Post.aggregate([
+         {
+           $unwind: '$tags' 
+         },
+         {
+           $group: {
+             _id: '$tags', 
+             count: { $sum: 1 } 
+           }
+         }
+       ]).sort({count: 'desc'}).limit(6);
+
+       
+       const user = await Account.find({ "username" : "helpvirus" });
+
+       const subscribedTags = user[0].subscribed_tags;
+       const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
+       
+       const getPopularTags = [];
+
+     for (var i = 0; i < tagCounts.length; i++){
+         var newTag = await Tag.findById(tagCounts[i]._id).lean();
+         console.log(tagCounts[i].count);
+         var tag = ({
+             tag_name: newTag.tag_name,
+             tag_id: newTag._id,
+             count: tagCounts[i].count
+         });
+        getPopularTags.push(tag);
+
+     }
+
+
+    res.render("edit-comment", {
+        header: "Edit comment",
+        script: "js/post.js",
+        username: getComment.username.username,
+        comment_date: getComment.comment_date,
+        comment_content: getComment.comment_content,
+        posts_latest: latest_posts,
+        popular_tags: getPopularTags,
+        sub_tags: listofTags,
+        id: getComment._id,
+        button_type: 'edit-comment-btn'
+    });
+});
+
+
+router.post('/editc-:id', async (req, res) =>{
+
+    try{
+    const getId = req.params.id;
+
+    console.log(req.body);
+    
+
+    const getComment = await Comment.findOne({_id: getId});
+
+    const { comment_content } = req.body;
+
+    if(comment_content != "") {
+        getComment.comment_content = comment_content;
+    }
+
+    getComment.is_edited = true;
+    
+    console.log(getId);
+
+    const saveComment = await getComment.save();
+    console.log("Saved", saveComment);
+
+    return res.json({ message: 'success', id: getId} );
+} catch(error){
+    console.log(error);
+    return res.status(500).send('Error creating post.');
+
+}
+});
 
 // add viewing of page for a specific post
 router.get('/:id', async (req, res) =>{
@@ -229,7 +441,11 @@ router.get('/:id', async (req, res) =>{
             }
           ]).sort({count: 'desc'}).limit(6);
 
-          
+          const user = await Account.find({ "username" : "helpvirus" });
+
+          const subscribedTags = user[0].subscribed_tags;
+          const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
           const getPopularTags = [];
 
         for (var i = 0; i < tagCounts.length; i++){
@@ -237,6 +453,7 @@ router.get('/:id', async (req, res) =>{
             console.log(tagCounts[i].count);
             var tag = ({
                 tag_name: newTag.tag_name,
+                tag_id: newTag._id,
                 count: tagCounts[i].count
             });
            getPopularTags.push(tag);
@@ -257,6 +474,14 @@ router.get('/:id', async (req, res) =>{
         var downvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'down'}).count();
         var commentsC = await Post.findOne().where({_id: getName}).select('comments');
        
+        const listofcomments = await Comment.find({
+            _id: { $in: getPost.comments },
+          })
+            .populate("username") // Populate the 'username' field with the 'Account' documents
+            .lean();
+
+            const comment_amount = listofcomments.length;
+
         res.render("view-post", {
             post_title: getPost.post_title,
             post_content: getPost.post_content,
@@ -266,6 +491,9 @@ router.get('/:id', async (req, res) =>{
             posts_latest: latest_posts,
             popular_tags: getPopularTags,
             post_edited: getPost.post_edited,
+            sub_tags: listofTags,
+            comment: listofcomments,
+            comment_amount: comment_amount,
             id: getName,
             is_upvoted: checkUpvote,
             is_downvoted: checkDownvote,
@@ -420,7 +648,6 @@ router.post('/', upload.single('post_attachment'), async (req, res) => {
             // Format the date
             let formattedDate = monthNames[month] + " " + day + ", " + year;
             
-            console.log(formattedDate);
             const post_date = formattedDate;
 
             const tagNames = tags.split(',').map(tag => tag.trim());

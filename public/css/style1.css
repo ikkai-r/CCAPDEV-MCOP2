@@ -344,7 +344,7 @@ button.active div {
     margin-bottom: 2vh;
 }
 
-.tag-group {
+.tag-post-prev {
     background-color:#EBEBEB;
     border: solid 1px #000000;
     border-radius: 15px;
@@ -616,10 +616,6 @@ a {
 .comment-vote-cont{
     font-weight: bolder;
     font-size: 1.7em;
-}
-
-.comment-profile-pic {
-    width:4vh;
 }
 
 .comment-content, .comment-reply, .comment-hide-reply {

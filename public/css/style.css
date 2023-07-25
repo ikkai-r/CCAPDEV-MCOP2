@@ -446,7 +446,7 @@ body::-webkit-scrollbar{
 }
 
 /* Popular Tags */
-.tag-subscribe {
+.tag-subscribe, .tag-subscribe-s {
     background-color: #8D5821;
     color: #dbdbdb;
     font-weight: bolder;
@@ -458,17 +458,9 @@ body::-webkit-scrollbar{
     margin-bottom: auto;
 }
 
-.tag-subscribe:hover {
+.tag-subscribe:hover, .tag-subscribe-s:hover {
     background-color: #543515;
     cursor: pointer;
-}
-
-/* View Tag Styles */
-.tag-group-row{
-    justify-content: space-between;
-    display: flex;
-
-    margin-bottom: 4vh;
 }
 
 /* View Tag Styles */
@@ -489,6 +481,9 @@ body::-webkit-scrollbar{
 
     padding: 2vh 1vh 2vh 1vh;
     margin-right: 2vh;
+    margin-bottom: 2vh;
+
+    width: 20vh;
 }
 
 .tag-group-info {
@@ -521,8 +516,6 @@ body::-webkit-scrollbar{
     background-position:top; 
     background-size:cover; 
     background-repeat:no-repeat;
-    background-image:url(img/sans.png);
-
 
     background-color:#DBBFA4;
 
@@ -757,8 +750,8 @@ body::-webkit-scrollbar{
 }
 
 .comment-profile-pic {
-    width:5.3vh;
-    height: 5.3vh;
+    width: 5.3vh;
+    height:  5.3vh;
     border-radius: 50%;
 }
 

@@ -404,18 +404,6 @@ function returnReply(){
     return span;
 }
 
-function insertEdited(){
-    // <span class="edited" title="This post has been edited.">edited</span>
-
-    let span = document.createElement("span");
-    span.setAttribute("class", "edited");
-    span.setAttribute("title", "This post has been edited.");
-
-    span.innerHTML += `edited`;
-
-    return span;
-}
-
 function onClickCancelEdit(e){
     let parentComment = e.target.closest(".row.comment");
     let commentTextarea = parentComment.querySelector(".commenting");
@@ -427,37 +415,86 @@ function onClickCancelEdit(e){
     isEditing = 0;
 }
     
-function onClickSubmitEdit(e){
-    let parentComment = e.target.closest(".row.comment");
-    let commenting = $(".commenting");
-    let commentContent = parentComment.querySelector(".comment-content");
-    let commentTimeReply = parentComment.querySelector(".comment-time-reply");
-    let commentOptions = parentComment.querySelector(".comment-options");
-    let commentTextarea = $(".comment-textarea");
+$(document).ready(function() {
 
-    if(commentTextarea.val() !== "") {
-        console.log("success");
+    $("#comment-send-btn").click(function(e) {
+      e.preventDefault();
         
-        commenting.remove();
-        commentContent.appendChild(returnCommentContentText(commentTextarea.val()));
+      // Send the form data to the server using AJAX
+      const formData = $('#comment-form').serialize();
 
-        if (!parentComment.querySelector(".edited") && prevCommentContent != commentTextarea.val()){
-            $(insertEdited()).insertBefore(commentOptions);
-        } 
+      // Send the form data to the server using AJAX
+      $.ajax({
+        url: '/post/comment', 
+        method: 'POST',
+        data: formData,
+        success: function(data) {
+          console.log(data.message);
+          location.reload(); // Refresh the page to get the updated comments
+
+        },
+        error: function(error) {
+          console.error('Error submitting form:', error);
+        }
+      });
+
+});
+});
+
+
+
+$(document).ready(function() {
+
+    $("#edit-comment-btn").click(function(e) {
+      e.preventDefault();
         
-        $(returnReply()).insertBefore(commentTimeReply);
-        isEditing = 0;
-    } else {
-        console.log("fail");
-        console.log(commentTextarea);
-    }
-}
-
-function onClickDeleteComment(e){
-    let parentComment = e.target.closest(".row.comment");
-    let commentNumber = document.getElementById("comment-amnt").innerText;
-    document.getElementById("comment-amnt").innerHTML = parseInt(commentNumber) - 1;
-    document.getElementById("comment-bar-amnt").innerHTML = parseInt(commentNumber) - 1;
-
-    parentComment.remove();
-}
+      // Send the form data to the server using AJAX
+      const formData = $('#edit-comment-form').serialize();
+  
+      // Send the form data to the server using AJAX
+      $.ajax({
+        url: '/post/editc-'+$('#comment_id').val(), 
+        method: 'POST',
+        data: formData,
+        success: function(data) {
+            
+          window.location.href = 'post/'+data.id; 
+        },
+        error: function(error) {
+          console.error('Error submitting form:', error);
+        }
+      });
+  
+  });
+  });
+  
+  
+  $(document).ready(function() {
+  
+    $("#delete-comment-btn").click(function(e) {
+  
+      console.log("HERE");
+      e.preventDefault();
+    
+      if($("#comment_id").val() !== "") {
+        const postId = $("#comment_id").val();
+    
+      $.ajax({
+        url: `/post/${postId}`,
+        method: 'DELETE',
+        success: function(data) {
+          // Handle the success response (e.g., show a success message or refresh the page)
+          window.location.reload(); 
+        },
+        error: function(error) {
+          // Handle the error response (e.g., show an error message)
+          console.error('Error deleting comment:', error);
+          alert('An error occurred while deleting the comment.');
+        },
+      });
+      } else {
+        window.location.reload(); 
+      }
+      
+    });
+    });

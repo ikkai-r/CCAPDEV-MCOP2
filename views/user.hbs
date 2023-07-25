@@ -1,5 +1,12 @@
 
-  
+    <script type="text/x-handlebars-template" id="user-subtags-partial">
+    <div class="tag-group mr-5 col-md-3">
+    <div><h6 class="tag-group-name"><a href="../tag/{{this.tag_name}}">{{this.tag_name}}</a></h4></div>
+        <div class="tag-group-img" style="background-image:url({{this.photo}});"></div>
+        <div><h6 class="tag-group-count">8k posts</h4></div>
+    </div>
+  </script>
+
     <!-- Edit Profile Modal -->
     <div class="modal fade" id="edProfModal" tabindex="-1" aria-labelledby="edProfModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -149,26 +156,8 @@
                          <div class="tab-pane fade" id="nav-tags" role="tabpanel" aria-labelledby="nav-tags-tab">
                             <div class="container">
 
-                                <div class="row" style="display: flex; justify-content: center;">
-                                {{!-- <div class="row" style="display: flex; justify-content: center;">
-                                    <div class="tag-group col-md-3" style="margin-right: 5vh;">
-                                        <div><h6 class="tag-group-name"><a href="view-tags.html">#nou</a></h4></div>
-                                        <div class="tag-group-img" style="background-image:url(img/nou.jpg);"></div>
-                                        <div><h6 class="tag-group-count">702 posts</h4></div>
-                                    </div>
-                                    <div class="tag-group mr-5 col-md-3" style="margin-right: 5vh;">
-                                        <div><h6 class="tag-group-name"><a href="view-tags.html">#hahafunny</a></h4></div>
-                                        <div class="tag-group-img" style="background-image:url(img/hahafunny.jpg);"></div>
-                                        <div><h6 class="tag-group-count">4.3k posts</h4></div>
-                                    </div>
-                                    <div class="tag-group mr-5 col-md-3">
-                                        <div><h6 class="tag-group-name"><a href="view-tags.html">#meme</a></h4></div>
-                                        <div class="tag-group-img" style="background-image:url(img/meme.jpg);"></div>
-                                        <div><h6 class="tag-group-count">8k posts</h4></div>
-                                    </div>
-                                --}}
-                                
-                                {{#each sub_tags}}
+                                <div class="row" style="display: flex; justify-content: center;" id="user-subtags-pane">
+                                {{#each user_sub_tags}}
                                 {{> user-subtags this}}
                                 {{else}}
                                 {{> user-pane-empty this}}

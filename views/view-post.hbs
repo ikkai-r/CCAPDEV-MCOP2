@@ -8,21 +8,22 @@
 
         {{> post logged_in=logged_in}}
     
-        <h3>Comments (<span id="comment-bar-amnt">0</span>)</h3>
+        <h3>Comments (<span id="comment-bar-amnt">{{comment_amount}}</span>)</h3>
         
+        <form id="comment-form">
         <div class="row comment-textarea-holder">
                 <div class="col-11 d-flex justify-content-center">
-                        <textarea class="comment-textarea" contenteditable="true" placeholder="add text here" ></textarea>
+                        <input type="hidden" value="{{id}}" name="id">
+                        <textarea class="comment-textarea" id="comment-textarea" name="comment_textarea" contenteditable="true" placeholder="add text here" ></textarea>
                 </div>
-                <div class="col-1 d-flex comment-send">
+                <div class="col-1 d-flex comment-send" id="comment-send-btn">
                         <i class="fa-solid fa-paper-plane" style="margin:auto"></i>
                 </div>
-
         </div>
-        
+        </form>
         <!-- Comment portion -->
         {{#each comment}}
-        {{> comments}}
+        {{> comments this}}
         {{/each}}
     </div>
     

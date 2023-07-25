@@ -171,7 +171,6 @@ $("#delete-post-btn").click(function(e) {
     method: 'DELETE',
     success: function(data) {
       // Handle the success response (e.g., show a success message or refresh the page)
-      alert(data.message);
       window.location.href = '/home'; 
     },
     error: function(error) {
