@@ -440,34 +440,6 @@ $(document).ready(function() {
 
 });
 });
-
-
-
-$(document).ready(function() {
-
-    $("#edit-comment-btn").click(function(e) {
-      e.preventDefault();
-        
-      // Send the form data to the server using AJAX
-      const formData = $('#edit-comment-form').serialize();
-  
-      // Send the form data to the server using AJAX
-      $.ajax({
-        url: '/post/editc-'+$('#comment_id').val(), 
-        method: 'POST',
-        data: formData,
-        success: function(data) {
-            
-          window.location.href = 'post/'+data.id; 
-        },
-        error: function(error) {
-          console.error('Error submitting form:', error);
-        }
-      });
-  
-  });
-  });
-  
   
   $(document).ready(function() {
   
