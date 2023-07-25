@@ -59,6 +59,7 @@ router.get('/', async (req, res) => {
         }
 
         res.render("index", {
+        title: "Hot Posts",
         header: "Hot Posts",
         script: 'js/index.js',
         posts: listofposts,

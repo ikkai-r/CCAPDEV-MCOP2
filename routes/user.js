@@ -119,6 +119,7 @@ router.get("/:name", async (req, res)=> {
       }
 
       res.render("user", {
+        title: user[0].username,
         "username": user[0].username,
         "profile_desc": user[0].profile_desc,
         "profile_pic": user[0].profile_pic,

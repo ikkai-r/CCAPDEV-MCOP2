@@ -76,6 +76,7 @@ router.get("/:tagname", async (req, res)=>{
         }
 
         res.render("tag-posts", {
+            title: "Tag | "+getTagName,
             tag_name: getTagName,
             tag_id: getTag[0]._id,
             post_cnt: postListLength, 
@@ -119,6 +120,7 @@ router.get("/", async  (req, res)=>{
             tagListWithCount.push(tag);
         }
         res.render("tag", {
+            title: "View tags",
             header: "View tags",
             tag: tagListWithCount,
             script: "js/tag.js",
