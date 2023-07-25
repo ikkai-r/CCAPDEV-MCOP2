@@ -16,6 +16,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 const bodyParser = require('body-parser');
+const { getRounds } = require("bcryptjs");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
@@ -250,6 +251,12 @@ router.get('/:id', async (req, res) =>{
             logged_in = false;
         }
 
+        var checkUpvote = await Vote.exists({post_comment: getName, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
+        var checkDownvote = await  Vote.exists({post_comment: getName, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
+        var upvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'up'}).count();
+        var downvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'down'}).count();
+        var commentsC = await Post.findOne().where({_id: getName}).select('comments');
+       
         res.render("view-post", {
             post_title: getPost.post_title,
             post_content: getPost.post_content,
@@ -260,6 +267,11 @@ router.get('/:id', async (req, res) =>{
             popular_tags: getPopularTags,
             post_edited: getPost.post_edited,
             id: getName,
+            is_upvoted: checkUpvote,
+            is_downvoted: checkDownvote,
+            upvote_count: upvoteC,
+            downvote_count: downvoteC,
+            comments_count: commentsC.comments.length,
             logged_in: logged_in,
             script: "js/view-post.js"
         });
@@ -273,6 +285,12 @@ router.post('/:id', async (req, res) =>{
     const getId = req.params.id;
   
     try{
+        const getPost = await Post.findOne({_id: getId}).populate({
+            path: "username"
+        }).populate({
+            path: 'tags'
+        }).lean();
+
         const {action} = req.body;
         var isUpvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
         var isDownvoted = await  Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
@@ -304,6 +322,70 @@ router.post('/:id', async (req, res) =>{
            await editedDownvote.save();
             console.log("User previously upvoted, removing upvote for downvote");
         }
+
+        // start for side-container content
+
+        const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+        const tagCounts = await Post.aggregate([
+            {
+              $unwind: '$tags' 
+            },
+            {
+              $group: {
+                _id: '$tags', 
+                count: { $sum: 1 } 
+              }
+            }
+          ]).sort({count: 'desc'}).limit(6);
+
+          
+          const getPopularTags = [];
+
+        for (var i = 0; i < tagCounts.length; i++){
+            var newTag = await Tag.findById(tagCounts[i]._id).lean();
+            console.log(tagCounts[i].count);
+            var tag = ({
+                tag_name: newTag.tag_name,
+                count: tagCounts[i].count
+            });
+           getPopularTags.push(tag);
+
+        }
+
+        let logged_in = "";
+
+        if(getPost.username.username == "helpvirus") {
+            logged_in = true;
+        } else {
+            logged_in = false;
+        }
+
+        var checkUpvote = await Vote.exists({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
+        var checkDownvote = await  Vote.exists({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
+        var upvoteC = await Vote.find().where({post_comment: getId, up_downvote: 'up'}).count();
+        var downvoteC = await Vote.find().where({post_comment: getId, up_downvote: 'down'}).count();
+        var commentsC = await Post.findOne().where({_id: getName}).select('comments');
+       
+
+        res.render("view-post", {
+            post_title: getPost.post_title,
+            post_content: getPost.post_content,
+            username: getPost.username,
+            post_date: getPost.post_date,
+            tags_post: getPost.tags,
+            posts_latest: latest_posts,
+            popular_tags: getPopularTags,
+            post_edited: getPost.post_edited,
+            id: getId,
+            is_upvoted: checkUpvote,
+            is_downvoted: checkDownvote,
+            upvote_count: upvoteC,
+            downvote_count: downvoteC,
+            comments_count: commentsC.comments.length,
+            logged_in: logged_in,
+            script: "js/view-post.js"
+        });
         
     } catch(error){
         console.log(error);
