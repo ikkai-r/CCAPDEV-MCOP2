@@ -499,7 +499,6 @@ router.get('/:id', async (req, res) =>{
             is_downvoted: checkDownvote,
             upvote_count: upvoteC,
             downvote_count: downvoteC,
-            comments_count: commentsC.comments.length,
             logged_in: logged_in,
             script: "js/view-post.js"
         });
@@ -593,7 +592,14 @@ router.post('/:id', async (req, res) =>{
         var checkDownvote = await  Vote.exists({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
         var upvoteC = await Vote.find().where({post_comment: getId, up_downvote: 'up'}).count();
         var downvoteC = await Vote.find().where({post_comment: getId, up_downvote: 'down'}).count();
-        var commentsC = await Post.findOne().where({_id: getName}).select('comments');
+        const listofcomments = await Comment.find({
+            _id: { $in: getPost.comments },
+          })
+            .populate("username") // Populate the 'username' field with the 'Account' documents
+            .lean();
+
+            const comment_amount = listofcomments.length;
+
        
 
         res.render("view-post", {
@@ -610,7 +616,7 @@ router.post('/:id', async (req, res) =>{
             is_downvoted: checkDownvote,
             upvote_count: upvoteC,
             downvote_count: downvoteC,
-            comments_count: commentsC.comments.length,
+            comment_amount: comment_amount,
             logged_in: logged_in,
             script: "js/view-post.js"
         });
