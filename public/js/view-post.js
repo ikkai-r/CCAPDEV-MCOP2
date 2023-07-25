@@ -184,7 +184,7 @@ $(".comment-container").click(function (e) {
 });
 
 upvote.addEventListener("click", function(){
-
+    e.preventDefault();
     try{
         // check if upvoted already?
         var voteForm = $('#upvoteForm').serialize();
@@ -317,6 +317,45 @@ downvote.addEventListener("click", function(e){
 $(document).on("click", ".comment-proper-votes", function () {
     var voteCount = $(this).closest(".com-votes-cont").find(".comment-vote-cont .com-prop-amnt");
 
+    try{
+    
+         if($(this).hasClass('fa-circle-up')) {
+        // check if upvoted already?
+        console.log($(this).closest(".comment_id")).find("#comment_id");
+        var upvoteVoteForm = $('#upvoteCommentForm').serialize();
+        $.ajax({
+            url: '/post/up_comment' ,
+            method: 'POST',
+            data: upvoteVoteForm,
+            success: function(data) {
+                console.log(data.message);
+                //window.location.reload(); // Refresh the page to get the updated comments
+            },
+            error: function(error) {
+              console.error('Error submitting form:', error);
+            }
+          
+        });
+        }else {
+            var downvoteVoteForm = $('#downvoteCommentForm').serialize();
+
+            $.ajax({
+                url: '/post/down_comment', 
+                method: 'POST',
+                data: downvoteVoteForm,
+                success: function(data) {
+                    console.log(data.message);
+                    //window.location.reload(); // Refresh the page to get the updated comments
+                },
+                error: function(error) {
+                  console.error('Error submitting form:', error);
+                }
+              
+            });
+        }
+    }catch(error){
+        console.log(error);
+    }
     if($(this).hasClass('fa-circle-up')) {
         //upvote
         if($(this).hasClass('fa-regular')) {

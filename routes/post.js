@@ -256,7 +256,59 @@ router.post('/comment', async (req, res) =>{
 
 
 });
+router.post('/up_comment/', async(req, res)=>{
+    try{
+         const getId = req.body.comment_id;
+         console.log(getId);
 
+        var isUpvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
+        var isDownvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
+        if (!isUpvoted && !isDownvoted){
+            const newUpvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'up'});
+            await newUpvote.save();
+            return res.json({message:"User upvoted successfully"});
+        }
+        else if (isUpvoted){
+            await Vote.findByIdAndDelete(isUpvoted._id);
+            return res.json({message:"User already upvoted, removing upvote"});
+        }
+        else if (isDownvoted){
+            await Vote.findByIdAndDelete(isDownvoted._id);
+            const editedUpvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'up'});
+            await editedUpvote.save();
+            return res.json({message:"User previously downvoted, removing downvote for upvote"});
+        }
+    } catch(error){
+        console.log(error);
+    }
+});
+
+
+router.post('/down_comment', async(req, res)=>{
+    try{
+         const getId = req.body.comment_id;
+         console.log(getId);
+        var isUpvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
+        var isDownvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
+        if (!isUpvoted && !isDownvoted){
+            const newDownvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'down'});
+            await newDownvote.save();
+            return res.json({message:"User downvoted successfully"});
+        }
+        else if (isDownvoted){
+            await Vote.findByIdAndDelete(isDownvoted._id);
+            return res.json({message:"User already downvoted, removing downvote"});
+        }
+        else if(isUpvoted){
+            await Vote.findOneAndDelete(isUpvoted._id);
+            const editedDownvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'down'});
+           await editedDownvote.save();
+           return res.json({message: "User previously upvoted, removing upvote for downvote"});
+        }
+    } catch(error){
+        console.log(error);
+    }
+})
 //reply
 router.post('/reply', async (req, res) =>{
 
