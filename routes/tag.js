@@ -1,6 +1,7 @@
 const express = require ("express");
 const router = express.Router();
 const Tag = require('../server/schema/Tag');
+const Account = require('../server/schema/Account');
 const Postschema = require('../server/schema/Post');
 const Vote = require("../server/schema/Vote");
 
@@ -74,8 +75,6 @@ router.get("/:tagname", async (req, res)=>{
             postWithNetVote.push(postData);
         }
 
-        console.log(postWithNetVote);
-
         res.render("tag-posts", {
             tag_name: getTagName,
             tag_id: getTag[0]._id,
@@ -119,7 +118,6 @@ router.get("/", async  (req, res)=>{
             });
             tagListWithCount.push(tag);
         }
-        console.log(tagListWithCount);
         res.render("tag", {
             header: "View tags",
             tag: tagListWithCount,

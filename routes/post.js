@@ -355,8 +355,19 @@ router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
 
                 if (!tag) {
                     // Create a new tag if it doesn't exist
-                    tag = new Tag({ tag_name: tagName });
+
+                    if(post_attachment != "") {
+                        tag = new Tag({ tag_name: tagName, photo: post_attachment });
+                    } else {
+                        tag = new Tag({ tag_name: tagName });
+                    }
                     await tag.save();
+                } else {
+                    //update the photo with the latest one
+                    if(post_attachment != "") {
+                        tag.photo = post_attachment;
+                        await tag.save();
+                    }
                 }
 
                 tagIds.push(tag._id);
@@ -737,9 +748,21 @@ router.post('/', upload.single('post_attachment'), async (req, res) => {
 
                 if (!tag) {
                     // Create a new tag if it doesn't exist
-                    tag = new Tag({ tag_name: tagName });
+
+                    if(post_attachment != "") {
+                        tag = new Tag({ tag_name: tagName, photo: post_attachment });
+                    } else {
+                        tag = new Tag({ tag_name: tagName });
+                    }
                     await tag.save();
+                } else {
+                    //update the photo with the latest one
+                    if(post_attachment != "") {
+                        tag.photo = post_attachment;
+                        await tag.save();
+                    }
                 }
+
 
                 tagIds.push(tag._id);
             }
