@@ -77,6 +77,8 @@ $(".comment-container").click(function (e) {
                 data: formData,
                 success: function(data) {
                 console.log(data.message);
+                window.location.reload(); // Refresh the page to get the updated comments
+
                 },
                 error: function(error) {
                 console.error('Error submitting form:', error);
@@ -357,7 +359,7 @@ $(document).ready(function() {
         data: formData,
         success: function(data) {
           console.log(data.message);
-          location.reload(); // Refresh the page to get the updated comments
+          window.location.reload(); // Refresh the page to get the updated comments
 
         },
         error: function(error) {
