@@ -16,6 +16,7 @@ let downvote = document.querySelector(".votes-cont i.fa-circle-down");
 
 let shareButton = document.querySelector(".share-cont");
 
+
 function createTextarea () {
     let div = document.createElement("div");
     div.setAttribute("class", "commenting mt-2");
@@ -186,7 +187,7 @@ upvote.addEventListener("click", function(){
             data: voteForm,
             success: function(data) {
                 console.log(data.message);
-                location.reload(); // Refresh the page to get the updated comments
+                window.location.reload(); // Refresh the page to get the updated comments
             },
             error: function(error) {
               console.error('Error submitting form:', error);
@@ -242,8 +243,8 @@ upvote.addEventListener("click", function(){
 });
 
 
-downvote.addEventListener("click", function(){
-
+downvote.addEventListener("click", function(e){
+    e.preventDefault();
     try{
         // check if upvoted already?
         var voteForm = $('#downvoteForm').serialize();
@@ -254,7 +255,7 @@ downvote.addEventListener("click", function(){
             data: voteForm,
             success: function(data) {
                 console.log(data.message);
-                location.reload(); // Refresh the page to get the updated comments
+                window.location.reload(); // Refresh the page to get the updated comments
             },
             error: function(error) {
               console.error('Error submitting form:', error);
