@@ -2,8 +2,8 @@ const express = require ("express");
 const handlebars = require('handlebars');
 const Post = require('../server/schema/Post');
 const Tag = require('../server/schema/Tag');
-const Account = require('../server/schema/Account');
 const Comment = require('../server/schema/Comment');
+const Account = require('../server/schema/Account');
 const Vote = require('../server/schema/Vote');
 const router = express.Router();
 
@@ -520,6 +520,8 @@ router.get('/:id', async (req, res) =>{
         }).populate({
             path: 'tags'
         }).lean();
+
+        console.log(getPost.username);
 
         // start for side-container content
 
