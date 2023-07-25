@@ -130,7 +130,8 @@ router.get("/:name", async (req, res)=> {
         posts_latest: latest_posts,
         popular_tags: getPopularTags,
         script: "js/profile.js",
-        add_script: "js/index.js"
+        add_script: "js/index.js",
+        navbar: 'logged-navbar'
     });
         
     } catch(error){

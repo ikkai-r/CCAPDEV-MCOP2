@@ -63,7 +63,8 @@ router.get('/', async (req, res) => {
         script: 'js/index.js',
         posts: listofposts,
         posts_latest: latest_posts,
-        popular_tags: getPopularTags
+        popular_tags: getPopularTags,
+        navbar: 'navbar'
         });
     } catch(error){
         console.log(error);

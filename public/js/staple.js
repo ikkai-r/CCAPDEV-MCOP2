@@ -7,6 +7,8 @@ function copyLink(url) {
     }, 1500)
 }
 
+
+
 function convertDateToTxt() {
     const date = new Date();
     const monthNames = [
@@ -78,7 +80,17 @@ $('#password-reg, #confirm-password').on('keyup', function () {
     }
   });
 
- 
+
+  $("#logout-btn").click(function (e) {
+    e.preventDefault();
+
+    $("#logoutModal").modal('show');
+
+    setTimeout(function() {
+        window.location.href = "/home";
+      }, 2000);
+});
+
 
   $("#register-btn").click(function (e) {
     e.preventDefault();

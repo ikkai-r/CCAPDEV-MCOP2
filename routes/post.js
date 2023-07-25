@@ -135,7 +135,8 @@ router.get('/edit-:id', async (req, res) =>{
             sub_tags: listofTags,
             popular_tags: getPopularTags,
             id: getId,
-            button_type: "edit-post-btn"
+            button_type: "edit-post-btn",
+            navbar: 'logged-navbar'
         });
     } catch(error){
         console.log(error);
@@ -379,7 +380,9 @@ router.get('/editc-:id', async (req, res) =>{
         popular_tags: getPopularTags,
         sub_tags: listofTags,
         id: getComment._id,
-        button_type: 'edit-comment-btn'
+        button_type: 'edit-comment-btn',
+        navbar: 'logged-navbar'
+
     });
 });
 
@@ -500,7 +503,8 @@ router.get('/:id', async (req, res) =>{
             upvote_count: upvoteC,
             downvote_count: downvoteC,
             logged_in: logged_in,
-            script: "js/view-post.js"
+            script: "js/view-post.js",
+            navbar: 'logged-navbar'
         });
     } catch(error){
         console.log(error);
@@ -618,7 +622,9 @@ router.post('/:id', async (req, res) =>{
             downvote_count: downvoteC,
             comment_amount: comment_amount,
             logged_in: logged_in,
-            script: "js/view-post.js"
+            script: "js/view-post.js",
+            navbar: 'logged-navbar'
+
         });
         
     } catch(error){

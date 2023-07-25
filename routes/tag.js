@@ -34,7 +34,8 @@ router.get("/:tagname", async (req, res)=>{
             post_cnt: postListLength, 
             post:postList,
             sub_tags: listofTagsLogged,
-            script: "js/tag.js"
+            script: "js/tag.js",
+            navbar: 'logged-navbar'
         })
     } catch (error){
         console.log(error);
@@ -49,7 +50,8 @@ router.get("/", async  (req, res)=>{
         res.render("tag", {
             header: "View tags",
             tag: taglist,
-            script: "js/tag.js"
+            script: "js/tag.js",
+            navbar: 'logged-navbar'
         });
     }catch(error){
         console.log(error);

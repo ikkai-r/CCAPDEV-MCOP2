@@ -48,7 +48,8 @@ router.get('/', async (req, res) =>{
         searched_accounts: searchResults_Account,
         searched_tags: searchResults_Tag,
         script: 'js/index.js',
-        add_style: '<link rel="stylesheet" type="text/css" href="css/style1.css">'
+        add_style: '<link rel="stylesheet" type="text/css" href="css/style1.css">',
+        navbar: 'logged-navbar'
         });
 });
 
