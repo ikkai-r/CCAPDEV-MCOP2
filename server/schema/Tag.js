@@ -6,7 +6,7 @@ const tagSchema = new mongoose.Schema({
     },
     photo:{
         type: String,
-
+        default: 'img/default_tag.jpg'
     }
 
 })

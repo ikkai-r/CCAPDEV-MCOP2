@@ -1,8 +1,9 @@
 const express = require ("express");
 const router = express.Router();
 const Tag = require('../server/schema/Tag');
-const Post = require('../server/schema/Post');
 const Account = require('../server/schema/Account');
+const Postschema = require('../server/schema/Post');
+const Vote = require("../server/schema/Vote");
 
 router.get("/:tagname", async (req, res)=>{
     
@@ -19,7 +20,8 @@ router.get("/:tagname", async (req, res)=>{
             tag_name: getTagName
         }).lean();
         
-        const postList = await Post.find({
+        //list of posts under that tag
+        const postList =  await Postschema.find({
             tags: {$in: getTag}
         }).populate({
             path: 'username'
@@ -28,17 +30,57 @@ router.get("/:tagname", async (req, res)=>{
             select: 'tag_name _id'
         }).lean();
 
-        //list of accounts
-        const accountsList = await Account.find().lean();
-        
         const postListLength = postList.length;
+
+        //how many users are subscribed to a tag
+        const accountList = Account.find({
+            subscribed_tags: {$in: getTag}
+        }).lean();
+
+        let accountListLength = (await accountList).length;
+        if (accountListLength == null){
+            accountListLength = 0;
+        }
+
+        //get netvotecount for each post
+        let postWithNetVote = [];
+
+        //sums up how many posts are under every tag into an array
+        for (i = 0; i < postListLength; i++){
+            let currPostID = postList[i]._id;
+            //getting votes
+            let upvoteList = Vote.find({ 
+                post_comment: currPostID,
+                post_comment_model: 'post',
+                up_downvote: 'up'
+            });
+            let downvoteList = Vote.find({ 
+                post_comment: currPostID,
+                post_comment_model: 'post',
+                up_downvote: 'down'
+            });
+            //add curent info + new info
+            var postData = ({
+                _id: postList[i]._id,
+                username: postList[i].username,
+                post_title: postList[i].post_title,
+                post_content: postList[i].post_content,
+                post_edited: postList[i].post_edited,
+                post_date: postList[i].post_date,
+                post_date_modified: postList[i].post_date_modified,
+                comments: postList[i].comments,
+                tags: postList[i].tags,
+                net_vote_count: (await upvoteList).length - (await downvoteList).length
+            })
+            postWithNetVote.push(postData);
+        }
 
         res.render("tag-posts", {
             tag_name: getTagName,
             tag_id: getTag[0]._id,
             post_cnt: postListLength, 
-            post:postList,
-            upvotes:'0',
+            subscribers: accountListLength,
+            post:postWithNetVote,
             sub_tags: listofTagsLogged,
             script: "js/tag.js",
             navbar: 'logged-navbar'
@@ -51,9 +93,8 @@ router.get("/:tagname", async (req, res)=>{
 
 router.get("/", async  (req, res)=>{
     try{
-        const taglist = await Tag.find().lean();
-
-        const tagCounts = await Post.aggregate([
+        //sums up how many posts are under every tag into an array
+        const tagCounts = await Postschema.aggregate([
             {
               $unwind: '$tags' 
             },
@@ -67,15 +108,16 @@ router.get("/", async  (req, res)=>{
 
         const tagListWithCount = [];
 
+        //making an object that contains tagname and count
         for (var i = 0; i < tagCounts.length; i++){
             var newTag = await Tag.findById(tagCounts[i]._id).lean();
             var tag = ({
                 tag_name: newTag.tag_name,
+                photo: newTag.photo,
                 count: tagCounts[i].count
             });
             tagListWithCount.push(tag);
         }
-
         res.render("tag", {
             header: "View tags",
             tag: tagListWithCount,
