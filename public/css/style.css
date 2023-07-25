@@ -463,6 +463,57 @@ body::-webkit-scrollbar{
     cursor: pointer;
 }
 
+/* Page Nav */
+.pagination {
+    background-color:#FFF6EB;
+    border: solid 1px #000000;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+
+    box-shadow: 1vh 1vh #D4A373, 1vh 1vh 0px 1px black;
+
+    margin: 5vh 10vh;
+    padding: 2vh;
+}
+
+.page-link {
+    margin-right: 2vh;
+    color: black;
+
+    border-radius: 10%;
+
+    background-color: #e0be9c;
+    border: solid 1px #000000;
+}
+
+.page-link:hover{
+    background-color: white;
+    color: #000000;
+
+    border: solid 1px #000000;
+}
+
+.page-link-arrow, .page-link-arrow-l, .page-link-arrow-r{
+    margin-right: 2vh;
+
+    border: solid 1px #000000;
+
+    background-color: #543515;
+    color: white;
+}
+
+
+.page-link-arrow-l{
+    border-radius: 0, 0, 50%, 50%;
+}
+.page-link-arrow-r{
+    border-radius: 0, 0, 50%, 50%;
+}
+
+.page-link-arrow:hover{
+   filter: brightness(.95);
+}
 /* View Tag Styles */
 .tag-group-row{
     justify-content: space-between;

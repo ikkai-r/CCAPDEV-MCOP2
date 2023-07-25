@@ -8,5 +8,42 @@
     </div> <!-- End of post container -->
     
     {{> nlg-side-container}}
-    
 </div>
+
+<nav aria-label="Page navigation">
+    <span>{{prev_page}}, {{next_page}}</span>
+    <ul class="pagination justify-content-between d-flex">
+        
+        <span>
+            {{#if prev_page}}
+            <li class="page-item">
+                <a class="page-link page-link-arrow-l" href="?p={{prev_page}}" tabindex="-1"><i class="fa-solid fa-chevron-left"></i></a>
+            </li>
+            {{/if}}
+        </span>
+
+        <span class="d-flex">
+            {{#if prev_page}}
+            <li class="page-item"><a class="page-link" href="?p={{first_page}}">{{first_page}}</a></li>
+            <li class="page-item"><a class="page-link">...</a></li>
+            {{/if}}
+            
+            <li class="page-item"><a class="page-link" href="?p={{curr_page}}">{{curr_page}}</a></li>
+            
+            {{#if next_page}}
+            <li class="page-item"><a class="page-link">...</a></li>
+            <li class="page-item"><a class="page-link" href="?p={{last_page}}">{{last_page}}</a></li>
+            {{/if}}
+        </span>
+
+        <span>
+            {{#if next_page}}
+            <li class="page-item">
+                <a class="page-link page-link-arrow-r" href="?p={{next_page}}"><i class="fa-solid fa-chevron-right"></i></a>
+            </li>
+            {{/if}}
+            
+        </span>
+
+    </ul>
+</nav>
