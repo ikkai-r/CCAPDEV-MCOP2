@@ -41,33 +41,36 @@ router.get("/:tagname", async (req, res)=>{
 
 router.get("/", async  (req, res)=>{
     try{
-        const tagList = await Tag.find().lean();
-        
-        tagList.forEach((tag) =>{
-            try{
-                //TODO: create a field that will accept the postList.length
-                
-                tag.postCnt = 0;
-                
-                const postList = Post.find({
-                    tags: {$in: tag},
-                });
+        const taglist = await Tag.find().lean();
 
-                tag.postCnt = postList.length;
-
-                // console.log(tag);
-                // console.log(postList.length);
-                console.log(tag.postCnt);
-            }catch(error){
-                console.log(error);
+        const tagCounts = await Post.aggregate([
+            {
+              $unwind: '$tags' 
+            },
+            {
+              $group: {
+                _id: '$tags', 
+                count: { $sum: 1 } 
+              }
             }
-        });
+        ]).sort({count: 'desc'});
 
+        const tagListWithCount = [];
 
+        for (var i = 0; i < tagCounts.length; i++){
+            var newTag = await Tag.findById(tagCounts[i]._id).lean();
+            var tag = ({
+                tag_name: newTag.tag_name,
+                count: tagCounts[i].count
+            });
+            tagListWithCount.push(tag);
+        }
 
         res.render("tag", {
             header: "View tags",
-            tag: tagList
+            tag: tagListWithCount,
+            script: "js/tag.js",
+            navbar: 'logged-navbar'
         });
     }catch(error){
         console.log(error);
