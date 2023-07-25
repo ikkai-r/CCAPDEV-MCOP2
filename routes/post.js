@@ -570,6 +570,7 @@ router.post('/:id', async (req, res) =>{
             }
           ]).sort({count: 'desc'}).limit(6);
 
+          const user = await Account.find({ "username" : "helpvirus" });
           
           const getPopularTags = [];
 
@@ -583,6 +584,9 @@ router.post('/:id', async (req, res) =>{
            getPopularTags.push(tag);
 
         }
+
+        const subscribedTags = user[0].subscribed_tags;
+        const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
 
         let logged_in = "";
 
@@ -615,6 +619,7 @@ router.post('/:id', async (req, res) =>{
             posts_latest: latest_posts,
             popular_tags: getPopularTags,
             post_edited: getPost.post_edited,
+            sub_tags: listofTags,
             id: getId,
             is_upvoted: checkUpvote,
             is_downvoted: checkDownvote,
