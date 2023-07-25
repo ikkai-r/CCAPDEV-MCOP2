@@ -159,7 +159,29 @@ $("#edit-post-btn").click(function(e) {
 });
 
 
+$(document).ready(function() {
+  
+  $("#delete-post-btn").click(function(e) {
 
+    e.preventDefault();
+
+    $.ajax({
+      url: '/post/edit-'+$('#post_id').val(),
+      method: 'DELETE',
+      success: function(data) {
+        // Handle the success response (e.g., show a success message or refresh the page)
+        window.location.href = "/home"; 
+      },
+      error: function(error) {
+        // Handle the error response (e.g., show an error message)
+        console.error('Error deleting post:', error);
+        alert('An error occurred while deleting the post.');
+      },
+    });
+    
+    
+  });
+  });
 
 
   $("#edit-comment-btn").click(function(e) {

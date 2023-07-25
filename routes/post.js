@@ -87,6 +87,8 @@ router.get('/', async (req, res) =>{
 router.get('/edit-:id', async (req, res) =>{
     const getId = req.params.id;
 
+    console.log(getId);
+
     const getPost = await Post.findOne({_id: getId});
     const getUser = await Account.findOne({_id: getPost.username});
     const getTags = await Tag.find({ _id: { $in: getPost.tags } }).lean();
@@ -154,28 +156,11 @@ router.get('/edit-:id', async (req, res) =>{
    
 });
 
-//delete comment
-router.delete('/:id', async (req, res) =>{
-    const postId = req.params.id;
-    try {
-
-        const result = await Comment.findByIdAndDelete(postId);
-
-        if (result) {
-          res.status(200).json({ message: 'Successfully deleted.' });
-        } else {
-          res.status(404).json({ message: 'Document not found.' });
-        }
-      } catch (error) {
-        console.error('Error deleting document:', error);
-        res.status(500).json({ message: 'Internal server error.' });
-      }
-});
-
 
 //delete post
 router.delete('/edit-:id', async (req, res) =>{
     const postId = req.params.id;
+
     try {
 
         const getPost = await Post.findOne({_id: postId});
@@ -190,6 +175,24 @@ router.delete('/edit-:id', async (req, res) =>{
         }
 
         const result = await Post.findByIdAndDelete(postId);
+
+        if (result) {
+          res.status(200).json({ message: 'Successfully deleted.' });
+        } else {
+          res.status(404).json({ message: 'Document not found.' });
+        }
+      } catch (error) {
+        console.error('Error deleting document:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+      }
+});
+
+//delete comment
+router.delete('/:id', async (req, res) =>{
+    const postId = req.params.id;
+    try {
+
+        const result = await Comment.findByIdAndDelete(postId);
 
         if (result) {
           res.status(200).json({ message: 'Successfully deleted.' });
