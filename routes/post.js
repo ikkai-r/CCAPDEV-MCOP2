@@ -250,6 +250,71 @@ router.post('/comment', async (req, res) =>{
 
 });
 
+router.post('/reply', async (req, res) =>{
+
+    try {
+
+        const {parent_comment_id, reply_content} = req.body;
+
+        if(reply_content != "") {
+
+            
+        const date = new Date();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
+          ];
+        
+        let day = date.getDate();
+        let month = date.getMonth();
+        let year = date.getFullYear();
+    
+        // Format the date
+        let formattedDate = monthNames[month] + " " + day + ", " + year;
+        
+        const comment_date = formattedDate;
+        
+        console.log(req.body);
+        //find the post using the comment id
+        const getPost = await Post.find({ parent_comment_id: { $in: getPost.comments } }).lean();
+        
+        console.log(getPost);
+           
+        // //add comment in collection
+        //     const newComment = new Comment({
+        //         username: '64b7e12123b197fa3cd7539b',
+        //         post_commented: id,
+        //         comment_content: comment_textarea,
+        //         comment_date: comment_date
+        //     });
+
+        //     // Save the new comment to the database
+        //     const savedComment = await newComment.save();
+            
+        //     console.log('New Comment created:', savedComment._id);
+        //     console.log('New Comment created:', savedComment);
+
+        //     //update post
+        //     const updatedPost = await Post.findOneAndUpdate(
+        //         { _id: id },
+        //         { $push: { comments: savedComment._id } });
+
+        //     //update comment with replies
+
+        //     console.log('Saved', updatedPost);
+
+            return res.json({ message: 'Successfully commented!'});
+        }
+
+    } catch(error) {
+        console.error('Error creating comment:', error);
+        return res.status(500).send('Error creating comment.');
+    }
+
+
+
+});
+
 router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
     const getId = req.params.id;
 
