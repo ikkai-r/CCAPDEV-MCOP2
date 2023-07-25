@@ -600,6 +600,7 @@ router.get('/:id', async (req, res) =>{
             console.log(commentsWithReplies);
               //end
         res.render("view-post", {
+            title: "post | " + getPost.post_title,
             post_title: getPost.post_title,
             post_content: getPost.post_content,
             username: getPost.username,
