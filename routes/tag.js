@@ -71,11 +71,12 @@ router.get("/", async  (req, res)=>{
             var newTag = await Tag.findById(tagCounts[i]._id).lean();
             var tag = ({
                 tag_name: newTag.tag_name,
+                photo: newTag.photo,
                 count: tagCounts[i].count
             });
             tagListWithCount.push(tag);
         }
-
+        console.log(tagListWithCount);
         res.render("tag", {
             header: "View tags",
             tag: tagListWithCount,

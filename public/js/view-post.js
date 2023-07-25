@@ -477,13 +477,12 @@ $(document).ready(function() {
   
   $(document).ready(function() {
   
-    $("#delete-comment-btn").click(function(e) {
-  
-      console.log("HERE");
+    $(".delete-comment-btn").click(function(e) {
+
       e.preventDefault();
     
-      if($("#comment_id").val() !== "") {
-        const postId = $("#comment_id").val();
+      const postId = $(this).closest(".comment-options-menu").find("#comment_id").val();
+      if(postId !== "") {
     
       $.ajax({
         url: `/post/${postId}`,
