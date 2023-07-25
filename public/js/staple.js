@@ -109,6 +109,41 @@ $('#password-reg, #confirm-password').on('keyup', function () {
     }
 });
 
+function subUnsub(tagIdValue, action) {
+    const user_id = "64b7e12123b197fa3cd7539b";
+
+    $.ajax({
+        url: '/subscribe',
+        method: 'POST',
+        data: { user_id: user_id, 
+                subscribe: tagIdValue, 
+                action: action},
+        success: function(data) {
+          console.log(data.message); // Optionally, handle success response
+          window.location.reload();
+        },
+        error: function(error) {
+          console.error('Error subscribing:', error); // Optionally, handle error response
+        }
+      });
+}
+
+$(".tag-subscribe").click(function (e) {
+    e.preventDefault();
+    
+    const tagIdValue = $(this).closest(".tag-subscribe").prev(".tag_pop_id").val();
+    const action = $(this).text();
+    
+    subUnsub(tagIdValue, action);
+});
+
+$("#tag-specific-subs").click(function (e) {
+    e.preventDefault();
+    
+    const tagIdValue = $("#header-tag-specific").text().replace("#", "");
+    const action = $(this).text();
+    subUnsub(tagIdValue, action);
+});
 
 
 $("#login-btn").click(function (e) {

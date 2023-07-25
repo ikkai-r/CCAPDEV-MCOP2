@@ -446,7 +446,7 @@ body::-webkit-scrollbar{
 }
 
 /* Popular Tags */
-.tag-subscribe {
+.tag-subscribe, .tag-subscribe-s {
     background-color: #8D5821;
     color: #dbdbdb;
     font-weight: bolder;
@@ -458,7 +458,7 @@ body::-webkit-scrollbar{
     margin-bottom: auto;
 }
 
-.tag-subscribe:hover {
+.tag-subscribe:hover, .tag-subscribe-s:hover {
     background-color: #543515;
     cursor: pointer;
 }
@@ -750,8 +750,8 @@ body::-webkit-scrollbar{
 }
 
 .comment-profile-pic {
-    width:5.3vh;
-    height: 5.3vh;
+    width: 5.3vh;
+    height:  5.3vh;
     border-radius: 50%;
 }
 

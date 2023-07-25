@@ -618,10 +618,6 @@ a {
     font-size: 1.7em;
 }
 
-.comment-profile-pic {
-    width:4vh;
-}
-
 .comment-content, .comment-reply, .comment-hide-reply {
     font-size: 0.9em;
     margin-top:1vh;

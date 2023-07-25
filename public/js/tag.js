@@ -51,3 +51,12 @@ downvote.addEventListener("click", function(){
     
     
 });
+
+function tagSub() {
+        
+    if( document.getElementById("tag-specific-subs").innerHTML == "Subscribe") {
+        document.getElementById("tag-specific-subs").innerHTML = "Unsubscribe";
+    } else {
+        document.getElementById("tag-specific-subs").innerHTML = "Subscribe";
+    }
+}

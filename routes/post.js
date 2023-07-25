@@ -38,6 +38,12 @@ router.get('/', async (req, res) =>{
        ]).sort({count: 'desc'}).limit(6);
 
        
+       const user = await Account.find({ "username" : "helpvirus" });
+
+       const subscribedTags = user[0].subscribed_tags;
+       const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
+       
        const getPopularTags = [];
 
      for (var i = 0; i < tagCounts.length; i++){
@@ -45,6 +51,7 @@ router.get('/', async (req, res) =>{
          console.log(tagCounts[i].count);
          var tag = ({
              tag_name: newTag.tag_name,
+             tag_id: newTag._id,
              count: tagCounts[i].count
          });
         getPopularTags.push(tag);
@@ -58,6 +65,7 @@ router.get('/', async (req, res) =>{
         post_date: new Date(),
         posts_latest: latest_posts,
         popular_tags: getPopularTags,
+        sub_tags: listofTags,
         button_type: "create-post-btn"
     });
 });
@@ -75,6 +83,41 @@ router.get('/edit-:id', async (req, res) =>{
     if(getPost.post_attachment) {
         post_attachment = getPost.post_attachment.replace("img/", "");
     }
+
+    // start for side-container content
+
+    const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+    const tagCounts = await Post.aggregate([
+        {
+          $unwind: '$tags' 
+        },
+        {
+          $group: {
+            _id: '$tags', 
+            count: { $sum: 1 } 
+          }
+        }
+      ]).sort({count: 'desc'}).limit(6);
+
+      const user = await Account.find({ "username" : "helpvirus" });
+
+      const subscribedTags = user[0].subscribed_tags;
+      const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
+      const getPopularTags = [];
+
+    for (var i = 0; i < tagCounts.length; i++){
+        var newTag = await Tag.findById(tagCounts[i]._id).lean();
+        console.log(tagCounts[i].count);
+        var tag = ({
+            tag_name: newTag.tag_name,
+            tag_id: newTag._id,
+            count: tagCounts[i].count
+        });
+       getPopularTags.push(tag);
+
+    }
  
     try{
         res.render("create-post", {
@@ -86,6 +129,9 @@ router.get('/edit-:id', async (req, res) =>{
             post_username: getUser.username,
             post_attachment: post_attachment,
             tags: getTags,
+            posts_latest: latest_posts,
+            sub_tags: listofTags,
+            popular_tags: getPopularTags,
             id: getId,
             button_type: "edit-post-btn"
         });
@@ -283,6 +329,43 @@ router.get('/editc-:id', async (req, res) =>{
         path: "username",
     }).lean();
 
+     // start for side-container content
+
+     const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
+
+     const tagCounts = await Post.aggregate([
+         {
+           $unwind: '$tags' 
+         },
+         {
+           $group: {
+             _id: '$tags', 
+             count: { $sum: 1 } 
+           }
+         }
+       ]).sort({count: 'desc'}).limit(6);
+
+       
+       const user = await Account.find({ "username" : "helpvirus" });
+
+       const subscribedTags = user[0].subscribed_tags;
+       const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
+       
+       const getPopularTags = [];
+
+     for (var i = 0; i < tagCounts.length; i++){
+         var newTag = await Tag.findById(tagCounts[i]._id).lean();
+         console.log(tagCounts[i].count);
+         var tag = ({
+             tag_name: newTag.tag_name,
+             tag_id: newTag._id,
+             count: tagCounts[i].count
+         });
+        getPopularTags.push(tag);
+
+     }
+
 
     res.render("edit-comment", {
         header: "Edit comment",
@@ -290,6 +373,9 @@ router.get('/editc-:id', async (req, res) =>{
         username: getComment.username.username,
         comment_date: getComment.comment_date,
         comment_content: getComment.comment_content,
+        posts_latest: latest_posts,
+        popular_tags: getPopularTags,
+        sub_tags: listofTags,
         id: getComment._id,
         button_type: 'edit-comment-btn'
     });
@@ -353,7 +439,11 @@ router.get('/:id', async (req, res) =>{
             }
           ]).sort({count: 'desc'}).limit(6);
 
-          
+          const user = await Account.find({ "username" : "helpvirus" });
+
+          const subscribedTags = user[0].subscribed_tags;
+          const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
           const getPopularTags = [];
 
         for (var i = 0; i < tagCounts.length; i++){
@@ -361,6 +451,7 @@ router.get('/:id', async (req, res) =>{
             console.log(tagCounts[i].count);
             var tag = ({
                 tag_name: newTag.tag_name,
+                tag_id: newTag._id,
                 count: tagCounts[i].count
             });
            getPopularTags.push(tag);
@@ -392,6 +483,7 @@ router.get('/:id', async (req, res) =>{
             posts_latest: latest_posts,
             popular_tags: getPopularTags,
             post_edited: getPost.post_edited,
+            sub_tags: listofTags,
             comment: listofcomments,
             comment_amount: comment_amount,
             id: getName,
