@@ -22,6 +22,13 @@ const { getRounds } = require("bcryptjs");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
+handlebars.registerHelper('ifCond', function(v1, v2, options) {
+    if (v1 === v2) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
+});
+
 
 router.get('/', async (req, res) =>{
 
@@ -250,6 +257,7 @@ router.post('/comment', async (req, res) =>{
 
 });
 
+//reply
 router.post('/reply', async (req, res) =>{
 
     try {
@@ -273,36 +281,40 @@ router.post('/reply', async (req, res) =>{
         let formattedDate = monthNames[month] + " " + day + ", " + year;
         
         const comment_date = formattedDate;
-        
-        console.log(req.body);
-        //find the post using the comment id
-        const getPost = await Post.find({ parent_comment_id: { $in: getPost.comments } }).lean();
-        
-        console.log(getPost);
-           
-        // //add comment in collection
-        //     const newComment = new Comment({
-        //         username: '64b7e12123b197fa3cd7539b',
-        //         post_commented: id,
-        //         comment_content: comment_textarea,
-        //         comment_date: comment_date
-        //     });
+        //find the comment using the comment id
+        const getComment = await Comment.findOne({_id: parent_comment_id});
 
-        //     // Save the new comment to the database
-        //     const savedComment = await newComment.save();
+        console.log(getComment);
+        //const getPost = await Post.find({ parent_comment_id: { $in: listOfcomments } }).lean();
+
+        //add comment in collection
+            const newComment = new Comment({
+                username: '64b7e12123b197fa3cd7539b',
+                post_commented: getComment.post_commented,
+                comment_content: reply_content,
+                comment_date: comment_date,
+                parent_comment_id: parent_comment_id
+            });
+
+            // Save the new comment to the database
+            const savedComment = await newComment.save();
             
-        //     console.log('New Comment created:', savedComment._id);
-        //     console.log('New Comment created:', savedComment);
+            console.log('New Comment created:', savedComment._id);
+            console.log('New Comment created:', savedComment);
 
-        //     //update post
-        //     const updatedPost = await Post.findOneAndUpdate(
-        //         { _id: id },
-        //         { $push: { comments: savedComment._id } });
+            //update post
+            const updatedPost = await Post.findOneAndUpdate(
+                { _id: getComment.post_commented },
+                { $push: { comments: savedComment._id } });
 
-        //     //update comment with replies
+         //update comment with replies
 
-        //     console.log('Saved', updatedPost);
+        const updatedComment = await Comment.findOneAndUpdate(
+            { _id: getComment._id },
+            { $push: { replies: savedComment._id } });
 
+             console.log('Saved', updatedPost);
+             console.log('Saved', updatedComment);
             return res.json({ message: 'Successfully commented!'});
         }
 
@@ -542,10 +554,51 @@ router.get('/:id', async (req, res) =>{
             _id: { $in: getPost.comments },
           })
             .populate("username") // Populate the 'username' field with the 'Account' documents
+            .populate({path: "replies", model: 'Comment'})
             .lean();
 
             const comment_amount = listofcomments.length;
 
+            //start
+            const populateRepliesRecursively = async (comment) => {
+                if (comment.replies.length === 0) {
+                  return; // Base case: if the comment has no replies, return
+                }
+              
+                // Populate the replies for the current comment
+                comment.replies = await Comment.populate(comment.replies, {
+                  path: "replies",
+                  model: "Comment",
+                  populate: {
+                    path: "username",
+                  },
+                });
+              
+                // Recursively populate replies for each nested reply
+                for (const reply of comment.replies) {
+                  await populateRepliesRecursively(reply);
+                }
+              };
+
+              const getCommentsWithReplies = async (commentIds) => {
+                const comments = await Comment.find({ _id: { $in: commentIds } })
+                  .populate("username")
+                  .populate("replies") // Only populate immediate replies for the main comments
+                  .lean();
+              
+                // Recursively populate replies for each comment
+                for (const comment of comments) {
+                  await populateRepliesRecursively(comment);
+                }
+              
+                return comments;
+              };
+
+            const commentIds = getPost.comments;
+            const commentsWithReplies = await getCommentsWithReplies(commentIds);
+           
+            console.log(commentsWithReplies);
+              //end
         res.render("view-post", {
             post_title: getPost.post_title,
             post_content: getPost.post_content,
@@ -556,7 +609,7 @@ router.get('/:id', async (req, res) =>{
             popular_tags: getPopularTags,
             post_edited: getPost.post_edited,
             sub_tags: listofTags,
-            comment: listofcomments,
+            comment: commentsWithReplies,
             comment_amount: comment_amount,
             id: getName,
             is_upvoted: checkUpvote,

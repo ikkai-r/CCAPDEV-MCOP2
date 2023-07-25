@@ -16,14 +16,14 @@ let downvote = document.querySelector(".votes-cont i.fa-circle-down");
 
 let shareButton = document.querySelector(".share-cont");
 
-function createTextarea () {
+function createTextarea (commentId) {
     let div = document.createElement("div");
     div.setAttribute("class", "commenting mt-2");
     div.setAttribute("id", "commenting");
 
     div.innerHTML += `
     <form id="reply-form" method="post">
-    <input type="hidden" id="parent-comment-id" name="parent_comment_id" value="`+commentId+`">
+    <input type="hidden" id="parent_comment_id" name="parent_comment_id" value="`+commentId+`">
     <textarea class="reply-textarea comment-textarea" contenteditable="true" placeholder="add text here" name="reply_content"></textarea>
     <div class="d-flex justify-content-between">
         <button class="cancel-comment pill" id="comment-cancel" style="background-color: #DBDBDB;">cancel</button>
@@ -120,8 +120,7 @@ function addReply(text) {
 
 function onClickRep(e) {
     let closest = e.target.closest(".all-comment");
-    const commentId = $(e.target).closest(".all-comment").find("#comment_id").text();
-
+    const commentId = $(e.target).closest(".all-comment").find("#comment_id").val();
     if (isCommenting == 0) {
         closest.appendChild(createTextarea (commentId));
         element = document.getElementById("comment-cancel");
@@ -145,24 +144,27 @@ $(".comment-container").click(function (e) {
     $(".submit-comment").unbind().click(function (e) {
         e.preventDefault();
         console.log("HEREEE");
-        //   // Send the form data to the server using AJAX
-        //   const formData = $('#reply-form').serialize();
-    
-        //   // Send the form data to the server using AJAX
-        //   $.ajax({
-        //     url: '/post/reply', 
-        //     method: 'POST',
-        //     data: formData,
-        //     success: function(data) {
-        //       console.log(data.message);
-        //     },
-        //     error: function(error) {
-        //       console.error('Error submitting form:', error);
-        //     }
-        //   });
+
         const commentTextarea = $(".reply-textarea");
-        if (commentTextarea.val) {
-            console.log(commentTextarea.val());
+
+        if (commentTextarea.val()) {
+            // Send the form data to the server using AJAX
+            const formData = $('#reply-form').serialize();
+            console.log(formData);
+
+            // Send the form data to the server using AJAX
+            $.ajax({
+                url: '/post/reply', 
+                method: 'POST',
+                data: formData,
+                success: function(data) {
+                console.log(data.message);
+                },
+                error: function(error) {
+                console.error('Error submitting form:', error);
+                }
+            });
+
             if(commentTextarea.val() !== "") {
                 if(closest != null){
                     closest.appendChild(addReply(commentTextarea.val()));
@@ -176,9 +178,8 @@ $(".comment-container").click(function (e) {
                 commentTextarea.hide();
             }
             isCommenting = 0;
-        } 
+        }
      });
-     $("#reply-form").trigger("reset");
 });
 });
 

@@ -19,7 +19,12 @@ const commentSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    replies: [mongoose.SchemaTypes.ObjectId]
+    replies: [{
+        type: mongoose.Schema.Types.ObjectId, ref:'Comment',
+    }],
+    parent_comment_id: {
+        type: mongoose.Schema.Types.ObjectId, ref:'Comment'
+    },
 })
 
 module.exports = mongoose.model('Comment', commentSchema);
