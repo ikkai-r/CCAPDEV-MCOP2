@@ -1,4 +1,5 @@
 const express = require ("express");
+const handlebars = require('handlebars');
 const Post = require('../server/schema/Post');
 const Tag = require('../server/schema/Tag');
 const Account = require('../server/schema/Account');
@@ -20,6 +21,7 @@ const bodyParser = require('body-parser');
 const { getRounds } = require("bcryptjs");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
+
 
 router.get('/', async (req, res) =>{
 
@@ -50,7 +52,6 @@ router.get('/', async (req, res) =>{
 
      for (var i = 0; i < tagCounts.length; i++){
          var newTag = await Tag.findById(tagCounts[i]._id).lean();
-         console.log(tagCounts[i].count);
          var tag = ({
              tag_name: newTag.tag_name,
              tag_id: newTag._id,
@@ -112,7 +113,6 @@ router.get('/edit-:id', async (req, res) =>{
 
     for (var i = 0; i < tagCounts.length; i++){
         var newTag = await Tag.findById(tagCounts[i]._id).lean();
-        console.log(tagCounts[i].count);
         var tag = ({
             tag_name: newTag.tag_name,
             tag_id: newTag._id,
@@ -425,7 +425,6 @@ router.get('/editc-:id', async (req, res) =>{
 
      for (var i = 0; i < tagCounts.length; i++){
          var newTag = await Tag.findById(tagCounts[i]._id).lean();
-         console.log(tagCounts[i].count);
          var tag = ({
              tag_name: newTag.tag_name,
              tag_id: newTag._id,
@@ -517,7 +516,6 @@ router.get('/:id', async (req, res) =>{
 
         for (var i = 0; i < tagCounts.length; i++){
             var newTag = await Tag.findById(tagCounts[i]._id).lean();
-            console.log(tagCounts[i].count);
             var tag = ({
                 tag_name: newTag.tag_name,
                 tag_id: newTag._id,
@@ -539,8 +537,7 @@ router.get('/:id', async (req, res) =>{
         var checkDownvote = await  Vote.exists({post_comment: getName, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
         var upvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'up'}).count();
         var downvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'down'}).count();
-        var commentsC = await Post.findOne().where({_id: getName}).select('comments');
-       
+
         const listofcomments = await Comment.find({
             _id: { $in: getPost.comments },
           })
@@ -592,109 +589,33 @@ router.post('/:id', async (req, res) =>{
         if (action === 'upvoted' && !isUpvoted && !isDownvoted){
             const newUpvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'up'});
             await newUpvote.save();
-            console.log("User upvoted successfully");
+            return res.json({message:"User upvoted successfully"});
         }
         else if (action === 'upvoted' && isUpvoted){
-            console.log("User already upvoted");
+            await Vote.findByIdAndDelete(isUpvoted._id);
+            return res.json({message:"User already upvoted, removing upvote"});
         }
         else if (action === 'upvoted' && isDownvoted){
             await Vote.findByIdAndDelete(isDownvoted._id);
             const editedUpvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'up'});
             await editedUpvote.save();
-            console.log("User previously downvoted, removing downvote for upvote");
+            return res.json({message:"User previously downvoted, removing downvote for upvote"});
         }
         else if (action === 'downvoted' && !isUpvoted && !isDownvoted){
             const newDownvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'down'});
             await newDownvote.save();
-            console.log("User downvoted successfully");
+            return res.json({message:"User downvoted successfully"});
         }
         else if (action === 'downvoted' && isDownvoted){
-            console.log("User already downvoted");
+            await Vote.findByIdAndDelete(isDownvoted._id);
+            return res.json({message:"User already downvoted, removing downvote"});
         }
         else if(action === 'downvoted' && isUpvoted){
             await Vote.findOneAndDelete(isUpvoted._id);
             const editedDownvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'down'});
            await editedDownvote.save();
-            console.log("User previously upvoted, removing upvote for downvote");
+           return res.json({message: "User previously upvoted, removing upvote for downvote"});
         }
-
-        // start for side-container content
-
-        const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
-
-        const tagCounts = await Post.aggregate([
-            {
-              $unwind: '$tags' 
-            },
-            {
-              $group: {
-                _id: '$tags', 
-                count: { $sum: 1 } 
-              }
-            }
-          ]).sort({count: 'desc'}).limit(6);
-
-          const user = await Account.find({ "username" : "helpvirus" });
-          
-          const getPopularTags = [];
-
-        for (var i = 0; i < tagCounts.length; i++){
-            var newTag = await Tag.findById(tagCounts[i]._id).lean();
-            console.log(tagCounts[i].count);
-            var tag = ({
-                tag_name: newTag.tag_name,
-                count: tagCounts[i].count
-            });
-           getPopularTags.push(tag);
-
-        }
-
-        const subscribedTags = user[0].subscribed_tags;
-        const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
-
-        let logged_in = "";
-
-        if(getPost.username.username == "helpvirus") {
-            logged_in = true;
-        } else {
-            logged_in = false;
-        }
-
-        var checkUpvote = await Vote.exists({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
-        var checkDownvote = await  Vote.exists({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
-        var upvoteC = await Vote.find().where({post_comment: getId, up_downvote: 'up'}).count();
-        var downvoteC = await Vote.find().where({post_comment: getId, up_downvote: 'down'}).count();
-        const listofcomments = await Comment.find({
-            _id: { $in: getPost.comments },
-          })
-            .populate("username") // Populate the 'username' field with the 'Account' documents
-            .lean();
-
-            const comment_amount = listofcomments.length;
-
-       
-
-        res.render("view-post", {
-            post_title: getPost.post_title,
-            post_content: getPost.post_content,
-            username: getPost.username,
-            post_date: getPost.post_date,
-            tags_post: getPost.tags,
-            posts_latest: latest_posts,
-            popular_tags: getPopularTags,
-            post_edited: getPost.post_edited,
-            sub_tags: listofTags,
-            id: getId,
-            is_upvoted: checkUpvote,
-            is_downvoted: checkDownvote,
-            upvote_count: upvoteC,
-            downvote_count: downvoteC,
-            comment_amount: comment_amount,
-            logged_in: logged_in,
-            script: "js/view-post.js",
-            navbar: 'logged-navbar'
-
-        });
         
     } catch(error){
         console.log(error);
