@@ -70,6 +70,7 @@ router.get('/', async (req, res) =>{
 
     res.render("create-post", {
         header: "Create a new post",
+        title: "Create a new post",
         script: "js/post.js",
         post_username: "helpvirus",
         post_date: new Date(),
@@ -131,6 +132,7 @@ router.get('/edit-:id', async (req, res) =>{
  
     try{
         res.render("create-post", {
+            title: "Edit post",
             header: "Edit post",
             script: "js/post.js",
             post_title: getPost.post_title,
@@ -449,6 +451,7 @@ router.get('/editc-:id', async (req, res) =>{
 
 
     res.render("edit-comment", {
+        title: "Edit comment",
         header: "Edit comment",
         script: "js/post.js",
         username: getComment.username.username,
@@ -619,6 +622,7 @@ router.get('/:id', async (req, res) =>{
             // console.log(listofcomments);
 
         res.render("view-post", {
+            title: "post | " + getPost.post_title,
             post_title: getPost.post_title,
             post_content: getPost.post_content,
             username: getPost.username,
