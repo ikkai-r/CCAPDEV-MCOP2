@@ -709,8 +709,10 @@ body::-webkit-scrollbar{
     background-repeat:no-repeat;
     background-color:#DBBFA4;
 
-    height: 30%;
-    width: 30%
+    height: 50%;
+    width: 50%;
+    max-height: 500px;
+    max-width: 500px;
 }
 
 .viewed-post-actions{

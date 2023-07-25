@@ -13,13 +13,13 @@
                         {{/if}}
             
             <div class="tag-post-hd">
-                <h5><b>{{post_cnt}}</b> post/s  | <b>TODO</b> subscribers</h5>
+                <h5><b>{{post_cnt}}</b> post/s  | <b>{{subscribers}}</b> subscribers</h5>
             </div>
         </div>
     </div>
 
     <!-- Posts -->
-    <div class="tag-group-row">
+    <div class="tag-group-row flex-wrap d-flex">
         {{#each post}}
         {{> tag-post-prev}}
         {{/each}}

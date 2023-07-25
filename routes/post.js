@@ -70,6 +70,7 @@ router.get('/', async (req, res) =>{
 
     res.render("create-post", {
         header: "Create a new post",
+        title: "Create a new post",
         script: "js/post.js",
         post_username: "helpvirus",
         post_date: new Date(),
@@ -131,6 +132,7 @@ router.get('/edit-:id', async (req, res) =>{
  
     try{
         res.render("create-post", {
+            title: "Edit post",
             header: "Edit post",
             script: "js/post.js",
             post_title: getPost.post_title,
@@ -171,6 +173,7 @@ router.delete('/:id', async (req, res) =>{
 });
 
 
+//delete post
 router.delete('/edit-:id', async (req, res) =>{
     const postId = req.params.id;
     try {
@@ -448,6 +451,7 @@ router.get('/editc-:id', async (req, res) =>{
 
 
     res.render("edit-comment", {
+        title: "Edit comment",
         header: "Edit comment",
         script: "js/post.js",
         username: getComment.username.username,
@@ -554,51 +558,69 @@ router.get('/:id', async (req, res) =>{
             _id: { $in: getPost.comments },
           })
             .populate("username") // Populate the 'username' field with the 'Account' documents
-            .populate({path: "replies", model: 'Comment'})
+            .populate({
+            path: "replies", 
+            model: 'Comment', 
+            populate: {
+              path: "username",
+                }})
             .lean();
+        
+        const newlist = [];
+
+        for(comment of listofcomments) {
+            if(comment.parent_comment_id == null) {
+                newlist.push(comment);
+            }
+        }
+
+        console.log(newlist);
 
             const comment_amount = listofcomments.length;
 
-            //start
-            const populateRepliesRecursively = async (comment) => {
-                if (comment.replies.length === 0) {
-                  return; // Base case: if the comment has no replies, return
-                }
+            // //start
+            // const populateRepliesRecursively = async (comment) => {
+            //     if (comment.replies.length === 0) {
+            //       return; // Base case: if the comment has no replies, return
+            //     }
               
-                // Populate the replies for the current comment
-                comment.replies = await Comment.populate(comment.replies, {
-                  path: "replies",
-                  model: "Comment",
-                  populate: {
-                    path: "username",
-                  },
-                });
+            //     // Populate the replies for the current comment
+            //     comment.replies = await Comment.populate(comment.replies, {
+            //       path: "replies",
+            //       model: "Comment",
+            //       populate: {
+            //         path: "username",
+            //       },
+            //     });
               
-                // Recursively populate replies for each nested reply
-                for (const reply of comment.replies) {
-                  await populateRepliesRecursively(reply);
-                }
-              };
+            //     // Recursively populate replies for each nested reply
+            //     for (const reply of comment.replies) {
+            //       await populateRepliesRecursively(reply);
+            //     }
+            //   };
 
-              const getCommentsWithReplies = async (commentIds) => {
-                const comments = await Comment.find({ _id: { $in: commentIds } })
-                  .populate("username")
-                  .populate("replies") // Only populate immediate replies for the main comments
-                  .lean();
+            //   const getCommentsWithReplies = async (commentIds) => {
+            //     const comments = await Comment.find({ _id: { $in: commentIds } })
+            //       .populate("username")
+            //       .populate("replies") // Only populate immediate replies for the main comments
+            //       .lean();
               
-                // Recursively populate replies for each comment
-                for (const comment of comments) {
-                  await populateRepliesRecursively(comment);
-                }
+            //     // Recursively populate replies for each comment
+            //     for (const comment of comments) {
+            //       await populateRepliesRecursively(comment);
+            //     }
               
-                return comments;
-              };
+            //     return comments;
+            //   };
 
-            const commentIds = getPost.comments;
-            const commentsWithReplies = await getCommentsWithReplies(commentIds);
+            // const commentIds = getPost.comments;
+            // const commentsWithReplies = await getCommentsWithReplies(commentIds);
            
-            console.log(commentsWithReplies);
-              //end
+            // console.log(commentsWithReplies);
+            //   //end
+
+            // console.log(listofcomments);
+
         res.render("view-post", {
             title: "post | " + getPost.post_title,
             post_title: getPost.post_title,
@@ -606,11 +628,12 @@ router.get('/:id', async (req, res) =>{
             username: getPost.username,
             post_date: getPost.post_date,
             tags_post: getPost.tags,
+            post_attachment:getPost.post_attachment,
             posts_latest: latest_posts,
             popular_tags: getPopularTags,
             post_edited: getPost.post_edited,
             sub_tags: listofTags,
-            comment: commentsWithReplies,
+            comment: newlist,
             comment_amount: comment_amount,
             id: getName,
             is_upvoted: checkUpvote,
