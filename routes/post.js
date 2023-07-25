@@ -69,7 +69,8 @@ router.get('/', async (req, res) =>{
         posts_latest: latest_posts,
         popular_tags: getPopularTags,
         sub_tags: listofTags,
-        button_type: "create-post-btn"
+        button_type: "create-post-btn",
+        navbar: 'logged-navbar'
     });
 });
 
@@ -390,8 +391,6 @@ router.post('/editc-:id', async (req, res) =>{
 
     try{
     const getId = req.params.id;
-
-    console.log(req.body);
     
 
     const getComment = await Comment.findOne({_id: getId});
@@ -409,7 +408,7 @@ router.post('/editc-:id', async (req, res) =>{
     const saveComment = await getComment.save();
     console.log("Saved", saveComment);
 
-    return res.json({ message: 'success', id: getId} );
+    return res.redirect(`/post/${saveComment.post_commented}`);
 } catch(error){
     console.log(error);
     return res.status(500).send('Error creating post.');

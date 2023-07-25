@@ -158,30 +158,29 @@ $("#edit-post-btn").click(function(e) {
 
 });
 
-$(document).ready(function() {
 
-$("#delete-post-btn").click(function(e) {
-  e.preventDefault();
 
-  if($("#post_id").val() !== "") {
-    const postId = $("#post_id").val();
 
-  $.ajax({
-    url: `/post/edit-${postId}`,
-    method: 'DELETE',
-    success: function(data) {
-      // Handle the success response (e.g., show a success message or refresh the page)
-      window.location.href = '/home'; 
-    },
-    error: function(error) {
-      // Handle the error response (e.g., show an error message)
-      console.error('Error deleting post:', error);
-      alert('An error occurred while deleting the post.');
-    },
-  });
-  } else {
-    window.location.href = '/home'; 
-  }
-  
+
+  $("#edit-comment-btn").click(function(e) {
+    e.preventDefault();
+      
+    // Send the form data to the server using AJAX
+    const formData = $('#edit-comment-form').serialize();
+
+    // Send the form data to the server using AJAX
+    $.ajax({
+      url: '/post/editc-'+$('#comment_id').val(), 
+      method: 'POST',
+      data: formData,
+      success: function(data) {
+          console.log(data);
+        window.location.href = '/home'; 
+      },
+      error: function(error) {
+        console.error('Error submitting form:', error);
+      }
+    });
+
 });
-});
+
