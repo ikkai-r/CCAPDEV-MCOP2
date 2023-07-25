@@ -1,6 +1,5 @@
 const express = require ("express");
 const router = express.Router();
-const Account = require('../server/schema/Account');
 const Tag = require('../server/schema/Tag');
 const Post = require('../server/schema/Post');
 const Account = require('../server/schema/Account');
