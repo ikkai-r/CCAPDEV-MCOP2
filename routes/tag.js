@@ -49,18 +49,18 @@ router.get("/:tagname", async (req, res)=>{
         for (i = 0; i < postListLength; i++){
             let currPostID = postList[i]._id;
             //getting votes
-            let upvoteList = Vote.find({ 
+            const upvoteList = await Vote.find({ 
                 post_comment: currPostID,
                 post_comment_model: 'post',
                 up_downvote: 'up'
             });
-            let downvoteList = Vote.find({ 
+            const downvoteList = await Vote.find({ 
                 post_comment: currPostID,
                 post_comment_model: 'post',
                 up_downvote: 'down'
             });
             //add curent info + new info
-            var postData = ({
+            const postData = ({
                 _id: postList[i]._id,
                 username: postList[i].username,
                 post_title: postList[i].post_title,
@@ -70,7 +70,7 @@ router.get("/:tagname", async (req, res)=>{
                 post_date_modified: postList[i].post_date_modified,
                 comments: postList[i].comments,
                 tags: postList[i].tags,
-                net_vote_count: (await upvoteList).length - (await downvoteList).length
+                net_vote_count: upvoteList.length - downvoteList.length
             })
             postWithNetVote.push(postData);
         }
