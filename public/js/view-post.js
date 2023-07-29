@@ -7,11 +7,7 @@ var element;
 
 var prevCommentContent;
 
-let alreadyVoted = false;
-
-let upvoteAlready = false;
 let upvote = document.querySelector(".votes-cont i.fa-circle-up");
-let downvoteAlready = false;
 let downvote = document.querySelector(".votes-cont i.fa-circle-down");
 
 let shareButton = document.querySelector(".share-cont");
@@ -103,8 +99,12 @@ $(".comment-container").click(function (e) {
 });
 });
 
-upvote.addEventListener("click", function(){
+upvote.addEventListener("click", function(e){
     e.preventDefault();
+    var upvoteCount = parseInt($(this).closest(".votes-cont").find("#upvote-amnt").text());
+    var downvoteCount = parseInt($(this).closest(".votes-cont").find("#downvote-amnt").text());
+    console.log("upvote " + upvoteCount + " downvote: " + downvoteCount);
+   
     try{
         // check if upvoted already?
         var voteForm = $('#upvoteForm').serialize();
@@ -115,7 +115,6 @@ upvote.addEventListener("click", function(){
             data: voteForm,
             success: function(data) {
                 console.log(data.message);
-                window.location.reload(); // Refresh the page to get the updated comments
             },
             error: function(error) {
               console.error('Error submitting form:', error);
@@ -123,58 +122,44 @@ upvote.addEventListener("click", function(){
           
         });
             
-       
-
-        /* let upvoteNumber = document.querySelectorAll(".votes-cont span")[0].innerText;
-            let downvoteNumber = document.querySelectorAll(".votes-cont span")[2].innerText;
-            
-            if (downvoteAlready && !upvoteAlready){
-                
-                document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) - 1;
-                document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
-                upvoteAlready = true;
-                downvoteAlready = false;
-
-                upvote.classList.remove("fa-regular");
-                upvote.classList.add("fa-solid");
-                downvote.classList.add("fa-regular");
-                downvote.classList.remove("fa-solid");
-
-                document.getElementById("upvote-amnt").style.fontWeight = "bold";
-            }
-            else if (!upvoteAlready){
-                
-                document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) + 1;
-                upvoteAlready = true;
-
-                upvote.classList.remove("fa-regular");
-                upvote.classList.add("fa-solid");
-                downvote.classList.add("fa-regular");
-                downvote.classList.remove("fa-solid");
-
-                document.getElementById("upvote-amnt").style.fontWeight = "bold";
-            }
-            else {
-                document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
-                upvoteAlready = false;
-
-                upvote.classList.remove("fa-solid");
-                upvote.classList.add("fa-regular");
-
-                document.getElementById("upvote-amnt").style.fontWeight = "bold";
-            }*/
+           
     }catch(error){
         console.log(error);
     }
+  
+        //upvote
+        if($(this).hasClass('fa-regular')) {
+            var downVoteElement = $(this).closest(".votes-cont").find("#downvote-btn");  
+
+            if(downVoteElement.hasClass('fa-solid')) {
+                downVoteElement.removeClass('fa-solid');
+                downVoteElement.addClass('fa-regular');
+                $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount - 1);
+            } 
     
+            $(this).removeClass('fa-regular');
+            $(this).addClass('fa-solid');
+            $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount + 1);
+        } else {
+            $(this).removeClass('fa-solid');
+            $(this).addClass('fa-regular');
+            $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount - 1);
+        }
+        document.getElementById("upvote-amnt").style.fontWeight = "bold";
+
+
     
 });
 
 
 downvote.addEventListener("click", function(e){
     e.preventDefault();
+
+    var upvoteCount = parseInt($(this).closest(".votes-cont").find("#upvote-amnt").text());
+    var downvoteCount = parseInt($(this).closest(".votes-cont").find("#downvote-amnt").text());
+    console.log("upvote " + upvoteCount + " downvote: " + downvoteCount);
+
     try{
-        // check if upvoted already?
         var voteForm = $('#downvoteForm').serialize();
 
         $.ajax({
@@ -183,7 +168,6 @@ downvote.addEventListener("click", function(e){
             data: voteForm,
             success: function(data) {
                 console.log(data.message);
-                window.location.reload(); // Refresh the page to get the updated comments
             },
             error: function(error) {
               console.error('Error submitting form:', error);
@@ -194,59 +178,43 @@ downvote.addEventListener("click", function(e){
         console.log(error);
     }
 
-    /*let upvoteNumber = document.querySelectorAll(".votes-cont span")[0].innerText;
-    let downvoteNumber = document.querySelectorAll(".votes-cont span")[2].innerText;
-    
-    if (upvoteAlready && !downvoteAlready){
-        console.log(downvoteNumber + " prior downvotes - post has already been upvoted. removed the upvoted and downvoted the post instead")
-        document.querySelectorAll(".votes-cont span")[0].innerHTML = parseInt(upvoteNumber) - 1;
-        document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) + 1;
-        downvoteAlready = true;
-        upvoteAlready = false;
 
-        downvote.classList.remove("fa-regular");
-        downvote.classList.add("fa-solid");
-        upvote.classList.add("fa-regular");
-        upvote.classList.remove("fa-solid");
+    //downvote
+    if($(this).hasClass('fa-regular')) {
+        var upVoteElement =  $(this).closest(".votes-cont").find("#upvote-btn");  
 
-        document.getElementById("downvote-amnt").style.fontWeight = "bold";
+        if(upVoteElement.hasClass('fa-solid')) {
+            upVoteElement.removeClass('fa-solid');
+            upVoteElement.addClass('fa-regular');
+            $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount - 1);
+        }
+
+        $(this).removeClass('fa-regular');
+        $(this).addClass('fa-solid');
+        $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount + 1);
+    } else {
+        $(this).removeClass('fa-solid');
+        $(this).addClass('fa-regular');
+        $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount - 1);
     }
-    else if (!downvoteAlready){
-        document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) + 1;
-        console.log(downvoteNumber + " prior downvotes - downvoted the post!");
-        downvoteAlready = true;
 
-        downvote.classList.remove("fa-regular");
-        downvote.classList.add("fa-solid");
-        upvote.classList.add("fa-regular");
-        upvote.classList.remove("fa-solid");
+    document.getElementById("downvote-amnt").style.fontWeight = "bold";
 
-        document.getElementById("downvote-amnt").style.fontWeight = "bold";
-    }
-    else{
-        document.querySelectorAll(".votes-cont span")[2].innerHTML = parseInt(downvoteNumber) - 1;
-        downvoteAlready = false;
-
-        downvote.classList.remove("fa-solid");
-        downvote.classList.add("fa-regular");
-
-        document.getElementById("downvote-amnt").style.fontWeight = "bold";
-    }*/
+   
 });
 
-$(document).on("click", ".comment-proper-votes", function () {
+$(document).on("click", ".comment-proper-votes", function (e) {
+    var form = {"comment_id":  $(this).parent().parent().find("#this_comment_id").val()};
     var voteCount = $(this).closest(".com-votes-cont").find(".comment-vote-cont .com-prop-amnt");
-
+    
     try{
     
          if($(this).hasClass('fa-circle-up')) {
         // check if upvoted already?
-        console.log($(this).closest(".comment_id")).find("#comment_id");
-        var upvoteVoteForm = $('#upvoteCommentForm').serialize();
         $.ajax({
             url: '/post/up_comment' ,
             method: 'POST',
-            data: upvoteVoteForm,
+            data: form,
             success: function(data) {
                 console.log(data.message);
                 //window.location.reload(); // Refresh the page to get the updated comments
@@ -257,12 +225,11 @@ $(document).on("click", ".comment-proper-votes", function () {
           
         });
         }else {
-            var downvoteVoteForm = $('#downvoteCommentForm').serialize();
 
             $.ajax({
                 url: '/post/down_comment', 
                 method: 'POST',
-                data: downvoteVoteForm,
+                data: form,
                 success: function(data) {
                     console.log(data.message);
                     //window.location.reload(); // Refresh the page to get the updated comments

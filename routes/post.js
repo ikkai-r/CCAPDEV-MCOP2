@@ -30,6 +30,8 @@ handlebars.registerHelper('ifCond', function(v1, v2, options) {
 });
 
 
+
+
 router.get('/', async (req, res) =>{
 
      // start for side-container content
@@ -264,8 +266,9 @@ router.post('/comment', async (req, res) =>{
 });
 router.post('/up_comment/', async(req, res)=>{
     try{
-         const getId = req.body.comment_id;
-         console.log(getId);
+        
+        var getId = req.body.comment_id;
+        console.log("comment id: " + getId);
 
         var isUpvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
         var isDownvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
@@ -292,8 +295,9 @@ router.post('/up_comment/', async(req, res)=>{
 
 router.post('/down_comment', async(req, res)=>{
     try{
-         const getId = req.body.comment_id;
-         console.log(getId);
+        var getId = req.body.comment_id;
+        console.log("comment id: " + getId);
+
         var isUpvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
         var isDownvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
         if (!isUpvoted && !isDownvoted){
@@ -637,6 +641,25 @@ router.get('/:id', async (req, res) =>{
         const newlist = [];
 
         for(comment of listofcomments) {
+            var hadUpvoted = await Vote.exists({post_comment: comment._id, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
+            var hadDownvoted = await Vote.exists({post_comment: comment._id, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
+            if (hadUpvoted)
+                Object.assign(comment, {up: true});
+            else 
+                Object.assign(comment, {up: false})
+            
+            if (hadDownvoted)
+                Object.assign(comment, {down: true})
+            else
+                Object.assign(comment, {down :false})
+
+            var numberUpvotes = await Vote.find({post_comment: comment._id, up_downvote: "up"}).count();
+            var numberDownvotes = await Vote.find({post_comment: comment._id, up_downvote: "down"}).count();
+            var sum = numberUpvotes - numberDownvotes;
+            
+            Object.assign(comment, {total: sum});
+            console.log("comment +" + comment.total);
+            
             if(comment.parent_comment_id == null) {
                 newlist.push(comment);
             }
