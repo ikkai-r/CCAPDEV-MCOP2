@@ -70,7 +70,34 @@ router.post('/', async (req, res) =>{
 
 });
 
+router.get('/findUser', async (req, res) => {
+    const username = req.query.user;
+    const userInUse = await Account.findOne({username:username}).exec();
+    if (userInUse){
+        res.sendStatus(400);
+    } else {
+        res.sendStatus(200);
+    }
+})
 
+// REGEX FROM: https://www.simplilearn.com/tutorials/javascript-tutorial/email-validation-in-javascript
+router.get('/verifyEmail', async (req, res) => {
+    const email = req.query.email;
+    const emailInUse = await Account.findOne({email:email}).exec();
+
+    var validEmailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const isValid = email.match(validEmailFormat);
+    console.log(isValid);
+
+    if (emailInUse){
+        res.sendStatus(400);
+    } else if (!isValid){
+        res.sendStatus(422);
+    } else {
+        res.sendStatus(200);
+    }
+
+})
 
 
 module.exports = router;

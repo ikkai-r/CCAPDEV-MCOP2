@@ -27,6 +27,44 @@ function convertDateToTxt() {
 
 }
 
+$("#username").on('keyup', async function (){
+    const getUsername = $("#username").val();
+    const response = await fetch ('/findUser?user=' + getUsername, {
+        method: 'GET'
+    });
+
+    if (response.status == 400){
+        $("#username-msg").css('display','block');
+        $('#username-msg').addClass('alert-danger');
+        $("#username-msg").text('Username is already in use');
+    } else if (response.status == 200){
+        $("#username-msg").css('display','none');
+    }
+});
+
+// TODO: Implement on the email for logging as well, but with 
+// different email validation
+$("#email-reg").on('keyup', async function (){
+    const getEmail = $("#email-reg").val();
+    const response = await fetch ('/verifyEmail?email=' + getEmail, {
+        method: 'GET'
+    });
+    
+    switch (response.status){
+        case 400: 
+            $("#email-msg").css('display','block');
+            $('#email-msg').addClass('alert-danger');
+            $("#email-msg").text('Email is already in use');
+            break;
+        case 422: 
+            $("#email-msg").css('display','block');
+            $('#email-msg').addClass('alert-danger');
+            $("#email-msg").text('Invalid email.');
+            break;
+        case 200:
+            $("#email-msg").css('display','none');
+    }
+})
 
 
 $("#toggle-pass-log").click(function () {
@@ -69,13 +107,14 @@ $("#toggle-pass-con").click(function () {
 $('#password-reg, #confirm-password').on('keyup', function () {
 
     if ($('#password-reg').val() == $('#confirm-password').val() && $('#password-reg').val() != "") {
-        $('#pass-msg').css('display', 'block');
+        $('#pass-msg').css('display', 'none');
         $('#pass-msg').removeClass('alert-danger');
-        $('#pass-msg').addClass('alert-success');
-        $('#pass-msg').text('Matching password');
+        // $('#pass-msg').addClass('alert-success');
+        // $('#pass-msg').text('Matching password');
     } else  {
+        $('#pass-msg').css('display', 'block');
         $('#pass-msg').addClass('alert-danger');
-        $('#pass-msg').removeClass('alert-success');
+        // $('#pass-msg').removeClass('alert-success');
         $('#pass-msg').text('Not matching password');
     }
   });

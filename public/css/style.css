@@ -1,3 +1,7 @@
+.debug-col{
+    border: 1px solid red;
+}
+
 body {
     background-color: #FAEDCD;
     font-family: 'Inter', sans-serif;
