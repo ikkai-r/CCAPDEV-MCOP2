@@ -73,22 +73,29 @@ leftBarHeaders.forEach((leftBarHeader) => {
     const voteAmnt = leftBarHeader.querySelector(".vote-amnt");
     const styleVoteAmnt = leftBarHeader.querySelector(".vote-amnt");
 
-    let upvoteAlready = false;
-    let downvoteAlready = false;
 
-    upvoteBtn.addEventListener("click", function () {
-        if (downvoteAlready && !upvoteAlready) {
+    upvoteBtn.addEventListener("click", async function () {
+
+        $.ajax({
+            url: '/tag/up/' + $(this).closest(".left-bar-header").find("#post_id").val(), 
+            method: 'POST',
+            success: function(data) {
+             console.log(data.message);
+            },
+            error: function(error) {
+              console.error('Error submitting form:', error);
+            }
+          });
+
+        if (downvoteBtn.classList.contains('fa-solid')) {
             voteAmnt.textContent = parseInt(voteAmnt.textContent) + 2;
-            upvoteAlready = true;
-            downvoteAlready = false;
 
             upvoteBtn.classList.remove("fa-regular");
             upvoteBtn.classList.add("fa-solid");
             downvoteBtn.classList.add("fa-regular");
             downvoteBtn.classList.remove("fa-solid");
-        } else if (!upvoteAlready) {
+        } else if (upvoteBtn.classList.contains('fa-regular')) {
             voteAmnt.textContent = parseInt(voteAmnt.textContent) + 1;
-            upvoteAlready = true;
 
             upvoteBtn.classList.remove("fa-regular");
             upvoteBtn.classList.add("fa-solid");
@@ -97,8 +104,7 @@ leftBarHeaders.forEach((leftBarHeader) => {
         }
         else {
             voteAmnt.textContent = parseInt(voteAmnt.textContent) - 1;
-            upvoteAlready = false;
-
+    
             upvoteBtn.classList.remove("fa-solid");
             upvoteBtn.classList.add("fa-regular");
         }
@@ -107,16 +113,25 @@ leftBarHeaders.forEach((leftBarHeader) => {
     });
 
     downvoteBtn.addEventListener("click", function () {
-        if (upvoteAlready && !downvoteAlready) {
-            voteAmnt.textContent = parseInt(voteAmnt.textContent) - 2;
-            downvoteAlready = true;
-            upvoteAlready = false;
+        
+        $.ajax({
+            url: '/tag/down/' + $(this).closest(".left-bar-header").find("#post_id").val(), 
+            method: 'POST',
+            success: function(data) {
+             console.log(data.message);
+            },
+            error: function(error) {
+              console.error('Error submitting form:', error);
+            }
+          });
 
+        if (upvoteBtn.classList.contains('fa-solid')) {
+            voteAmnt.textContent = parseInt(voteAmnt.textContent) - 2;
             downvoteBtn.classList.remove("fa-regular");
             downvoteBtn.classList.add("fa-solid");
             upvoteBtn.classList.add("fa-regular");
             upvoteBtn.classList.remove("fa-solid");
-        } else if (!downvoteAlready) {
+        } else if (downvoteBtn.classList.contains('fa-regular')) {
             voteAmnt.textContent = parseInt(voteAmnt.textContent) - 1;
             downvoteAlready = true;
 

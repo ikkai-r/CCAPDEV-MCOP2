@@ -3,9 +3,18 @@
     <div class="tag-post-left-bar">
         <!-- Votes -->
         <div class="left-bar-header"> 
+             <input type="hidden" value="{{_id}}" name="post_id" id="post_id">
+            {{#if upvoted}}
+            <i class="fa fa-solid fa-circle-up upvote-btn" id="upvote-btn"></i>
+            {{else}}
             <i class="fa fa-regular fa-circle-up upvote-btn" id="upvote-btn"></i>
+            {{/if}}
             <span style="font-Weight:bold; font-size:smaller; margin-right: 5vh;" id="vote-ctr" class="vote-amnt">{{net_vote_count}}</span>
+            {{#if downvoted}}
+            <i class="fa fa-solid fa-circle-down downvote-btn" id="downvote-btn"></i>
+            {{else}}
             <i class="fa fa-regular fa-circle-down downvote-btn" id="downvote-btn"></i>
+            {{/if}}
         </div>
 
         <!-- Share -->
@@ -22,7 +31,7 @@
             <div class="tag-profile">
                 <img src="{{username.profile_pic}}" class="profile-pic">
             </div>
-            <h7 class="tag-title"><b>{{{post_title}}}</b></h7>   
+            <a href="/post/{{_id}}"><h7 class="tag-title"><b>{{{post_title}}}</b></h7></a> 
         </div>
         <span class="post-info">posted by <a href="../user/{{{username.username}}}">{{{username.username}}}</a> on {{{post_date}}}</span>
         
@@ -31,7 +40,7 @@
             <p class="tag-post-content">{{{post_content}}}</p>
             
             <!--TO DO: insert the html file for this post -->
-            <p class="tag-post-continue"> <a href="../post/{{_id}}">Read more...</a></p>
+            <p class="tag-post-continue"> <a href="/post/{{_id}}">Read more...</a></p>
         </div>
 
         <!-- footer of the tag that contains the taglist -->
