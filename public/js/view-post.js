@@ -54,7 +54,7 @@ function onClickCancel(e) {
 $(document).ready(function() {
 $(".comment-container").click(function (e) {
     let closest = e.target.closest(".all-comment");
-
+    console.log(e.target);
     $(".submit-comment").unbind().click(function (e) {
         e.preventDefault();
         console.log("HEREEE");
@@ -81,19 +81,6 @@ $(".comment-container").click(function (e) {
                 }
             });
 
-            if(commentTextarea.val() !== "") {
-                if(closest != null){
-                    closest.appendChild(addReply(commentTextarea.val()));
-                } else {
-                    const commentContainer = document.querySelector(".comment-container");
-                    commentContainer.appendChild(addReply(commentTextarea.val()));
-                }
-                $(".commenting").hide();
-            } else {
-                const commentTextarea = $(".commenting");
-                commentTextarea.hide();
-            }
-            isCommenting = 0;
         }
      });
 });

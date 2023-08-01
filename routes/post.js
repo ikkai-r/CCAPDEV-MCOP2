@@ -1,5 +1,6 @@
 const express = require ("express");
 const handlebars = require('handlebars');
+const mongoose = require('mongoose');
 const Post = require('../server/schema/Post');
 const Tag = require('../server/schema/Tag');
 const Comment = require('../server/schema/Comment');
@@ -18,7 +19,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 const bodyParser = require('body-parser');
-const { getRounds } = require("bcryptjs");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
@@ -29,6 +29,40 @@ handlebars.registerHelper('ifCond', function(v1, v2, options) {
     return options.inverse(this);
 });
 
+handlebars.registerHelper('thereExists', function(postId, postParentId, options){
+    
+    if (postId.equals(postParentId))
+        return options.fn(this);
+
+});
+
+handlebars.registerHelper('checkUp', function(upArray, user, options){
+    var len = upArray.length;
+
+    for (var i = 0; i < len; i++) {
+        if (upArray[i].equals(user)) {
+            return options.fn(this);
+        }
+
+    }
+    return options.inverse(this)
+});
+
+handlebars.registerHelper('checkDown', function(downArray, user, options){
+    var len = downArray.length;
+
+    for (var i = 0; i < len; i++) {
+        if (downArray[i].equals(user)) {
+            return options.fn(this);
+        }
+
+    }
+    return options.inverse(this)
+});
+
+handlebars.registerHelper('log', function(something){
+    console.log(something);
+})
 
 
 
@@ -270,23 +304,56 @@ router.post('/up_comment/', async(req, res)=>{
         var getId = req.body.comment_id;
         console.log("comment id: " + getId);
 
-        var isUpvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
-        var isDownvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
-        if (!isUpvoted && !isDownvoted){
-            const newUpvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'up'});
-            await newUpvote.save();
-            return res.json({message:"User upvoted successfully"});
-        }
-        else if (isUpvoted){
-            await Vote.findByIdAndDelete(isUpvoted._id);
-            return res.json({message:"User already upvoted, removing upvote"});
-        }
-        else if (isDownvoted){
-            await Vote.findByIdAndDelete(isDownvoted._id);
-            const editedUpvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'up'});
-            await editedUpvote.save();
-            return res.json({message:"User previously downvoted, removing downvote for upvote"});
-        }
+        var isUpvoted = await Comment.findOne({_id: getId, username: '64b7e12123b197fa3cd7539b',
+        upvotes: new mongoose.Types.ObjectId('64b7e12123b197fa3cd7539b')
+      });
+    var isDownvoted =  await Comment.findOne({_id: getId, username: '64b7e12123b197fa3cd7539b',
+    downvotes: '64b7e12123b197fa3cd7539b'
+    });
+    console.log(isUpvoted);
+    console.log(isDownvoted)
+    
+    if (!isUpvoted && !isDownvoted){
+        await Comment.findByIdAndUpdate(getId, 
+           { $inc: { 
+                votes: 1 
+            },
+            $push: {
+                upvotes: new mongoose.Types.ObjectId('64b7e12123b197fa3cd7539b')
+            }
+        });
+        return res.json({message:"User downvoted successfully"});
+    }
+    else if (isUpvoted){
+        await Comment.findByIdAndUpdate(getId, 
+            { $inc: { 
+                 votes: -1
+             },
+             $pull: {
+                 upvotes: new mongoose.Types.ObjectId('64b7e12123b197fa3cd7539b')
+             }
+         });
+        return res.json({message:"User already downvoted, removing downvote"});
+    }
+    else if(isDownvoted){
+            await Comment.findByIdAndUpdate(getId, 
+                { $inc: { 
+                     votes: 1
+                 },
+                 $push: {
+                     upvotes: new mongoose.Types.ObjectId('64b7e12123b197fa3cd7539b')
+                 }
+             });
+            await Comment.findByIdAndUpdate(getId, 
+                { $inc: { 
+                     votes: 1
+                 },
+                 $pull: {
+                     downvotes: new mongoose.Types.ObjectId('64b7e12123b197fa3cd7539b')
+                 }
+             });
+       return res.json({message: "User previously upvoted, removing upvote for downvote"});
+    }
     } catch(error){
         console.log(error);
     }
@@ -298,21 +365,54 @@ router.post('/down_comment', async(req, res)=>{
         var getId = req.body.comment_id;
         console.log("comment id: " + getId);
 
-        var isUpvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
-        var isDownvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
+        var isUpvoted = await Comment.findOne({_id: getId, username: '64b7e12123b197fa3cd7539b',
+            upvotes: new mongoose.Types.ObjectId('64b7e12123b197fa3cd7539b')
+          });
+        var isDownvoted =  await Comment.findOne({_id: getId, username: '64b7e12123b197fa3cd7539b',
+        downvotes: '64b7e12123b197fa3cd7539b'
+        });
+        console.log(isUpvoted);
+        console.log(isDownvoted)
+        
         if (!isUpvoted && !isDownvoted){
-            const newDownvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'down'});
-            await newDownvote.save();
+            await Comment.findByIdAndUpdate(getId, 
+               { $inc: { 
+                    votes: -1 
+                },
+                $push: {
+                    downvotes: new mongoose.Types.ObjectId('64b7e12123b197fa3cd7539b')
+                }
+            });
             return res.json({message:"User downvoted successfully"});
         }
         else if (isDownvoted){
-            await Vote.findByIdAndDelete(isDownvoted._id);
+            await Comment.findByIdAndUpdate(getId, 
+                { $inc: { 
+                     votes: 1
+                 },
+                 $pull: {
+                     downvotes: new mongoose.Types.ObjectId('64b7e12123b197fa3cd7539b')
+                 }
+             });
             return res.json({message:"User already downvoted, removing downvote"});
         }
         else if(isUpvoted){
-            await Vote.findOneAndDelete(isUpvoted._id);
-            const editedDownvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'down'});
-           await editedDownvote.save();
+                await Comment.findByIdAndUpdate(getId, 
+                    { $inc: { 
+                         votes: -1
+                     },
+                     $push: {
+                         downvotes: new mongoose.Types.ObjectId('64b7e12123b197fa3cd7539b')
+                     }
+                 });
+                await Comment.findByIdAndUpdate(getId, 
+                    { $inc: { 
+                         votes: -1
+                     },
+                     $pull: {
+                         upvotes: new mongoose.Types.ObjectId('64b7e12123b197fa3cd7539b')
+                     }
+                 });
            return res.json({message: "User previously upvoted, removing upvote for downvote"});
         }
     } catch(error){
@@ -348,7 +448,7 @@ router.post('/reply', async (req, res) =>{
 
         console.log(getComment);
         //const getPost = await Post.find({ parent_comment_id: { $in: listOfcomments } }).lean();
-
+          
         //add comment in collection
             const newComment = new Comment({
                 username: '64b7e12123b197fa3cd7539b',
@@ -577,7 +677,57 @@ router.get('/:id', async (req, res) =>{
             path: 'tags'
         }).lean();
 
-        console.log(getPost.username);
+        const getComments = await Comment.find({post_commented: getName, parent_comment_id: null}).lean();
+
+        console.log(getComments);
+        /*
+        
+
+         {
+                $addFields: {
+                    up: 
+                    {
+                        $cond: 
+                            {   if: 
+                                {
+                                    $lookup: {
+                                    from: 'votes',
+                                    localField: '_id',
+                                    foreignField: 'post_comment',
+                                    as: 'allVotes'
+                                    }
+                                },
+                                then: true,
+                                else: false
+                            }
+                    }
+                }
+            }
+        */
+
+
+        /*for(comment of getComments) {
+            var hadUpvoted = await Vote.exists({post_comment: comment._id, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
+            var hadDownvoted = await Vote.exists({post_comment: comment._id, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
+            if (hadUpvoted)
+                Object.assign(comment, {up: true});
+            else 
+                Object.assign(comment, {up: false});
+            
+            if (hadDownvoted)
+                Object.assign(comment, {down: true});
+            else
+                Object.assign(comment, {down: false});
+    
+            var numberUpvotes = await Vote.find({post_comment: comment._id, up_downvote: "up"}).count();
+            var numberDownvotes = await Vote.find({post_comment: comment._id, up_downvote: "down"}).count();
+            var sum = numberUpvotes - numberDownvotes;
+            comment_amount += 1;
+            
+            Object.assign(comment, {total: sum});
+            
+        }*/
+        //find({post_commented: getName}).sort({comment_date: 1}).lean().then(countVotes);
 
         // start for side-container content
 
@@ -626,6 +776,8 @@ router.get('/:id', async (req, res) =>{
         var upvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'up'}).count();
         var downvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'down'}).count();
 
+        console.log("are? okashi na.......");
+        /*
         const listofcomments = await Comment.find({
             _id: { $in: getPost.comments },
           })
@@ -637,37 +789,26 @@ router.get('/:id', async (req, res) =>{
               path: "username",
                 }})
             .lean();
+        */
+
+
+            
+               
+            
         
         const newlist = [];
+        var comment_amount = 0;
 
-        for(comment of listofcomments) {
-            var hadUpvoted = await Vote.exists({post_comment: comment._id, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
-            var hadDownvoted = await Vote.exists({post_comment: comment._id, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
-            if (hadUpvoted)
-                Object.assign(comment, {up: true});
-            else 
-                Object.assign(comment, {up: false})
-            
-            if (hadDownvoted)
-                Object.assign(comment, {down: true})
-            else
-                Object.assign(comment, {down :false})
+        
+        
+        console.log("bro i don't even know\n");
+        // console.log(getComments);
 
-            var numberUpvotes = await Vote.find({post_comment: comment._id, up_downvote: "up"}).count();
-            var numberDownvotes = await Vote.find({post_comment: comment._id, up_downvote: "down"}).count();
-            var sum = numberUpvotes - numberDownvotes;
-            
-            Object.assign(comment, {total: sum});
-            console.log("comment +" + comment.total);
-            
-            if(comment.parent_comment_id == null) {
-                newlist.push(comment);
-            }
-        }
+        
 
-        console.log(newlist);
+       
 
-            const comment_amount = listofcomments.length;
+            //const comment_amount = getComments.length + getComments.replies.length();
 
             // //start
             // const populateRepliesRecursively = async (comment) => {
@@ -724,7 +865,7 @@ router.get('/:id', async (req, res) =>{
             popular_tags: getPopularTags,
             post_edited: getPost.post_edited,
             sub_tags: listofTags,
-            comment: newlist,
+            comment: getComments,
             comment_amount: comment_amount,
             id: getName,
             is_upvoted: checkUpvote,

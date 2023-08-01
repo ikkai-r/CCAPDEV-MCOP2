@@ -23,8 +23,29 @@ const commentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref:'Comment',
     }],
     parent_comment_id: {
-        type: mongoose.Schema.Types.ObjectId, ref:'Comment'
+        type: mongoose.Schema.Types.ObjectId, ref:'Comment',
     },
+    votes: {
+        type: Number,
+        default: 0
+    },
+    upvotes: [{
+        type: mongoose.Schema.Types.ObjectId, ref:'Account'
+    }],
+    downvotes:[{
+        type: mongoose.Schema.Types.ObjectId, ref:'Account'
+    }]
 })
 
+commentSchema.virtual('up').get(function() {
+  return this.username;
+})
+
+function populateAll(next){
+     this.populate('replies');
+     this.populate('username');
+     next();
+}
+
+commentSchema.pre('find', populateAll);
 module.exports = mongoose.model('Comment', commentSchema);
