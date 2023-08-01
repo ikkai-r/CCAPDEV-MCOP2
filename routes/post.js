@@ -677,7 +677,7 @@ router.get('/:id', async (req, res) =>{
             path: 'tags'
         }).lean();
 
-        const getComments = await Comment.find({post_commented: getName, parent_comment_id: null}).lean();
+        const getComments = await Comment.find({post_commented: getName, parent_comment_id: null}).sort({votes: -1}).lean();
 
         console.log(getComments);
         /*
