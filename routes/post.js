@@ -797,7 +797,7 @@ router.get('/:id', async (req, res) =>{
             
         
         const newlist = [];
-        var comment_amount = 0;
+        var comment_amount = await Comment.find({post_commented: getName}).count();
 
         
         
