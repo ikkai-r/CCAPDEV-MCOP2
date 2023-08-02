@@ -1,6 +1,9 @@
 // Get all post containers
 const postContainers = document.querySelectorAll(".profile-post");
 
+
+
+
 document.addEventListener("DOMContentLoaded", function() {
     // Get the query parameter from the URL
     var queryParams = new URLSearchParams(window.location.search);

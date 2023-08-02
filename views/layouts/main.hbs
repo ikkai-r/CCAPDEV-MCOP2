@@ -121,19 +121,21 @@
                               <label for="username" class="col-form-label"><b>username</b></label>
                               <input type="username" class="form-control" id="username" name="username" required>
                             </div>
+                            <div class="alert" id="username-msg" role="alert" style="display: none;"></div>
                             <div class="mb-3">
                               <label for="email" class="col-form-label"><b>email</b></label>
                               <input type="email" class="form-control" id="email-reg" name="email_reg" required>
                             </div>
+                            <div class="alert" id="email-msg" role="alert" style="display: none;"></div>
                             <label for="password" class="col-form-label"><b>password</b></label>
                             <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="password-reg"  aria-label="password" name="password_reg" required> 
-                            <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-reg"></i></span>
+                                <input type="password" class="form-control" id="password-reg"  aria-label="password" name="password_reg" required> 
+                                <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-reg"></i></span>
                             </div>
                             <label for="password" class="col-form-label"><b>confirm password</b></label>
                             <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="confirm-password"  aria-label="confirm-password" name="confirm_password" required>
-                            <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-con"></i></span>
+                                <input type="password" class="form-control" id="confirm-password"  aria-label="confirm-password" name="confirm_password" required>
+                                <span class="input-group-text"><i class="fa-solid fa-eye-slash" id="toggle-pass-con"></i></span>
                             </div>
                             <input type="hidden" name="action" value="register">
                             <div class="alert" id="pass-msg" role="alert" style="display: none;"></div>
