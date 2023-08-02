@@ -28,7 +28,16 @@ const postSchema = new mongoose.Schema({
     post_date_modified: {
         type: Date
     },
+    upvotes:[{
+        default: [],
+        type: mongoose.Schema.Types.ObjectId, ref: 'Account'
+    }],
+    downvotes:[{
+        default: [],
+        type: mongoose.Schema.Types.ObjectId, ref:'Account'
+    }],
     comments: [{
+        default: [],
         type: mongoose.Schema.Types.ObjectId, ref:'Comment',
     }],
     tags: [{

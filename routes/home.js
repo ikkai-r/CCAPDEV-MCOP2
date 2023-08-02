@@ -30,9 +30,30 @@ router.get('/', async (req, res) => {
 
         // start for side-container content
 
+        let logged_in = false;
+        let listofTags;
+        let navbar = 'navbar';
+
+        if(req.session.username) {
+          //user is logged in
+
+          logged_in = true;
+          
+          const user = await Account.findOne({ "username" : req.session.username });
+
+          const subscribedTags = user.subscribed_tags;
+          listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+          
+          navbar = 'logged-navbar';
+        }
+
+
+        console.log(listofTags);
+
         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
 
-        const tagCounts = await Post.aggregate([
+          // start for side-container content
+          const tagCounts = await Post.aggregate([
             {
               $unwind: '$tags' 
             },
@@ -49,15 +70,15 @@ router.get('/', async (req, res) => {
 
         for (var i = 0; i < tagCounts.length; i++){
             var newTag = await Tag.findById(tagCounts[i]._id).lean();
-            console.log(tagCounts[i].count);
             var tag = ({
                 tag_name: newTag.tag_name,
+                tag_id: newTag._id,
                 count: tagCounts[i].count
             });
-           getPopularTags.push(tag);
+          getPopularTags.push(tag);
 
-        }
-
+  }
+       
         res.render("index", {
         title: "Hot Posts",
         header: "Hot Posts",
@@ -65,7 +86,10 @@ router.get('/', async (req, res) => {
         posts: listofposts,
         posts_latest: latest_posts,
         popular_tags: getPopularTags,
-        navbar: 'navbar'
+        sub_tags: listofTags,
+        logged_in: logged_in,
+        navbar: navbar,
+        session_user: req.session.username
         });
     } catch(error){
         console.log(error);

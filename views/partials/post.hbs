@@ -2,15 +2,16 @@
     {{#if is_user_post}}
         <a href="/post/edit-{{_id}}"><div class="post-creator-delete" id="edit-post-btn"><i class="fa-regular fa-pen-to-square"></i></div></a>
     {{/if}}
+    
     <h2>{{post_title}}</h2> 
     
     <div class="d-flex">
         {{#if post_edited}}
         <!-- Indicate if post is edited -->
-        <p class="post-creator-posted-by">posted by <a href="/user/{{username.username}}">{{username.username}}</a> on {{post_date}}</p>
+        <p class="post-creator-posted-by">posted by <a href="/user/{{post_username.username}}">{{post_username.username}}</a> on {{formatDate post_date}}</p>
         <p class="edited-tag-post" id="edited-tag-post">(edited)</p>
         {{else}}
-        <p class="post-creator-posted-by">posted by <a href="/user/{{username.username}}">{{username.username}}</a> on {{post_date}}</p>
+        <p class="post-creator-posted-by">posted by <a href="/user/{{post_username.username}}">{{post_username.username}}</a> on {{formatDate post_date}}</p>
         {{/if}}
     </div>
 

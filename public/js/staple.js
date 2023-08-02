@@ -136,15 +136,34 @@ $('#password-reg, #confirm-password').on('keyup', function () {
   });
 
 
-  $("#logout-btn").click(function (e) {
-    e.preventDefault();
+//   $("#logout-btn").click(function (e) {
+//     e.preventDefault();
 
-    $("#logoutModal").modal('show');
+//     $("#logoutModal").modal('show');
 
-    setTimeout(function() {
-        window.location.href = "/home";
-      }, 2000);
-});
+//     setTimeout(function() {
+//         window.location.href = "/home";
+//       }, 2000);
+// });
+
+$("#logout-btn").click(function() {
+    // Redirect to the logout route to destroy the session
+    $.ajax({
+      url: '/logout',
+      method: 'GET',
+      success: function() {
+        $("#logoutModal").modal('show');
+
+        // Redirect to the home page after a short delay
+        setTimeout(function() {
+          window.location.href = "/home";
+        }, 2000);
+      },
+      error: function(error) {
+        console.error('Error logging out:', error);
+      }
+    });
+  });
 
 
   $("#register-btn").click(function (e) {
@@ -177,12 +196,11 @@ $('#password-reg, #confirm-password').on('keyup', function () {
 });
 
 function subUnsub(tagIdValue, action) {
-    const user_id = "64b7e12123b197fa3cd7539b";
 
     $.ajax({
         url: '/subscribe',
         method: 'POST',
-        data: { user_id: user_id, 
+        data: { 
                 subscribe: tagIdValue, 
                 action: action},
         success: function(data) {

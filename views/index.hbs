@@ -7,6 +7,9 @@
         {{/each}}
     </div> <!-- End of post container -->
     
+    {{#if logged_in}}
+    {{> side-container}}
+    {{else}}
     {{> nlg-side-container}}
-    
+    {{/if}}
 </div>

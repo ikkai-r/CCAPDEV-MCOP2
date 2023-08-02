@@ -3,7 +3,8 @@
     <div class="view-tag-header">
         <h1 class="header-text" id="header-tag-specific" value="{{tag_name}}">#{{tag_name}}</h1>
         <div class="tag-post-hder">
-                      {{#if (isInSubscribedTags tag_id)}}
+            {{#if logged_in}}
+                {{#if (isInSubscribedTags tag_id)}}
                       <div class="tag-post-hd" onclick="tagSub()">
                         <h5 id="tag-specific-subs">Unsubscribe</h5></div>
                         
@@ -11,6 +12,10 @@
                            <div class="tag-post-hd" onclick="tagSub()">
                         <h5 id="tag-specific-subs">Subscribe</h5></div>
                         {{/if}}
+            {{else}}
+                   <div class="tag-post-hd" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <h5 id="tag-specific-subs">Subscribe</h5></div>
+            {{/if}}
             
             <div class="tag-post-hd">
                 <h5><b>{{post_cnt}}</b> post/s  | <b>{{subscribers}}</b> subscribers</h5>
@@ -20,8 +25,15 @@
 
     <!-- Posts -->
     <div class="tag-group-row flex-wrap d-flex justify-content-around">
-        {{#each post}}
-        {{> tag-post-prev}}
-        {{/each}}
+        {{#if logged_in}}
+            {{#each post}}
+            {{log post}}
+                {{> tag-post-prev this}}
+            {{/each}}
+        {{else}}
+             {{#each post}}
+                {{> nlg-tag-post-prev this}}
+            {{/each}}
+        {{/if}}
     </div> <!-- End of 1st row -->
 </div> <!-- End of Tags Page -->
