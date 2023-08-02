@@ -18,15 +18,15 @@
     <!-- Comment Proper -->
 
     <div class="d-flex justify-content-between">
-        <h6 class="comment-title"><b><a href="post/{{post_commented._id}}">{{{post_commented.post_title}}}</a></b></h6> 
+        <h6 class="comment-title"><b><a href="/post/{{post_commented._id}}">{{{post_commented.post_title}}}</a></b></h6> 
         <div class="d-flex">
             {{#each post_commented.tags}}
-            <a href="tag/{{this.tag_name}}" class="postcom-tags post-tags-cont">#{{this.tag_name}}</a>
+            <a href="/tag/{{this.tag_name}}" class="postcom-tags post-tags-cont">#{{this.tag_name}}</a>
             {{/each}}
         </div>
     </div>
     
-    <span class="comment-info"><a href="user/{{{username.username}}}">{{{username.username}}}</a> commented on {{formatDate comment_date}}</span>
+    <span class="comment-info"><a href="/user/{{{username.username}}}">{{{username.username}}}</a> commented on {{formatDate comment_date}}</span>
     <p class="post-content pt-2">{{{comment_content}}}</p>
     <div class="d-flex justify-content-between">
         <div>{{edit_comment}}</div>
@@ -36,12 +36,12 @@
             </div>
             <div class="votes-cont profile-post">
                 <i class="fa-regular fa-circle-up upvote-btn"></i>
-                <span style="fontWeight:bold; font-size:smaller; margin-right: 0.5vh;" class="upvote-amnt" id="upvote-amnt"><b>5</b></span>
+                <span style="fontWeight:bold; font-size:smaller; margin-right: 0.5vh;" class="upvote-amnt" id="upvote-amnt"><b>{{upvotes.length}}</b></span>
                 <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
                 <i class="fa-regular fa-circle-down downvote-btn"></i>
-                <span style="fontWeight:bold; font-size:smaller" class="downvote-amnt" id="downvote-amnt"><b>5</b></span>
+                <span style="fontWeight:bold; font-size:smaller" class="downvote-amnt" id="downvote-amnt"><b>{{downvotes.length}}</b></span>
             </div>
-            <div class="comments-cont" onclick="redirectToPage('post/{{post_commented._id}}')">
+            <div class="comments-cont" onclick="redirectToPage('/post/{{post_commented._id}}')">
                 <i class="fa-regular fa-comment-dots"></i>
                 <span style="font-size:smaller"><b>Reply</b></span>
             </div>

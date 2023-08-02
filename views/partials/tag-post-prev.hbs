@@ -19,7 +19,7 @@
 
         <!-- Share -->
         <div class="left-bar-footer">
-            <i class="fa fa-regular fa-share-from-square" onclick="copyLink('post/{{_id}}')"></i>
+            <i class="fa fa-regular fa-share-from-square" onclick="copyLink('/post/{{_id}}')"></i>
         </div>
     </div>
 
@@ -47,7 +47,7 @@
         <div class="right-bar-footer">
             <div class="d-flex">
                 {{#each tags}}
-                <a href="{{tag_name}}" class="postcom-tags post-tags-cont">#{{tag_name}}</a>
+                <a href="/tag/{{tag_name}}" class="postcom-tags post-tags-cont">#{{tag_name}}</a>
                 {{/each}}
             </div>
         </div>

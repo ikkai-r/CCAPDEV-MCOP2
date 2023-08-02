@@ -10,7 +10,7 @@
     <div class="d-flex justify-content-between">
       <div class="d-flex">
             {{#each tags}}
-          <span class="postcom-tags post-tags-cont"><a href="/tags/{{this.tag_name}}">#{{tag_name}}</a></span>
+          <span class="postcom-tags post-tags-cont"><a href="/tag/{{this.tag_name}}">#{{tag_name}}</a></span>
           {{/each}}
       </div>
         <div class="actions-cont d-flex">
@@ -19,14 +19,14 @@
           </div>
           <div class="votes-cont profile-post">
             <i class="fa-regular fa-circle-up upvote-btn"></i>
-            <span style="fontWeight:bold; font-size:smaller; margin-right: 0.5vh;" class="upvote-amnt" id="upvote-amnt"><b>101</b></span>
+            <span style="fontWeight:bold; font-size:smaller; margin-right: 0.5vh;" class="upvote-amnt" id="upvote-amnt"><b>{{upvotes.length}}</b></span>
             <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
             <i class="fa-regular fa-circle-down downvote-btn"></i>
-            <span style="fontWeight:bold; font-size:smaller" class="downvote-amnt" id="downvote-amnt"><b>100</b></span>
+            <span style="fontWeight:bold; font-size:smaller" class="downvote-amnt" id="downvote-amnt"><b>{{downvotes.length}}</b></span>
           </div>
-        <div class="comments-cont">
-          <i class="fa-regular fa-comment-dots"></i>
-          <span style="font-size:smaller"><b>30</b></span>
+       <div class="comments-cont" onclick="redirectToPage('/post/{{_id}}')">
+                <i class="fa-regular fa-comment-dots"></i>
+                <span style="font-size:smaller"><b>{{comments.length}}</b></span>
         </div>
       </div>
     </div>
