@@ -1,10 +1,14 @@
 const express = require ("express");
 const mongoose = require('mongoose');
+const handlebars = require('handlebars');
 const router = express.Router();
 const Tag = require('../server/schema/Tag');
 const Account = require('../server/schema/Account');
 const Postschema = require('../server/schema/Post');
 
+handlebars.registerHelper('log', function(something){
+    console.log("test " + something);
+})
 router.get("/:tagname", async (req, res)=>{
     
     try {
@@ -103,7 +107,7 @@ router.get("/:tagname", async (req, res)=>{
             postWithNetVote.push(postData);
         }
 
-        
+        console.log("all good");
         res.render("tag-posts", {
             title: "Tag | "+getTagName,
             tag_name: getTagName,
@@ -173,7 +177,6 @@ router.get("/", async  (req, res)=>{
 
 router.post("/up/:post_id", async (req, res)=>{
     const getId = req.params.post_id;
-    console.log(user);
     if(req.session.username) {
 
         const user = await Account.findOne({ "username" : req.session.username } );
@@ -271,7 +274,6 @@ router.post("/down/:post_id", async (req, res)=>{
                         }
                     }
                 );
-            await editedDownvote.save();
             return res.json({message: "User previously upvoted, removing upvote for downvote"});
             }
         } catch(error){

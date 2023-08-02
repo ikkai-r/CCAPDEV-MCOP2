@@ -25,12 +25,15 @@
 
     <!-- Posts -->
     <div class="tag-group-row flex-wrap d-flex justify-content-around">
-        {{#each post}}
         {{#if logged_in}}
-        {{> tag-post-prev}}
+            {{#each post}}
+            {{log post}}
+                {{> tag-post-prev this}}
+            {{/each}}
         {{else}}
-        {{> nlg-tag-post-prev}}
+             {{#each post}}
+                {{> nlg-tag-post-prev this}}
+            {{/each}}
         {{/if}}
-        {{/each}}
     </div> <!-- End of 1st row -->
 </div> <!-- End of Tags Page -->

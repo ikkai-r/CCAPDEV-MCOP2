@@ -123,6 +123,8 @@ router.get("/:name", async (req, res)=> {
             getPopularTags.push(tag);
   
     }
+
+    console.log(listofcomments);
          
       res.render("user", {
         title: user.username,
