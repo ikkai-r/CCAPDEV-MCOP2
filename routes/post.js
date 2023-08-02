@@ -610,7 +610,8 @@ router.get('/editc-:id', async (req, res) =>{
             path: "username",
         }).lean();
 
-        if(getComment.username.username.equals(req.session.username)) {
+
+        if(req.session.username.toString() == getComment.username.username.toString()) {
             //if owner
 
                     // start for side-container content
