@@ -161,12 +161,11 @@ $('#password-reg, #confirm-password').on('keyup', function () {
 });
 
 function subUnsub(tagIdValue, action) {
-    const user_id = "64b7e12123b197fa3cd7539b";
 
     $.ajax({
         url: '/subscribe',
         method: 'POST',
-        data: { user_id: user_id, 
+        data: { 
                 subscribe: tagIdValue, 
                 action: action},
         success: function(data) {

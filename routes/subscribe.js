@@ -36,33 +36,39 @@ handlebars.registerHelper('isInSubscribedTags', function(tagId, options) {
 
 router.post('/', async (req, res) =>{
 
+  if(req.session.username) {
+
+    const user = await Account.findOne({ "username" : req.session.username });
+    const user_id = user._id;
+
     try {
-        const { user_id, subscribe, action} = req.body;
+      const { subscribe, action} = req.body;
 
-        const tag = await Tag.findOne({ tag_name: subscribe }).lean();
-        
-        if(action == "Subscribe") {
-          const updatedUser = await Account.findOneAndUpdate(
-            { _id: user_id },
-            { $push: { subscribed_tags: tag._id } },
-            { new: true } 
-          ).lean();
-            console.log('User subscription updated:', updatedUser);
-            return res.json({ message: 'Successfully subscribed!', subscribedTags: updatedUser.subscribed_tags});
-        } else {
-          const updatedUser = await Account.findOneAndUpdate(
-            { _id: user_id },
-            { $pull: { subscribed_tags: tag._id } },
-            { new: true } 
-          ).lean();
-            console.log('User subscription updated:', updatedUser);
-            return res.json({ message: 'Successfully unsubscribed!', subscribedTags: updatedUser.subscribed_tags});
-        }
+      const tag = await Tag.findOne({ tag_name: subscribe }).lean();
+      
+      if(action == "Subscribe") {
+        const updatedUser = await Account.findOneAndUpdate(
+          { _id: user_id },
+          { $push: { subscribed_tags: tag._id } },
+          { new: true } 
+        ).lean();
+          console.log('User subscription updated:', updatedUser);
+          return res.json({ message: 'Successfully subscribed!', subscribedTags: updatedUser.subscribed_tags});
+      } else {
+        const updatedUser = await Account.findOneAndUpdate(
+          { _id: user_id },
+          { $pull: { subscribed_tags: tag._id } },
+          { new: true } 
+        ).lean();
+          console.log('User subscription updated:', updatedUser);
+          return res.json({ message: 'Successfully unsubscribed!', subscribedTags: updatedUser.subscribed_tags});
+      }
 
-    } catch (error) {
-        console.error('Error sub:', error);
-        return res.status(500).send('Error sub.');
-    }
+  } catch (error) {
+      console.error('Error sub:', error);
+      return res.status(500).send('Error sub.');
+  }
+  }
 
 });
 

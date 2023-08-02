@@ -11,10 +11,18 @@ router.get("/:tagname", async (req, res)=>{
         //gets the list of posts that contains tag
         const getTagName = req.params.tagname;
 
-        const user1 = await Account.find({ "username" : "helpvirus" } );
-        const subscribedTagsLogged = user1[0].subscribed_tags;
+        let logged_in = false;
+        let user;
+        let navbar = 'navbar';
 
-        const listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
+        if(req.session.username) {
+            //loggedin
+            logged_in = true;
+            navbar = 'logged-navbar';
+            user = await Account.findOne({ "username" : req.session.username } );
+            const subscribedTagsLogged = user.subscribed_tags;
+            const listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
+        }
 
         const getTag = await Tag.find({
             tag_name: getTagName
@@ -48,19 +56,23 @@ router.get("/:tagname", async (req, res)=>{
         //sums up how many posts are under every tag into an array
         for (i = 0; i < postListLength; i++){
             let currPostID = postList[i]._id;
-
-            var isUpvoted = await Vote.findOne({post_comment: currPostID, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
-            var isDownvoted = await Vote.findOne({post_comment: currPostID, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
-            
-
-            if (isUpvoted)
-                isUpvoted = true;
-            else
-                isUpvoted = false;
-            if(isDownvoted)
-                isDownvoted = true;
-            else
-                isDownvoted = false;
+            var isUpvoted = false;
+            var isDownvoted = false;
+            if(logged_in) {
+                
+                isUpvoted = await Vote.findOne({post_comment: currPostID, username: user._id, up_downvote: 'up'});
+                isDownvoted = await Vote.findOne({post_comment: currPostID, username: user._id, up_downvote: 'down'});
+                
+    
+                if (isUpvoted)
+                    isUpvoted = true;
+                else
+                    isUpvoted = false;
+                if(isDownvoted)
+                    isDownvoted = true;
+                else
+                    isDownvoted = false;
+            }
             //getting votes
             const upvoteList = await Vote.find({ 
                 post_comment: currPostID,
@@ -72,7 +84,8 @@ router.get("/:tagname", async (req, res)=>{
             });
             console.log("up " + isUpvoted);
             console.log("down " + isDownvoted);
-            //add curent info + new info
+            //add current info + new info
+
             const postData = ({
                 _id: postList[i]._id,
                 username: postList[i].username,
@@ -87,9 +100,11 @@ router.get("/:tagname", async (req, res)=>{
                 downvoted: isDownvoted,
                 net_vote_count: upvoteList.length - downvoteList.length
             })
+
             postWithNetVote.push(postData);
         }
 
+        
         res.render("tag-posts", {
             title: "Tag | "+getTagName,
             tag_name: getTagName,
@@ -99,7 +114,9 @@ router.get("/:tagname", async (req, res)=>{
             post:postWithNetVote,
             sub_tags: listofTagsLogged,
             script: "js/tag.js",
-            navbar: 'logged-navbar'
+            navbar: navbar,
+            logged_in: logged_in,
+            username: req.session.username
         })
     } catch (error){
         console.log(error);
@@ -108,7 +125,13 @@ router.get("/:tagname", async (req, res)=>{
 
 
 router.get("/", async  (req, res)=>{
-    try{
+
+    let navbar = 'navbar';
+    if(req.session.username) {
+        navbar = 'logged-navbar';
+    } 
+
+    try {
         //sums up how many posts are under every tag into an array
         const tagCounts = await Postschema.aggregate([
             {
@@ -139,7 +162,8 @@ router.get("/", async  (req, res)=>{
             header: "View tags",
             tag: tagListWithCount,
             script: "js/tag.js",
-            navbar: 'logged-navbar'
+            navbar: navbar,
+            username: req.session.username
         });
     }catch(error){
         console.log(error);
@@ -151,52 +175,62 @@ router.get("/", async  (req, res)=>{
 router.post("/up/:post_id", async (req, res)=>{
     const getId = req.params.post_id;
   
-    try{
-        var isUpvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
-        var isDownvoted = await  Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
-        if (!isUpvoted && !isDownvoted){
-            const newUpvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'up'});
-            await newUpvote.save();
-            return res.json({message:"User upvoted successfully"});
+    if(req.session.username) {
+
+        const user = await Account.findOne({ "username" : req.session.username } );
+
+        try{
+            var isUpvoted = await Vote.findOne({post_comment: getId, username: user._id, up_downvote: 'up'});
+            var isDownvoted = await  Vote.findOne({post_comment: getId, username: user._id, up_downvote: 'down'});
+            if (!isUpvoted && !isDownvoted){
+                const newUpvote = new Vote({username: user._id, post_comment: getId, up_downvote: 'up'});
+                await newUpvote.save();
+                return res.json({message:"User upvoted successfully"});
+            }
+            else if (isUpvoted){
+                await Vote.findByIdAndDelete(isUpvoted._id);
+                return res.json({message:"User already upvoted, removing upvote"});
+            }
+            else if (isDownvoted){
+                await Vote.findByIdAndDelete(isDownvoted._id);
+                const editedUpvote = new Vote({username: user._id, post_comment: getId, up_downvote: 'up'});
+                await editedUpvote.save();
+                return res.json({message:"User previously downvoted, removing downvote for upvote"});
+            } 
+        } catch(error){
+            console.log(error);
         }
-        else if (isUpvoted){
-            await Vote.findByIdAndDelete(isUpvoted._id);
-            return res.json({message:"User already upvoted, removing upvote"});
-        }
-        else if (isDownvoted){
-            await Vote.findByIdAndDelete(isDownvoted._id);
-            const editedUpvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'up'});
-            await editedUpvote.save();
-            return res.json({message:"User previously downvoted, removing downvote for upvote"});
-        } 
-    } catch(error){
-        console.log(error);
     }
 });
 
 router.post("/down/:post_id", async (req, res)=>{
     const getId = req.params.post_id;
-  
-    try{
-        var isUpvoted = await Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
-        var isDownvoted = await  Vote.findOne({post_comment: getId, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
-        if (!isUpvoted && !isDownvoted){
-            const newDownvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'down'});
-            await newDownvote.save();
-            return res.json({message:"User downvoted successfully"});
+   
+    if(req.session.username) {
+
+        const user = await Account.findOne({ "username" : req.session.username } );
+
+        try{
+            var isUpvoted = await Vote.findOne({post_comment: getId, username: user._id, up_downvote: 'up'});
+            var isDownvoted = await  Vote.findOne({post_comment: getId, username: user._id, up_downvote: 'down'});
+            if (!isUpvoted && !isDownvoted){
+                const newDownvote = new Vote({username: user._id, post_comment: getId, up_downvote: 'down'});
+                await newDownvote.save();
+                return res.json({message:"User downvoted successfully"});
+            }
+            else if (isDownvoted){
+                await Vote.findByIdAndDelete(isDownvoted._id);
+                return res.json({message:"User already downvoted, removing downvote"});
+            }
+            else if(isUpvoted){
+                await Vote.findOneAndDelete(isUpvoted._id);
+                const editedDownvote = new Vote({username: user._id, post_comment: getId, up_downvote: 'down'});
+            await editedDownvote.save();
+            return res.json({message: "User previously upvoted, removing upvote for downvote"});
+            }
+        } catch(error){
+            console.log(error);
         }
-        else if (isDownvoted){
-            await Vote.findByIdAndDelete(isDownvoted._id);
-            return res.json({message:"User already downvoted, removing downvote"});
-        }
-        else if(isUpvoted){
-            await Vote.findOneAndDelete(isUpvoted._id);
-            const editedDownvote = new Vote({username: '64b7e12123b197fa3cd7539b', post_comment: getId, up_downvote: 'down'});
-           await editedDownvote.save();
-           return res.json({message: "User previously upvoted, removing upvote for downvote"});
-        }
-    } catch(error){
-        console.log(error);
     }
 });
 

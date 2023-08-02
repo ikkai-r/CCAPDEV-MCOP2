@@ -28,8 +28,6 @@ router.get("/:name", async (req, res)=> {
 
     try{
         const user = await Account.find({ "username" : { $regex : new RegExp(getName, "i") } });
-        const logged_user = await Account.find({ "username" : req.session.username } );
-
 
         if (!user) {
             // Handle the case when the user is not found
@@ -79,10 +77,8 @@ router.get("/:name", async (req, res)=> {
           });
 
           const subscribedTags = user[0].subscribed_tags;
-          // const subscribedTagsLogged = logged_user[0].subscribed_tags;
 
           const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
-          // const listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
 
          // start for side-container content
 
@@ -114,27 +110,35 @@ router.get("/:name", async (req, res)=> {
              getPopularTags.push(tag);
          }
 
-         let editIconPr = "";
-      //if not logged in / not helpvirus
-     if(user[0].username == "helpvirus") {
-         editIconPr = '<i class="fa-regular fa-pen-to-square edit-profile-icon" data-bs-toggle="modal" data-bs-target="#edProfModal"></i>';
-      }
+         let logged_in = false;
+         let navbar = 'navbar';
+         let listofTagsLogged;
+
+      //if logged in 
+     if(req.session.username) {
+        navbar = 'logged-navbar';
+        logged_in = true;
+        const logged_user = await Account.find({ "username" : req.session.username } );
+        const subscribedTagsLogged = logged_user.subscribed_tags;
+        listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
+     }
 
       res.render("user", {
         title: user[0].username,
-        "username": user[0].username,
+        user_name: user[0].username,
         "profile_desc": user[0].profile_desc,
         "profile_pic": user[0].profile_pic,
         user_posts: listofposts,
         user_comments: listofcomments,
         user_sub_tags: listofTags,
-        // sub_tags: listofTagsLogged,
-        // edit_profile: editIconPr,
+        sub_tags: listofTagsLogged,
+        logged_in: logged_in,
         posts_latest: latest_posts,
         popular_tags: getPopularTags,
         script: "js/profile.js",
         add_script: "js/index.js",
-        navbar: 'logged-navbar'
+        navbar: navbar,
+        username: req.session.username
     });
         
     } catch(error){

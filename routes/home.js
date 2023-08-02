@@ -30,6 +30,21 @@ router.get('/', async (req, res) => {
 
         // start for side-container content
 
+        let logged_in = false;
+
+        if(req.session.username) {
+          //user is logged in
+
+          logged_in = true;
+          
+          const user = await Account.findOne({ "username" : req.session.username });
+
+          const subscribedTags = user.subscribed_tags;
+          listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+          
+          navbar = 'logged-navbar';
+        }
+
         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
 
         const tagCounts = await Post.aggregate([
@@ -49,7 +64,6 @@ router.get('/', async (req, res) => {
 
         for (var i = 0; i < tagCounts.length; i++){
             var newTag = await Tag.findById(tagCounts[i]._id).lean();
-            console.log(tagCounts[i].count);
             var tag = ({
                 tag_name: newTag.tag_name,
                 count: tagCounts[i].count
@@ -65,7 +79,10 @@ router.get('/', async (req, res) => {
         posts: listofposts,
         posts_latest: latest_posts,
         popular_tags: getPopularTags,
-        navbar: 'navbar'
+        sub_tags: listofTags,
+        logged_in: logged_in,
+        navbar: navbar,
+        username: req.session.username
         });
     } catch(error){
         console.log(error);

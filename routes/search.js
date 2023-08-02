@@ -7,6 +7,13 @@ const Tag =  require('../server/schema/Tag');
 
 
 router.get('/', async (req, res) =>{
+
+    let navbar = 'navbar';
+
+    if(req.session.username) {
+      navbar = 'logged-navbar';
+    } 
+    
     var searchTerm = req.query.text;
     const search = searchTerm.replace(/[^a-zA-Z0-9]/g, "");
 
@@ -70,7 +77,8 @@ router.get('/', async (req, res) =>{
         searched_tags: searchResults_Tag,
         script: 'js/index.js',
         add_style: '<link rel="stylesheet" type="text/css" href="css/style1.css">',
-        navbar: 'logged-navbar'
+        navbar: navbar,
+        username, username
         });
 });
 
