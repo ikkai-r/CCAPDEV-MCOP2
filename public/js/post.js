@@ -1,4 +1,5 @@
 document.getElementById("date").innerHTML = convertDateToTxt();
+const postTitle = document.getElementById("post_title");
 
 document.getElementById("add-tag-area").addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
@@ -10,8 +11,15 @@ document.getElementById("add-tag-area").addEventListener("keydown", function(e) 
         createNewDiv(text);
       }
     }
-  });
+});
   
+//Disallows a user from entering a line break
+postTitle.addEventListener("input", function (){
+  //REFERENCE: https://stackoverflow.com/questions/10805125/how-to-remove-all-line-breaks-from-a-string/10805198#10805198
+  postTitle.value = postTitle.value.replace(/(\r\n|\n|\r)/gm, "");
+});
+
+
 function createNewDiv(text) {
   var outerDiv = document.createElement("div");
   outerDiv.className = "post-tags-cont-r mt-2 added-tag";
@@ -70,7 +78,7 @@ $("#create-post-btn").click(function(e) {
           console.error('Error submitting form:', error);
       }
 
-});
+    });
 });
 
 
@@ -153,7 +161,7 @@ $("#edit-post-btn").click(function(e) {
           console.error('Error submitting form:', error);
       }
 
-});
+    });
 
 
 });
@@ -181,7 +189,8 @@ $(document).ready(function() {
     
     
   });
-  });
+
+});
 
 
   $("#edit-comment-btn").click(function(e) {
