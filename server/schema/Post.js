@@ -29,12 +29,15 @@ const postSchema = new mongoose.Schema({
         type: Date
     },
     upvotes:[{
+        default: [],
         type: mongoose.Schema.Types.ObjectId, ref: 'Account'
     }],
     downvotes:[{
+        default: [],
         type: mongoose.Schema.Types.ObjectId, ref:'Account'
     }],
     comments: [{
+        default: [],
         type: mongoose.Schema.Types.ObjectId, ref:'Comment',
     }],
     tags: [{
