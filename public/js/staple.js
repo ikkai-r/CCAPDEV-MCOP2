@@ -42,8 +42,6 @@ $("#username").on('keyup', async function (){
     }
 });
 
-// TODO: Implement on the email for logging as well, but with 
-// different email validation
 $("#email-reg").on('keyup', async function (){
     const getEmail = $("#email-reg").val();
     const response = await fetch ('/verifyEmail?email=' + getEmail, {
@@ -64,8 +62,29 @@ $("#email-reg").on('keyup', async function (){
         case 200:
             $("#email-msg").css('display','none');
     }
-})
+});
 
+$("#login-btn").on('click', async function (){
+    const getEmail = $("#email-log").val();
+    const response = await fetch ('/isEmail?email=' + getEmail, {
+        method: 'GET'
+    });
+    
+    switch (response.status){
+        case 400: 
+            $("#email-login-msg").css('display','block');
+            $('#email-login-msg').addClass('alert-danger');
+            $("#email-login-msg").text('Email does not belong to any account');
+            break;
+        case 422: 
+            $("#email-login-msg").css('display','block');
+            $("#email-login-msg").addClass('alert-danger');
+            $("#email-login-msg").text('Invalid email.');
+            break;
+        case 200:
+            $("#email-msg").css('display','none');
+    }
+});
 
 $("#toggle-pass-log").click(function () {
     if($("#password-log").prop('type') == 'text'){
@@ -109,12 +128,9 @@ $('#password-reg, #confirm-password').on('keyup', function () {
     if ($('#password-reg').val() == $('#confirm-password').val() && $('#password-reg').val() != "") {
         $('#pass-msg').css('display', 'none');
         $('#pass-msg').removeClass('alert-danger');
-        // $('#pass-msg').addClass('alert-success');
-        // $('#pass-msg').text('Matching password');
     } else  {
         $('#pass-msg').css('display', 'block');
         $('#pass-msg').addClass('alert-danger');
-        // $('#pass-msg').removeClass('alert-success');
         $('#pass-msg').text('Not matching password');
     }
   });
@@ -215,34 +231,36 @@ $("#tag-specific-subs").click(function (e) {
 });
 
 
+// TODO: Implement on the email for logging as well, but with 
+// different email validation
 $("#login-btn").click(function (e) {
     e.preventDefault();
 
-        const formData = $('#login-user').serialize();
+    const formData = $('#login-user').serialize();
 
-        // Send the form data to the server using AJAX
-        $.ajax({
-          url: '/', 
-          method: 'POST',
-          data: formData,
-          success: function(data) {
-            $('#login-msg').css('display', 'block');
-            $('#login-msg').removeClass('alert-danger');
-            $('#login-msg').addClass('alert-success');
-            $('#login-msg').text('Successful login. You will be redirected shortly.'); 
-            setTimeout(function() {
-                // Handle the redirect using JavaScript
-                window.location = "/user/" + data.username;
-              }, 2000);
-               },
-          error: function(error) {
-            console.error('Error submitting form:', error);
-            $('#login-msg').css('display', 'block');
-            $('#login-msg').removeClass('alert-success');
-            $('#login-msg').addClass('alert-danger');
-            $('#login-msg').text('Invalid credentials'); 
-          }
-        });
+    // Send the form data to the server using AJAX
+    $.ajax({
+        url: '/', 
+        method: 'POST',
+        data: formData,
+        success: function(data) {     
+        $('#login-msg').css('display', 'block');
+        $('#login-msg').removeClass('alert-danger');
+        $('#login-msg').addClass('alert-success');
+        $('#login-msg').text('Successful login. You will be redirected shortly.'); 
+        setTimeout(function() {
+            // Handle the redirect using JavaScript
+            window.location = "/user/" + data.username;
+            }, 2000);
+            },
+        error: function(error) {
+        console.error('Error submitting form:', error);
+        $('#login-msg').css('display', 'block');
+        $('#login-msg').removeClass('alert-success');
+        $('#login-msg').addClass('alert-danger');
+        $('#login-msg').text('Invalid credentials'); 
+        }
+    });
      
 });
 
