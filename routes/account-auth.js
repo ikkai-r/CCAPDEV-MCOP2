@@ -122,6 +122,7 @@ router.get('/isEmail', async (req, res) => {
     } else { 
         res.sendStatus(200);
     }
+});
 
 // Add a new route for logging out
 router.get('/logout', (req, res) => {
