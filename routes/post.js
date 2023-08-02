@@ -29,6 +29,10 @@ handlebars.registerHelper('ifCond', function(v1, v2, options) {
     return options.inverse(this);
 });
 
+handlebars.registerHelper('checkUserOwner', function (username, sessionUsername, options) {
+    return username === sessionUsername ? options.fn(this) : options.inverse(this);
+  });
+
 handlebars.registerHelper('thereExists', function(postId, postParentId, options){
     
     if (postId.equals(postParentId))
@@ -116,7 +120,7 @@ router.get('/', async (req, res) =>{
            sub_tags: listofTags,
            button_type: "create-post-btn",
            navbar: 'logged-navbar',
-           username: req.session.username
+           session_user: req.session.username
        });
 
     } else {
@@ -196,7 +200,7 @@ router.get('/edit-:id', async (req, res) =>{
                     id: getId,
                     button_type: "edit-post-btn",
                     navbar: 'logged-navbar',
-                    username: req.session.username
+                    session_user: req.session.username
                 });
             } catch(error){
                 console.log(error);
@@ -656,7 +660,7 @@ router.get('/editc-:id', async (req, res) =>{
                     id: getComment._id,
                     button_type: 'edit-comment-btn',
                     navbar: 'logged-navbar',
-                    username: req.session.username
+                    session_user: req.session.username
 
                 });
                 
@@ -741,6 +745,8 @@ router.get('/:id', async (req, res) =>{
 
             logged_in = true;
 
+            console.log(req.session.username);
+
             if(getPost.username.username == req.session.username) {
                 is_user_post = true;
             } 
@@ -801,7 +807,7 @@ router.get('/:id', async (req, res) =>{
             logged_in: logged_in,
             script: "js/view-post.js",
             navbar: navbar,
-            username: req.session.username
+            session_user: req.session.username
         });
     } catch(error){
         console.log(error);

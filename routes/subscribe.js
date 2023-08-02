@@ -26,7 +26,7 @@ handlebars.registerHelper('isInSubscribedTags', function(tagId, options) {
   const subscribedTagIds = subscribedTags.map((tag) => tag._id);
 
   const tagObjectId = new mongoose.Types.ObjectId(tagId);
-
+  
   // Check if the current tagId exists in the subscribedTags array
   const isSubscribed = subscribedTagIds.some((subscribedTagId) => subscribedTagId.equals(tagObjectId));
   

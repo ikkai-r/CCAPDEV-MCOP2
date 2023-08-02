@@ -78,7 +78,7 @@ router.get('/', async (req, res) =>{
         script: 'js/index.js',
         add_style: '<link rel="stylesheet" type="text/css" href="css/style1.css">',
         navbar: navbar,
-        username, username
+        session_user: req.session.username
         });
 });
 

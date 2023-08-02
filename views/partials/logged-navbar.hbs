@@ -19,7 +19,7 @@
                         <i class="nav-icons fa-solid fa-circle-user"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end profile-dropdown" aria-labelledby="navbar-logged-in">
-                      <li><a class="dropdown-item profile-dd-item" href="/user/{{{lookup . 'username'}}}"><i class="fa-solid fa-user" style="padding-right: 1vh;"></i>Profile</a></li>
+                      <li><a class="dropdown-item profile-dd-item" href="/user/{{{lookup . 'session_user'}}}"><i class="fa-solid fa-user" style="padding-right: 1vh;"></i>Profile</a></li>
                       <li><a class="dropdown-item profile-dd-item" id="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket" style="padding-right: 1vh;"></i>Logout</a></li>
                     </ul>
                   </li>

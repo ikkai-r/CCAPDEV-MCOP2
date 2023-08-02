@@ -27,14 +27,14 @@ router.get("/:name", async (req, res)=> {
     const maxTextLength = 50;
 
     try{
-        const user = await Account.find({ "username" : { $regex : new RegExp(getName, "i") } });
+        const user = await Account.findOne({ "username" : { $regex : new RegExp(getName, "i") } });
 
         if (!user) {
             // Handle the case when the user is not found
             return res.status(404).send("User not found.");
         }
 
-        const listofposts = await Post.find().where("username").equals(user[0]._id).populate({
+        const listofposts = await Post.find().where("username").equals(user._id).populate({
             path:'username',
             select: 'username'
         }).populate({
@@ -53,7 +53,7 @@ router.get("/:name", async (req, res)=> {
               }
         });
 
-        const listofcomments = await Comment.find().where("username").equals(user[0]._id).populate({
+        const listofcomments = await Comment.find().where("username").equals(user._id).populate({
             path: 'post_commented',
             select: 'post_id tags post_title',
             populate: {
@@ -76,39 +76,13 @@ router.get("/:name", async (req, res)=> {
             }
           });
 
-          const subscribedTags = user[0].subscribed_tags;
+          const subscribedTags = user.subscribed_tags;
 
           const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
 
          // start for side-container content
 
          const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
-
-         const tagCounts = await Post.aggregate([
-             {
-               $unwind: '$tags' 
-             },
-             {
-               $group: {
-                 _id: '$tags', 
-                 count: { $sum: 1 } 
-               }
-             }
-           ]).sort({count: 'desc'}).limit(6);
- 
-           
-           const getPopularTags = [];
- 
-         for (var i = 0; i < tagCounts.length; i++){
-             var newTag = await Tag.findById(tagCounts[i]._id).lean();
-             console.log(tagCounts[i]._id);
-             var tag = ({
-                 tag_name: newTag.tag_name,
-                 tag_id: newTag._id,
-                 count: tagCounts[i].count
-             });
-             getPopularTags.push(tag);
-         }
 
          let logged_in = false;
          let navbar = 'navbar';
@@ -118,16 +92,43 @@ router.get("/:name", async (req, res)=> {
      if(req.session.username) {
         navbar = 'logged-navbar';
         logged_in = true;
-        const logged_user = await Account.find({ "username" : req.session.username } );
+        const logged_user = await Account.findOne({ "username" : req.session.username } );
+
         const subscribedTagsLogged = logged_user.subscribed_tags;
         listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
      }
 
+            // start for side-container content
+            const tagCounts = await Post.aggregate([
+              {
+                $unwind: '$tags' 
+              },
+              {
+                $group: {
+                  _id: '$tags', 
+                  count: { $sum: 1 } 
+                }
+              }
+            ]).sort({count: 'desc'}).limit(6);
+  
+            const getPopularTags = [];
+  
+          for (var i = 0; i < tagCounts.length; i++){
+              var newTag = await Tag.findById(tagCounts[i]._id).lean();
+              var tag = ({
+                  tag_name: newTag.tag_name,
+                  tag_id: newTag._id,
+                  count: tagCounts[i].count
+              });
+            getPopularTags.push(tag);
+  
+    }
+         
       res.render("user", {
-        title: user[0].username,
-        user_name: user[0].username,
-        "profile_desc": user[0].profile_desc,
-        "profile_pic": user[0].profile_pic,
+        title: user.username,
+        user_name: user.username,
+        "profile_desc": user.profile_desc,
+        "profile_pic": user.profile_pic,
         user_posts: listofposts,
         user_comments: listofcomments,
         user_sub_tags: listofTags,
@@ -138,7 +139,7 @@ router.get("/:name", async (req, res)=> {
         script: "js/profile.js",
         add_script: "js/index.js",
         navbar: navbar,
-        username: req.session.username
+        session_user: req.session.username
     });
         
     } catch(error){

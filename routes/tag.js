@@ -117,7 +117,7 @@ router.get("/:tagname", async (req, res)=>{
             script: "js/tag.js",
             navbar: navbar,
             logged_in: logged_in,
-            username: req.session.username
+            session_user: req.session.username
         })
     } catch (error){
         console.log(error);
@@ -164,7 +164,7 @@ router.get("/", async  (req, res)=>{
             tag: tagListWithCount,
             script: "js/tag.js",
             navbar: navbar,
-            username: req.session.username
+            session_user: req.session.username
         });
     }catch(error){
         console.log(error);

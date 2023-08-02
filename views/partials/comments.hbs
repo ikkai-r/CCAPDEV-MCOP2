@@ -35,14 +35,16 @@
 
                         
                             </div>
+
+                        
             <div class="col-1">
                              {{#if is_edited}}
                             <!-- Indicate if post is edited -->
                             <p class="edited-tag-post" id="edited-tag-post" style="margin-left: -40px;">(edited)</p>
                             {{/if}}
-                            {{#if user_comment}}
+                            {{#checkUserOwner username.username session_user}}
                             {{> users-comment}}
-                            {{/if}}
+                            {{/checkUserOwner}}
             </div>
         </div>           
      </div>
@@ -104,9 +106,9 @@
                             <p class="edited-tag-post" id="edited-tag-post" style="margin-left: -40px;">(edited)</p>
                             {{/if}}
                             <!-- put comment helper that checks if username is this -->
-                        {{#if user_comment}}
+                           {{#checkUserOwner username.username session_user}}
                             {{> users-comment}}
-                            {{/if}}
+                            {{/checkUserOwner}}
                             </div>
                         </div>
 

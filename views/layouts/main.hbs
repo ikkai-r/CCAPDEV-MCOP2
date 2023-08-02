@@ -148,7 +148,7 @@
         </div>
     </div>
 
-    {{#if (lookup . 'username') }}
+    {{#if (lookup . 'session_user') }}
     <a href="/post"><div class="create-post">
     {{else}}
     <a data-bs-toggle="modal" data-bs-target="#loginModal"><div class="create-post">

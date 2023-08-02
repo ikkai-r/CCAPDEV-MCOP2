@@ -56,7 +56,7 @@
     </div>
 
     <!-- Create a Post-->
-        {{#if username}}
+        {{#if session_user}}
         <a href="/post"><div class="create-post">
         {{else}}
         <a data-bs-toggle="modal" data-bs-target="#loginModal"><div class="create-post">
@@ -175,9 +175,12 @@
                 </div>
 
             </div>
-            
-                {{> nlg-side-container}}
-        
+
+            {{#if logged_in}}
+            {{> side-container}}
+            {{else}}
+            {{> nlg-side-container}}
+            {{/if}}
         
         </div>
 
