@@ -69,7 +69,29 @@ app.engine("hbs", exphbs.engine({
             for(var i = 0; i < n; i++)
                 x+= block.fn(i)
             return x;
-        }
+        },
+        formatDate: function(date) {
+          const monthNames = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
+          ];
+        
+        let day = date.getDate();
+        let month = date.getMonth();
+        let year = date.getFullYear();
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+
+        let formattedTime = hours >= 12 ? "PM" : "AM";
+        hours = hours % 12 || 12; // Convert to 12-hour format
+        formattedTime = hours + ":" + (minutes < 10 ? "0" : "") + minutes + " " + formattedTime;
+    
+        // Format the date
+        let formattedDate = monthNames[month] + " " + day + ", " + year + " " + formattedTime;
+        
+        return formattedDate;
+      }
+
     }
     }
 ));

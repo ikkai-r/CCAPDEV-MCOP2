@@ -30,7 +30,9 @@
                           
                              <div class="comment-username"><a id="username_comment" href="/user/{{username.username}}">{{username.username}}</a></div>
 
-                        <div class="comment-username">{{comment_date}}</div>
+                        <div class="comment-username">{{formatDate comment_date}}</div>
+                   <input type="hidden" value="{{_id}}" id="comment_id">
+
                         
                             </div>
             <div class="col-1">
@@ -62,7 +64,6 @@
     <!-- Comment portion -->
     <div class="all-comment">
         <div class="row comment" id="comment">
-
             <!-- Votes -->
             <div class="col-1 com-votes-cont" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                  <input type="hidden" value="{{_id}}" name="this_comment_id" id="this_comment_id"> 
@@ -92,8 +93,9 @@
                             <div class="col-11">
                           
                              <div class="comment-username"><a id="username_comment" href="/user/{{username.username}}">{{username.username}}</a></div>
-          
-                        <div class="comment-username">{{comment_date}}</div>
+                             <input type="hidden" value="{{_id}}" id="comment_id">
+
+                        <div class="comment-username">{{formatDate comment_date}}</div>
                         
                             </div>
                             <div class="col-1">
@@ -101,6 +103,7 @@
                             <!-- Indicate if post is edited -->
                             <p class="edited-tag-post" id="edited-tag-post" style="margin-left: -40px;">(edited)</p>
                             {{/if}}
+                            <!-- put comment helper that checks if username is this -->
                         {{#if user_comment}}
                             {{> users-comment}}
                             {{/if}}

@@ -100,4 +100,16 @@ router.get('/verifyEmail', async (req, res) => {
 
 })
 
+// Add a new route for logging out
+router.get('/logout', (req, res) => {
+    // Destroy the session to log the user out
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Error destroying session:', err);
+      }
+      // Redirect to the home page after logout
+      res.redirect('/home');
+    });
+  });
+
 module.exports = router;

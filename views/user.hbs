@@ -56,7 +56,11 @@
     </div>
 
     <!-- Create a Post-->
-    <a href="/post"><div class="create-post">
+        {{#if username}}
+        <a href="/post"><div class="create-post">
+        {{else}}
+        <a data-bs-toggle="modal" data-bs-target="#loginModal"><div class="create-post">
+        {{/if}}
         <i class="fa-solid fa-circle-plus create-post-style" style="margin-right: 15px"></i>
         <h4 class="create-post-style mt-2"><b>Post</b></h4>
     </div></a>

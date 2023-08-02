@@ -14,6 +14,7 @@ router.get("/:tagname", async (req, res)=>{
         let logged_in = false;
         let user;
         let navbar = 'navbar';
+        let listofTagsLogged;
 
         if(req.session.username) {
             //loggedin
@@ -21,7 +22,7 @@ router.get("/:tagname", async (req, res)=>{
             navbar = 'logged-navbar';
             user = await Account.findOne({ "username" : req.session.username } );
             const subscribedTagsLogged = user.subscribed_tags;
-            const listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
+            listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
         }
 
         const getTag = await Tag.find({

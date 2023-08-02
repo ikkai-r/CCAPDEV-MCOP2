@@ -39,14 +39,15 @@
         {{/if}}
         <!-- Comment portion -->
         <div class="comment-container">
-
-        {{#each comment}}
-        {{#if logged_in}}
-        {{> comments this}}
-        {{else}}
-        {{> nlg-comments this}}
-        {{/if}}
-        {{/each}}
+                 {{#if logged_in}}
+                  {{#each comment}}
+                   {{> comments this}}
+                   {{/each}}
+                 {{else}}
+                   {{#each comment}}
+                   {{> nlg-comments this}}
+                   {{/each}}
+                  {{/if}}
         </div>
     </div>
     

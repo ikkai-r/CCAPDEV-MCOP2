@@ -134,9 +134,11 @@ router.get('/edit-:id', async (req, res) =>{
     if(req.session.username) {
         const getId = req.params.id;
 
+        const user = await Account.findOne({ "username" : req.session.username });
+
         const getPost = await Post.findOne({_id: getId});
 
-        if(req.session.username.equals(getPost.username)) {
+        if(user._id.toString() == getPost.username.toString()) {
             const getUser = await Account.findOne({_id: getPost.username});
             const getTags = await Tag.find({ _id: { $in: getPost.tags } }).lean();
             let post_attachment = "";
@@ -160,9 +162,7 @@ router.get('/edit-:id', async (req, res) =>{
                   }
                 }
               ]).sort({count: 'desc'}).limit(6);
-        
-              const user = await Account.findOne({ "username" : req.session.username });
-        
+                
               const subscribedTags = user.subscribed_tags;
               const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
         
@@ -201,11 +201,14 @@ router.get('/edit-:id', async (req, res) =>{
             } catch(error){
                 console.log(error);
             }
-        } 
+        } else {
+            //not allowed
+            res.redirect('/home');
     } 
-
-    //not allowed
-    res.redirect('/home');
+    } else {
+            //not allowed
+            res.redirect('/home');
+    }
    
 });
 
@@ -453,7 +456,9 @@ router.post('/reply', async (req, res) =>{
             const {parent_comment_id, reply_content} = req.body;
     
             if(reply_content != "") {
-    
+            
+                console.log(parent_comment_id);
+                console.log(reply_content);
                 
             const comment_date = new Date();
             
@@ -775,6 +780,7 @@ router.get('/:id', async (req, res) =>{
         res.render("view-post", {
             title: "post | " + getPost.post_title,
             post_title: getPost.post_title,
+            _id: getPost._id,
             post_content: getPost.post_content,
             post_username: getPost.username,
             post_date: getPost.post_date,

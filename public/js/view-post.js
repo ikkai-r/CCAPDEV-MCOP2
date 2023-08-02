@@ -273,17 +273,17 @@ $(document).on("click", ".comment-proper-votes", function (e) {
 
 });
 
-$(document).on("click", ".comments-cont", function (e){
-    let commentContainer = document.querySelector(".comment-container");
+// $(document).on("click", ".comments-cont", function (e){
+//     let commentContainer = document.querySelector(".comment-container");
 
-    if (isCommenting == 0){
-        commentContainer.appendChild(createTextarea ());
-        element = document.getElementById("comment-cancel");
-        isCommenting = 1;
-        element.addEventListener("click", onClickCancel);
-    }
+//     if (isCommenting == 0){
+//         commentContainer.appendChild(createTextarea ());
+//         element = document.getElementById("comment-cancel");
+//         isCommenting = 1;
+//         element.addEventListener("click", onClickCancel);
+//     }
     
-});
+// });
 
 function onClickEdit(e){
     let parentComment = e.target.closest(".row.comment");

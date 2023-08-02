@@ -120,15 +120,34 @@ $('#password-reg, #confirm-password').on('keyup', function () {
   });
 
 
-  $("#logout-btn").click(function (e) {
-    e.preventDefault();
+//   $("#logout-btn").click(function (e) {
+//     e.preventDefault();
 
-    $("#logoutModal").modal('show');
+//     $("#logoutModal").modal('show');
 
-    setTimeout(function() {
-        window.location.href = "/home";
-      }, 2000);
-});
+//     setTimeout(function() {
+//         window.location.href = "/home";
+//       }, 2000);
+// });
+
+$("#logout-btn").click(function() {
+    // Redirect to the logout route to destroy the session
+    $.ajax({
+      url: '/logout',
+      method: 'GET',
+      success: function() {
+        $("#logoutModal").modal('show');
+
+        // Redirect to the home page after a short delay
+        setTimeout(function() {
+          window.location.href = "/home";
+        }, 2000);
+      },
+      error: function(error) {
+        console.error('Error logging out:', error);
+      }
+    });
+  });
 
 
   $("#register-btn").click(function (e) {

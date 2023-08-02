@@ -31,6 +31,8 @@ router.get('/', async (req, res) => {
         // start for side-container content
 
         let logged_in = false;
+        let listofTags;
+        let navbar = 'navbar';
 
         if(req.session.username) {
           //user is logged in
