@@ -97,7 +97,7 @@ router.get('/verifyEmail', async (req, res) => {
     const isValid = email.match(validEmailFormat);
     console.log(isValid);
 
-    if (emailInUse){
+    if (emailInUse){ 
         res.sendStatus(400);
     } else if (!isValid){
         res.sendStatus(422);
@@ -106,6 +106,22 @@ router.get('/verifyEmail', async (req, res) => {
     }
 
 })
+
+router.get('/isEmail', async (req, res) => {
+    const email = req.query.email;
+    const emailInUse = await Account.findOne({email:email}).exec();
+
+    var validEmailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const isValid = email.match(validEmailFormat);
+    console.log(isValid);
+
+    if (!emailInUse){ //email has no acc
+        res.sendStatus(400);
+    } else if (!isValid){ //invalid format
+        res.sendStatus(422);
+    } else { 
+        res.sendStatus(200);
+    }
 
 // Add a new route for logging out
 router.get('/logout', (req, res) => {
@@ -121,6 +137,7 @@ router.get('/logout', (req, res) => {
     // Redirect to the home page after logout
     res.redirect('/home');
   });
+
 });
 
 module.exports = router;

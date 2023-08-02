@@ -3,6 +3,7 @@
 let commentContainer = document.getElementById("comment-container");
 var isCommenting = 0;
 var isEditing = 0;
+var enterPressed = false;
 var element;
 
 var prevCommentContent;
@@ -11,6 +12,8 @@ let upvote = document.querySelector(".votes-cont i.fa-circle-up");
 let downvote = document.querySelector(".votes-cont i.fa-circle-down");
 
 let shareButton = document.querySelector(".share-cont");
+
+const commentTextarea = document.getElementById("comment-textarea");
 
 function createTextarea (commentId) {
     let div = document.createElement("div");
@@ -52,39 +55,71 @@ function onClickCancel(e) {
 }
 
 $(document).ready(function() {
-$(".comment-container").click(function (e) {
-    let closest = e.target.closest(".all-comment");
-    console.log(e.target);
-    $(".submit-comment").unbind().click(function (e) {
-        e.preventDefault();
-        console.log("HEREEE");
+    $(".comment-container").click(function (e) {
+        let closest = e.target.closest(".all-comment");
+        console.log(e.target);
+        $(".submit-comment").unbind().click(function (e) {
+            e.preventDefault();
+            console.log("HEREEE");
 
-        const commentTextarea = $(".reply-textarea");
+            const commentTextarea = $(".reply-textarea");
 
-        if (commentTextarea.val()) {
-            // Send the form data to the server using AJAX
-            const formData = $('#reply-form').serialize();
-            console.log(formData);
+            if (commentTextarea.val()) {
+                // Send the form data to the server using AJAX
+                const formData = $('#reply-form').serialize();
+                console.log(formData);
 
-            // Send the form data to the server using AJAX
-            $.ajax({
-                url: '/post/reply', 
-                method: 'POST',
-                data: formData,
-                success: function(data) {
-                console.log(data.message);
-                window.location.reload(); // Refresh the page to get the updated comments
+                // Send the form data to the server using AJAX
+                $.ajax({
+                    url: '/post/reply', 
+                    method: 'POST',
+                    data: formData,
+                    success: function(data) {
+                    console.log(data.message);
+                    window.location.reload(); // Refresh the page to get the updated comments
 
-                },
-                error: function(error) {
-                console.error('Error submitting form:', error);
+                    },
+                    error: function(error) {
+                    console.error('Error submitting form:', error);
+                    }
+                });
+
+            }
+        });
+
+        $(".reply-textarea").unbind().on("keypress", function(e){
+            if (e.key === "Enter" && $(".reply-textarea").val()) {
+                console.log($(".reply-textarea").val());
+                e.preventDefault();
+            
+                // Send the form data to the server using AJAX
+                const formData = $('#reply-form').serialize();
+                console.log(formData);
+        
+                // Send the form data to the server using AJAX
+                if(!enterPressed){
+                    enterPressed = true;
+                    $.ajax({
+                        url: '/post/reply', 
+                        method: 'POST',
+                        data: formData,
+                        success: function(data) {
+                            console.log(data.message);
+                            window.location.reload(); // Refresh the page to get the updated comments
+                        },
+                        error: function(error) {
+                        console.error('Error submitting form:', error);
+                        }
+                    });
                 }
-            });
+                
+            }
+            enterPressed = false;
+        });
+    });
+});
 
-        }
-     });
-});
-});
+
 
 upvote.addEventListener("click", function(e){
     e.preventDefault();
@@ -339,7 +374,7 @@ function onClickCancelEdit(e){
     
 $(document).ready(function() {
 
-    $("#comment-send-btn").click(function(e) {
+    $("#comment-send-btn").unbind().click(function(e) {
       e.preventDefault();
         
       // Send the form data to the server using AJAX
@@ -359,8 +394,32 @@ $(document).ready(function() {
           console.error('Error submitting form:', error);
         }
       });
+    });
 
-});
+    $("#comment-textarea").unbind().on("keypress", function(e){
+        if (e.key === "Enter") {
+            e.preventDefault();
+        
+            // Send the form data to the server using AJAX
+            const formData = $('#comment-form').serialize();
+      
+            // Send the form data to the server using AJAX
+            $.ajax({
+              url: '/post/comment', 
+              method: 'POST',
+              data: formData,
+              success: function(data) {
+                console.log(data.message);
+                window.location.reload(); // Refresh the page to get the updated comments
+      
+              },
+              error: function(error) {
+                console.error('Error submitting form:', error);
+              }
+            });
+        }
+    });
+
 });
 
 
