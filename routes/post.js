@@ -5,7 +5,6 @@ const Post = require('../server/schema/Post');
 const Tag = require('../server/schema/Tag');
 const Comment = require('../server/schema/Comment');
 const Account = require('../server/schema/Account');
-const Vote = require('../server/schema/Vote');
 const router = express.Router();
 
 const multer  = require('multer')
@@ -326,10 +325,10 @@ router.post('/up_comment/', async(req, res)=>{
     
             var isUpvoted = await Comment.findOne({_id: getId, username: user._id,
             upvotes: new mongoose.Types.ObjectId(user._id)
-          });
-        var isDownvoted =  await Comment.findOne({_id: getId, username: user._id,
-        downvotes: user._id
-        });
+             });
+            var isDownvoted =  await Comment.findOne({_id: getId, username: user._id,
+            downvotes: new mongoose.Types.ObjectId(user._id)
+            });
         console.log(isUpvoted);
         console.log(isDownvoted)
         
@@ -753,8 +752,13 @@ router.get('/:id', async (req, res) =>{
             
             const user = await Account.findOne({ "username" : req.session.username });
 
-            var checkUpvote = await Vote.exists({post_comment: getName, username: user._id, up_downvote: 'up'});
-            var checkDownvote = await  Vote.exists({post_comment: getName, username: user._id, up_downvote: 'down'});
+            var isUpvoted = await Post.exists({_id: getName,
+                upvotes: new mongoose.Types.ObjectId(user._id)
+                 });
+            var isDownvoted =  await Post.exists({_id: getName,
+                downvotes: new mongoose.Types.ObjectId(user._id)
+            });
+
             
             const subscribedTags = user.subscribed_tags;
             listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
@@ -776,10 +780,10 @@ router.get('/:id', async (req, res) =>{
 
         }
 
-        var upvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'up'}).count();
-        var downvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'down'}).count();
+        var upvoteC = getPost.upvotes.length;
+        var downvoteC = getPost.downvotes.length;
 
-        const newlist = [];
+
         var comment_amount = await Comment.find({post_commented: getName}).count();
        
 
@@ -799,8 +803,8 @@ router.get('/:id', async (req, res) =>{
             comment: getComments,
             comment_amount: comment_amount,
             id: getName,
-            is_upvoted: checkUpvote,
-            is_downvoted: checkDownvote,
+            is_upvoted: isUpvoted,
+            is_downvoted: isDownvoted,
             upvote_count: upvoteC,
             downvote_count: downvoteC,
             is_user_post: is_user_post,
@@ -831,36 +835,77 @@ router.post('/:id', async (req, res) =>{
             }).lean();
     
             const {action} = req.body;
-            var isUpvoted = await Vote.findOne({post_comment: getId, username: user._id, up_downvote: 'up'});
-            var isDownvoted = await  Vote.findOne({post_comment: getId, username: user._id, up_downvote: 'down'});
+           
+            var isUpvoted = await Post.findOne({_id: getId,
+                upvotes: new mongoose.Types.ObjectId(user._id)
+                 });
+            var isDownvoted =  await Post.findOne({_id: getId,
+                downvotes: new mongoose.Types.ObjectId(user._id)
+            });
+
             if (action === 'upvoted' && !isUpvoted && !isDownvoted){
-                const newUpvote = new Vote({username: user._id, post_comment: getId, up_downvote: 'up'});
-                await newUpvote.save();
+                await Post.findByIdAndUpdate(getId, 
+                    {
+                        $push: {
+                        upvotes: new mongoose.Types.ObjectId(user._id)
+                        }
+                    }
+                );
                 return res.json({message:"User upvoted successfully"});
             }
             else if (action === 'upvoted' && isUpvoted){
-                await Vote.findByIdAndDelete(isUpvoted._id);
+                await Post.findByIdAndUpdate(getId, 
+                    {
+                        $pull: {
+                        upvotes: new mongoose.Types.ObjectId(user._id)
+                        }
+                    }
+                    );
                 return res.json({message:"User already upvoted, removing upvote"});
             }
             else if (action === 'upvoted' && isDownvoted){
-                await Vote.findByIdAndDelete(isDownvoted._id);
-                const editedUpvote = new Vote({username: user._id, post_comment: getId, up_downvote: 'up'});
-                await editedUpvote.save();
+                await Post.findByIdAndUpdate(getId, 
+                {
+                    $push: {
+                    upvotes: new mongoose.Types.ObjectId(user._id)
+                     },
+                    $pull: {
+                    downvotes: new mongoose.Types.ObjectId(user._id)
+                    }
+                }
+                );
                 return res.json({message:"User previously downvoted, removing downvote for upvote"});
             }
             else if (action === 'downvoted' && !isUpvoted && !isDownvoted){
-                const newDownvote = new Vote({username: user._id, post_comment: getId, up_downvote: 'down'});
-                await newDownvote.save();
+                await Post.findByIdAndUpdate(getId, 
+                    {
+                        $push: {
+                        downvotes: new mongoose.Types.ObjectId(user._id)
+                        }
+                    }
+                );
                 return res.json({message:"User downvoted successfully"});
             }
             else if (action === 'downvoted' && isDownvoted){
-                await Vote.findByIdAndDelete(isDownvoted._id);
+                await Post.findByIdAndUpdate(getId, 
+                    {
+                        $pull: {
+                        downvotes: new mongoose.Types.ObjectId(user._id)
+                        }
+                    });
                 return res.json({message:"User already downvoted, removing downvote"});
             }
             else if(action === 'downvoted' && isUpvoted){
-                await Vote.findOneAndDelete(isUpvoted._id);
-                const editedDownvote = new Vote({username: user._id, post_comment: getId, up_downvote: 'down'});
-               await editedDownvote.save();
+                await Post.findByIdAndUpdate(getId, 
+                    {
+                        $push: {
+                        downvotes: new mongoose.Types.ObjectId(user._id)
+                         },
+                        $pull: {
+                        upvotes: new mongoose.Types.ObjectId(user._id)
+                        }
+                    }
+                    );
                return res.json({message: "User previously upvoted, removing upvote for downvote"});
             }
             

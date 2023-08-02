@@ -28,6 +28,12 @@ const postSchema = new mongoose.Schema({
     post_date_modified: {
         type: Date
     },
+    upvotes:[{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Account'
+    }],
+    downvotes:[{
+        type: mongoose.Schema.Types.ObjectId, ref:'Account'
+    }],
     comments: [{
         type: mongoose.Schema.Types.ObjectId, ref:'Comment',
     }],
