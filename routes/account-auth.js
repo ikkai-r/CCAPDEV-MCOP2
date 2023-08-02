@@ -41,7 +41,7 @@ router.post('/', async (req, res) =>{
                 console.error('Error creating Account:', error);
             });
         } else if (action === 'login') {
-            const { email_log, password_log } = req.body;
+            const { email_log, password_log, rememberMe } = req.body;
 
             const user = await Account.findOne( {email: email_log} );
 
@@ -59,6 +59,13 @@ router.post('/', async (req, res) =>{
             }
             
             req.session.username = user.username;
+
+            if (rememberMe) {
+                req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+
+                console.log("cookie created ", req.session.cookie.maxAge);
+              } 
+
             return res.json({ username: user.username });
         }
 
@@ -102,14 +109,18 @@ router.get('/verifyEmail', async (req, res) => {
 
 // Add a new route for logging out
 router.get('/logout', (req, res) => {
-    // Destroy the session to log the user out
-    req.session.destroy((err) => {
-      if (err) {
-        console.error('Error destroying session:', err);
-      }
-      // Redirect to the home page after logout
-      res.redirect('/home');
-    });
+  // Destroy the session to log the user out
+
+  req.session.cookie.maxAge = 0;
+
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+    }
+
+    // Redirect to the home page after logout
+    res.redirect('/home');
   });
+});
 
 module.exports = router;
