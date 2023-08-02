@@ -6,6 +6,7 @@ router.use(express.json());
 const bcrypt = require('bcryptjs');
 
 
+
 router.post('/', async (req, res) =>{
 
     try {
@@ -18,7 +19,7 @@ router.post('/', async (req, res) =>{
             //will make frontend for this
             const existingUser = await Account.findOne({ email:email_reg });
             if (existingUser) {
-            return res.status(400).send('User already exists');
+                return res.status(400).json({ message: 'User already exists'});
             }
 
             const hashedPassword = await bcrypt.hash(password_reg, 10);
@@ -33,6 +34,7 @@ router.post('/', async (req, res) =>{
             newAccount.save()
             .then(savedAccount => {
                 console.log('New Account created:', savedAccount);
+                req.session.username = username;
                 return res.json({ message: 'Successfully registered! You will be redirected shortly.', username: username.toLowerCase() });
             })
             .catch(error => {
@@ -41,8 +43,6 @@ router.post('/', async (req, res) =>{
         } else if (action === 'login') {
             const { email_log, password_log } = req.body;
 
-            console.log(email_log);
-            console.log(password_log);
             const user = await Account.findOne( {email: email_log} );
 
             if (!user) {
@@ -54,10 +54,11 @@ router.post('/', async (req, res) =>{
             const passwordComp = await bcrypt.compare(password_log, user.password);
 
             if (!passwordComp) {
-                console.log('pass');
+                console.log(passwordComp);
                 return res.status(401).json({ message: 'Invalid credentials'});
             }
-
+            
+            req.session.username = user.username;
             return res.json({ username: user.username });
         }
 
@@ -69,7 +70,6 @@ router.post('/', async (req, res) =>{
                 }
 
 });
-
 
 
 

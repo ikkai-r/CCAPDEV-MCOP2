@@ -6,7 +6,7 @@
     <!-- View Post Container -->
     <div class="container viewed-post">
 
-        {{> post logged_in=logged_in}}
+        {{> post is_user_post=is_user_post}}
     
         <h3>Comments (<span id="comment-bar-amnt">{{comment_amount}}</span>)</h3>
         
@@ -30,6 +30,10 @@
         </div>
     </div>
     
+    {{#if logged_in}}
     {{> side-container}}
+    {{else}}
+    {{> nlg-side-container}}
+    {{/if}}
 </div>
         

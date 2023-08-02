@@ -1,5 +1,5 @@
 <div class="viewed-post-container mb-4">
-    {{#if logged_in}}
+    {{#if is_user_post}}
         <a href="/post/edit-{{_id}}"><div class="post-creator-delete" id="edit-post-btn"><i class="fa-regular fa-pen-to-square"></i></div></a>
     {{/if}}
     <h2>{{post_title}}</h2> 

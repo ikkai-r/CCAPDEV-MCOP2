@@ -168,7 +168,7 @@ $("#login-btn").click(function (e) {
           url: '/', 
           method: 'POST',
           data: formData,
-          success: function(data) {     
+          success: function(data) {
             $('#login-msg').css('display', 'block');
             $('#login-msg').removeClass('alert-danger');
             $('#login-msg').addClass('alert-success');

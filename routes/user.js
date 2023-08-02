@@ -21,12 +21,14 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.get("/:name", async (req, res)=> {
+
+    console.log(req.session.username);
     const getName = req.params.name;
     const maxTextLength = 50;
 
     try{
         const user = await Account.find({ "username" : { $regex : new RegExp(getName, "i") } });
-        const user1 = await Account.find({ "username" : "helpvirus" } );
+        const logged_user = await Account.find({ "username" : req.session.username } );
 
 
         if (!user) {
@@ -77,10 +79,10 @@ router.get("/:name", async (req, res)=> {
           });
 
           const subscribedTags = user[0].subscribed_tags;
-          const subscribedTagsLogged = user1[0].subscribed_tags;
+          // const subscribedTagsLogged = logged_user[0].subscribed_tags;
 
           const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
-          const listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
+          // const listofTagsLogged = await Tag.find({ _id: { $in: subscribedTagsLogged } }).lean();
 
          // start for side-container content
 
@@ -126,8 +128,8 @@ router.get("/:name", async (req, res)=> {
         user_posts: listofposts,
         user_comments: listofcomments,
         user_sub_tags: listofTags,
-        sub_tags: listofTagsLogged,
-        edit_profile: editIconPr,
+        // sub_tags: listofTagsLogged,
+        // edit_profile: editIconPr,
         posts_latest: latest_posts,
         popular_tags: getPopularTags,
         script: "js/profile.js",

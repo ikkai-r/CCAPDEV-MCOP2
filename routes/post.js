@@ -679,58 +679,6 @@ router.get('/:id', async (req, res) =>{
 
         const getComments = await Comment.find({post_commented: getName, parent_comment_id: null}).sort({votes: -1}).lean();
 
-        console.log(getComments);
-        /*
-        
-
-         {
-                $addFields: {
-                    up: 
-                    {
-                        $cond: 
-                            {   if: 
-                                {
-                                    $lookup: {
-                                    from: 'votes',
-                                    localField: '_id',
-                                    foreignField: 'post_comment',
-                                    as: 'allVotes'
-                                    }
-                                },
-                                then: true,
-                                else: false
-                            }
-                    }
-                }
-            }
-        */
-
-
-        /*for(comment of getComments) {
-            var hadUpvoted = await Vote.exists({post_comment: comment._id, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
-            var hadDownvoted = await Vote.exists({post_comment: comment._id, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
-            if (hadUpvoted)
-                Object.assign(comment, {up: true});
-            else 
-                Object.assign(comment, {up: false});
-            
-            if (hadDownvoted)
-                Object.assign(comment, {down: true});
-            else
-                Object.assign(comment, {down: false});
-    
-            var numberUpvotes = await Vote.find({post_comment: comment._id, up_downvote: "up"}).count();
-            var numberDownvotes = await Vote.find({post_comment: comment._id, up_downvote: "down"}).count();
-            var sum = numberUpvotes - numberDownvotes;
-            comment_amount += 1;
-            
-            Object.assign(comment, {total: sum});
-            
-        }*/
-        //find({post_commented: getName}).sort({comment_date: 1}).lean().then(countVotes);
-
-        // start for side-container content
-
         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
 
         const tagCounts = await Post.aggregate([
@@ -745,12 +693,33 @@ router.get('/:id', async (req, res) =>{
             }
           ]).sort({count: 'desc'}).limit(6);
 
-          const user = await Account.find({ "username" : "helpvirus" });
+          //if user is logged in 
+          //do all the stuff
 
-          const subscribedTags = user[0].subscribed_tags;
-          const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+          let logged_in = false;
+          let is_user_post = false;
+          let listofTags;
 
-          const getPopularTags = [];
+          if(req.session.username) {
+            //user is logged in
+
+            logged_in = true;
+
+            if(getPost.username.username == req.session.username) {
+                is_user_post = true;
+            } 
+            
+            const user = await Account.findOne({ "username" : req.session.username });
+
+            var checkUpvote = await Vote.exists({post_comment: getName, username: user._id, up_downvote: 'up'});
+            var checkDownvote = await  Vote.exists({post_comment: getName, username: user._id, up_downvote: 'down'});
+            
+            const subscribedTags = user.subscribed_tags;
+            listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
+          } 
+
+        const getPopularTags = [];
 
         for (var i = 0; i < tagCounts.length; i++){
             var newTag = await Tag.findById(tagCounts[i]._id).lean();
@@ -763,95 +732,12 @@ router.get('/:id', async (req, res) =>{
 
         }
 
-        let logged_in = "";
-
-        if(getPost.username.username == "helpvirus") {
-            logged_in = true;
-        } else {
-            logged_in = false;
-        }
-
-        var checkUpvote = await Vote.exists({post_comment: getName, username: '64b7e12123b197fa3cd7539b', up_downvote: 'up'});
-        var checkDownvote = await  Vote.exists({post_comment: getName, username: '64b7e12123b197fa3cd7539b', up_downvote: 'down'});
         var upvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'up'}).count();
         var downvoteC = await Vote.find().where({post_comment: getName, up_downvote: 'down'}).count();
 
-        console.log("are? okashi na.......");
-        /*
-        const listofcomments = await Comment.find({
-            _id: { $in: getPost.comments },
-          })
-            .populate("username") // Populate the 'username' field with the 'Account' documents
-            .populate({
-            path: "replies", 
-            model: 'Comment', 
-            populate: {
-              path: "username",
-                }})
-            .lean();
-        */
-
-
-            
-               
-            
-        
         const newlist = [];
         var comment_amount = await Comment.find({post_commented: getName}).count();
-
-        
-        
-        console.log("bro i don't even know\n");
-        // console.log(getComments);
-
-        
-
        
-
-            //const comment_amount = getComments.length + getComments.replies.length();
-
-            // //start
-            // const populateRepliesRecursively = async (comment) => {
-            //     if (comment.replies.length === 0) {
-            //       return; // Base case: if the comment has no replies, return
-            //     }
-              
-            //     // Populate the replies for the current comment
-            //     comment.replies = await Comment.populate(comment.replies, {
-            //       path: "replies",
-            //       model: "Comment",
-            //       populate: {
-            //         path: "username",
-            //       },
-            //     });
-              
-            //     // Recursively populate replies for each nested reply
-            //     for (const reply of comment.replies) {
-            //       await populateRepliesRecursively(reply);
-            //     }
-            //   };
-
-            //   const getCommentsWithReplies = async (commentIds) => {
-            //     const comments = await Comment.find({ _id: { $in: commentIds } })
-            //       .populate("username")
-            //       .populate("replies") // Only populate immediate replies for the main comments
-            //       .lean();
-              
-            //     // Recursively populate replies for each comment
-            //     for (const comment of comments) {
-            //       await populateRepliesRecursively(comment);
-            //     }
-              
-            //     return comments;
-            //   };
-
-            // const commentIds = getPost.comments;
-            // const commentsWithReplies = await getCommentsWithReplies(commentIds);
-           
-            // console.log(commentsWithReplies);
-            //   //end
-
-            // console.log(listofcomments);
 
         res.render("view-post", {
             title: "post | " + getPost.post_title,
@@ -872,6 +758,7 @@ router.get('/:id', async (req, res) =>{
             is_downvoted: checkDownvote,
             upvote_count: upvoteC,
             downvote_count: downvoteC,
+            is_user_post: is_user_post,
             logged_in: logged_in,
             script: "js/view-post.js",
             navbar: 'logged-navbar'

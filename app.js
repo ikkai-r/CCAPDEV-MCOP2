@@ -3,11 +3,31 @@ require('dotenv').config();
 const express = require('express');
 const exphbs = require('express-handlebars');
 const app = express();
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 const mongoose = require("mongoose");
 
 const PORT = 3000 || process.env.PORT;
 const connecttoDB = require('./server/config/db');
+
+app.use(
+    session({
+      secret: process.env.SESSION_SECRET, // Replace with your own secret key
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI, // Replace with your MongoDB connection URL and database name
+        ttl: 14 * 24 * 60 * 60,
+        autoRemove: 'native' 
+      }),
+      cookie: {
+        secure: false, // Set to true if using HTTPS
+        httpOnly: true // Restrict client-side access to the cookie
+      }
+    })
+  );
+
 
 const userRouter = require('./routes/user');
 const Account = require('./server/schema/Account');

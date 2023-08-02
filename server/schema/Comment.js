@@ -13,7 +13,7 @@ const commentSchema = new mongoose.Schema({
         min: 1,
     },
     comment_date: {
-        type: String
+        type: Date
     },
     is_edited: {
         type: Boolean,
