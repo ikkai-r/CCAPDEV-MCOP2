@@ -83,8 +83,22 @@ router.get("/:tagname", async (req, res)=>{
                     isDownvoted = false;
             }
             //getting votes
-            const updoots = getAPost.upvotes.length;
-            const downdoots = getAPost.downvotes.length;
+            var updoots = 0;
+            try{
+                updoots = getAPost.upvotes.length;
+            
+             }catch(error){
+                console.log(error);
+                updoots = 0;
+             }
+            var downdoots = 0;
+            try{
+                downdoots = getAPost.downvotes.length;
+            
+             }catch(error){
+                console.log(error);
+                downdoots = 0;
+             }
             console.log("up " + isUpvoted);
             console.log("down " + isDownvoted);
             //add current info + new info
