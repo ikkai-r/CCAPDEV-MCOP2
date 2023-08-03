@@ -204,7 +204,7 @@ function subUnsub(tagIdValue, action) {
                 subscribe: tagIdValue, 
                 action: action},
         success: function(data) {
-          console.log(data.message); // Optionally, handle success response
+          console.log("THIS IS", data.message); // Optionally, handle success response
           //if window location at user, add user tag
         },
         error: function(error) {
@@ -222,12 +222,20 @@ $(".tag-subscribe").click(function (e) {
     subUnsub(tagIdValue, action);
 });
 
-$("#tag-specific-subs").click(function (e) {
+$(".tag-post-hd").click(function (e) {
+
     e.preventDefault();
     
     const tagIdValue = $("#header-tag-specific").text().replace("#", "");
-    const action = $(this).text();
+    const action = $(this).find('#tag-specific-subs').text();
     subUnsub(tagIdValue, action);
+
+    if( document.getElementById("tag-specific-subs").innerHTML == "Subscribe") {
+        document.getElementById("tag-specific-subs").innerHTML = "Unsubscribe";
+    } else {
+        document.getElementById("tag-specific-subs").innerHTML = "Subscribe";
+    }
+
 });
 
 

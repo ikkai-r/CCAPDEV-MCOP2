@@ -5,11 +5,11 @@
         <div class="tag-post-hder">
             {{#if logged_in}}
                 {{#if (isInSubscribedTags tag_id)}}
-                      <div class="tag-post-hd" onclick="tagSub()">
+                      <div class="tag-post-hd">
                         <h5 id="tag-specific-subs">Unsubscribe</h5></div>
                         
                         {{else}}
-                           <div class="tag-post-hd" onclick="tagSub()">
+                           <div class="tag-post-hd">
                         <h5 id="tag-specific-subs">Subscribe</h5></div>
                         {{/if}}
             {{else}}
