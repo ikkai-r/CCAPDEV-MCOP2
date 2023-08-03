@@ -116,6 +116,30 @@ app.listen(PORT, () => {
     console.log("Server listening. Port: " + PORT);
 });
 
+app.get('/about', async(req, res) =>{
+  let logged_in = false;
+  let navbar = 'navbar';
+  if(req.session.username) {
+    //user is logged in
+
+    logged_in = true;
+    
+    const user = await Account.findOne({ "username" : req.session.username });
+
+    const subscribedTags = user.subscribed_tags;
+    listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+    
+    navbar = 'logged-navbar';
+  }
+
+  res.render('about',{
+    title: "About us",
+    navbar: navbar,
+    logged_in: logged_in,
+    session_user: req.session.username,
+  });
+});
+
 app.get('/', (req, res) =>{
     res.redirect('/home');
 });
