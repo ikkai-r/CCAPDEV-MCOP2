@@ -76,7 +76,9 @@
                 <div class="row">
                     <div class="col-12 d-flex justify-content-end">
                         {{#if logged_in}}
+                            {{#checkUserOwner user_name session_user}}
                             <i class="fa-regular fa-pen-to-square edit-profile-icon" data-bs-toggle="modal" data-bs-target="#edProfModal"></i>
+                            {{/checkUserOwner}}
                         {{/if}}
                     </div>
                 </div>
