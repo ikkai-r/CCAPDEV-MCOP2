@@ -43,30 +43,32 @@ handlebars.registerHelper('checkDown', function(downArray, user, options){
 
 router.get('/', async (req, res) => {
     const maxTextLength = 100;
-
-    let postsPerPage = 15;
+    const postsPerPage = 15;
     let page = parseInt(req.query.page) || 1;
 
     try {
-        const listofposts = await Post.find().populate({
+        const listofposts = await Post.find()
+        .populate({
             path: 'username',
-        }).populate({
+        })
+        .populate({
             path:'tags',
             select: 'tag_name'
-        }).populate('upvotes').populate('downvotes').sort({post_date: 'desc'})
-        .skip((page-1) * postsPerPage)
-        .limit(postsPerPage)
+        })
+        .populate('upvotes')
+        .populate('downvotes')
+        .sort({post_date: 'desc'})
         .lean();
 
         listofposts.forEach((post) => {
 
             if (post.post_title && post.post_title.length > maxTextLength) {
-              post.post_title = post.post_title.substring(0, maxTextLength) + '...';
+                post.post_title = post.post_title.substring(0, maxTextLength) + '...';
             }
 
             if (post.tags && post.tags.length > 3) {
                 post.tags = post.tags.slice(0, 3);
-              }
+            }
         });
 
         // start for side-container content
@@ -93,21 +95,21 @@ router.get('/', async (req, res) => {
 
         const latest_posts = await Post.find().populate('username').sort({post_date:'desc'}).limit(5).lean();
 
-          // start for side-container content
-          const tagCounts = await Post.aggregate([
-            {
-              $unwind: '$tags' 
-            },
-            {
-              $group: {
-                _id: '$tags', 
-                count: { $sum: 1 } 
-              }
+        // start for side-container content
+        const tagCounts = await Post.aggregate([
+        {
+            $unwind: '$tags' 
+        },
+        {
+            $group: {
+            _id: '$tags', 
+            count: { $sum: 1 } 
             }
-          ]).sort({count: 'desc'}).limit(6);
+        }
+        ]).sort({count: 'desc'}).limit(6);
 
           
-          const getPopularTags = [];
+        const getPopularTags = [];
 
         for (var i = 0; i < tagCounts.length; i++){
             var newTag = await Tag.findById(tagCounts[i]._id).lean();
@@ -116,17 +118,19 @@ router.get('/', async (req, res) => {
                 tag_id: newTag._id,
                 count: tagCounts[i].count
             });
-          getPopularTags.push(tag);
+            getPopularTags.push(tag);
         }
 
-        const numOfPosts = await Post.countDocuments().exec();
+        const numOfPosts = listofposts.length;
         const totalPages = Math.ceil(numOfPosts / postsPerPage);
+
+        const pagedPosts = listofposts.slice((page - 1) * postsPerPage, page * postsPerPage);
        
         res.render("index", {
         title: "Hot Posts",
         header: "Hot Posts",
         script: 'js/index.js',
-        posts: listofposts,
+        posts: pagedPosts,
         posts_latest: latest_posts,
         popular_tags: getPopularTags,
         sub_tags: listofTags,
