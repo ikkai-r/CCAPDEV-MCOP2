@@ -20,7 +20,6 @@
           <div class="votes-cont profile-post">
              <input type="hidden" value="{{_id}}" name="this_post_id" id="this_post_id"> 
                   {{#checkUp upvotes @root.session_user}}
-                  {{log session_user}}
                      <i class="fa-solid fa-circle-up upvote-btn"></i>
                     {{else}}
                      <i class="fa-regular fa-circle-up upvote-btn"></i>
