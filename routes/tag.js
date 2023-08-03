@@ -106,16 +106,31 @@ router.get("/:tagname", async (req, res)=>{
             console.log("down " + isDownvoted);
             //add current info + new info
 
+            // Limit the tags for each post into 2
+            let displayTags = []
+
+            if(postList[i].tags.length > 2) {
+                displayTags = postList[i].tags.slice(0, 2);     // Display only the first two tags
+            }
+            else {
+                displayTags = postList[i].tags;
+            }
+
             const postData = ({
                 _id: postList[i]._id,
                 username: postList[i].username,
                 post_title: postList[i].post_title,
-                post_content: postList[i].post_content,
+                
+                // Limit the contents of each post into 30 characters
+                post_content: postList[i].post_content.length > 30 ? postList[i].post_content.substring(0, 30) + '...' : postList[i].post_content,
+
                 post_edited: postList[i].post_edited,
                 post_date: postList[i].post_date,
                 post_date_modified: postList[i].post_date_modified,
                 comments: postList[i].comments,
-                tags: postList[i].tags,
+
+                tags: displayTags,
+
                 upvoted: isUpvoted,
                 downvoted: isDownvoted,
                 net_vote_count: updoots-downdoots,
@@ -170,7 +185,8 @@ router.get("/", async  (req, res)=>{
         for (var i = 0; i < tagCounts.length; i++){
             var newTag = await Tag.findById(tagCounts[i]._id).lean();
             var tag = ({
-                tag_name: newTag.tag_name,
+                // limit the characters of each tag name into 10 and add "..." if it is greater than 10
+                tag_name: newTag.tag_name.length > 10 ? newTag.tag_name.substring(0, 10) + '...' : newTag.tag_name,
                 photo: newTag.photo,
                 count: tagCounts[i].count
             });
