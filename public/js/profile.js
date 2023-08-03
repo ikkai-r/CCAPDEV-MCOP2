@@ -8,10 +8,11 @@ var loadFile = function (event) {
 };
 
 var backLoad = function (event) {
+
     var image = document.getElementById("edit-pfp");
-    image.src = "./img/profile.png";
-    document.getElementById("edit-pfp-bg").style.backgroundImage = "url(./img/profile.png)"
-    document.getElementById("bio-area").value = "i'm a great placeholder, just like how i am easily replaced";
+    image.src =  $("#upfp").attr('src')
+    document.getElementById("edit-pfp-bg").style.backgroundImage = "url("+$("#upfp").attr('src')+")"
+    document.getElementById("bio-area").value = $("#bio-user").text();
 };
 
 $("#edit-profile-btn").click(function (e) {
