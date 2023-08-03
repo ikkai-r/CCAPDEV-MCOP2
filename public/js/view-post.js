@@ -138,22 +138,24 @@ upvote.addEventListener("click", function(e){
             success: function(data) {
                 console.log(data.message);
                  //upvote
-                if($(this).hasClass('fa-regular')) {
-                    var downVoteElement = $(this).closest(".votes-cont").find("#downvote-btn");  
+                 console.log('success upvote');
+
+                if( $('#upvote-btn').hasClass('fa-regular')) {
+                    var downVoteElement =  $('#upvote-btn').closest(".votes-cont").find("#downvote-btn");  
 
                     if(downVoteElement.hasClass('fa-solid')) {
                         downVoteElement.removeClass('fa-solid');
                         downVoteElement.addClass('fa-regular');
-                        $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount - 1);
+                         $('#upvote-btn').closest(".votes-cont").find("#downvote-amnt").text(downvoteCount - 1);
                     } 
             
-                    $(this).removeClass('fa-regular');
-                    $(this).addClass('fa-solid');
-                    $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount + 1);
+                     $('#upvote-btn').removeClass('fa-regular');
+                     $('#upvote-btn').addClass('fa-solid');
+                     $('#upvote-btn').closest(".votes-cont").find("#upvote-amnt").text(upvoteCount + 1);
                 } else {
-                    $(this).removeClass('fa-solid');
-                    $(this).addClass('fa-regular');
-                    $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount - 1);
+                     $('#upvote-btn').removeClass('fa-solid');
+                     $('#upvote-btn').addClass('fa-regular');
+                     $('#upvote-btn').closest(".votes-cont").find("#upvote-amnt").text(upvoteCount - 1);
                 }
                 document.getElementById("upvote-amnt").style.fontWeight = "bold";
 
@@ -191,23 +193,27 @@ downvote.addEventListener("click", function(e){
             data: voteForm,
             success: function(data) {
                 console.log(data.message);
+                console.log('success downvote');
+
+                console.log("DOWN", this);
                  //downvote
-                if($(this).hasClass('fa-regular')) {
-                    var upVoteElement =  $(this).closest(".votes-cont").find("#upvote-btn");  
+                if( $('#downvote-btn').hasClass('fa-regular')) {
+                    var upVoteElement =  $('#downvote-btn').closest(".votes-cont").find("#upvote-btn");  
 
                     if(upVoteElement.hasClass('fa-solid')) {
+                        console.log('this down');
                         upVoteElement.removeClass('fa-solid');
                         upVoteElement.addClass('fa-regular');
-                        $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount - 1);
+                        $('#downvote-btn').closest(".votes-cont").find("#upvote-amnt").text(upvoteCount - 1);
                     }
 
-                    $(this).removeClass('fa-regular');
-                    $(this).addClass('fa-solid');
-                    $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount + 1);
+                    $('#downvote-btn').removeClass('fa-regular');
+                    $('#downvote-btn').addClass('fa-solid');
+                    $('#downvote-btn').closest(".votes-cont").find("#downvote-amnt").text(downvoteCount + 1);
                 } else {
-                    $(this).removeClass('fa-solid');
-                    $(this).addClass('fa-regular');
-                    $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount - 1);
+                    $('#downvote-btn').removeClass('fa-solid');
+                    $('#downvote-btn').addClass('fa-regular');
+                    $('#downvote-btn').closest(".votes-cont").find("#downvote-amnt").text(downvoteCount - 1);
                 }
 
                 document.getElementById("downvote-amnt").style.fontWeight = "bold";
@@ -230,10 +236,14 @@ downvote.addEventListener("click", function(e){
 $(document).on("click", ".comment-proper-votes", function (e) {
     var form = {"comment_id":  $(this).parent().parent().find("#this_comment_id").val()};
     var voteCount = $(this).closest(".com-votes-cont").find(".comment-vote-cont .com-prop-amnt");
+
+    var rootElement = $(this);
     
     try{
     
          if($(this).hasClass('fa-circle-up')) {
+
+
         // check if upvoted already?
         $.ajax({
             url: '/post/up_comment' ,
@@ -242,30 +252,31 @@ $(document).on("click", ".comment-proper-votes", function (e) {
             success: function(data) {
                 console.log(data.message);
                 //window.location.reload(); // Refresh the page to get the updated comments
-                if($(this).hasClass('fa-circle-up')) {
+                if(rootElement.hasClass('fa-circle-up')) {
                     //upvote
-                    if($(this).hasClass('fa-regular')) {
-                        var downVoteElement = $(this).closest(".com-votes-cont").find(".fa-circle-down.comment-proper-votes");  
-            
+                    if(rootElement.hasClass('fa-regular')) {
+                        var downVoteElement = rootElement.closest(".com-votes-cont").find(".fa-circle-down.comment-proper-votes");  
+                        console.log('this up');
+
                         if(downVoteElement.hasClass('fa-solid')) {
                             downVoteElement.removeClass('fa-solid');
                             downVoteElement.addClass('fa-regular');
                             voteCount.text(parseInt(voteCount.text()) + 1);
                         } 
                 
-                        $(this).removeClass('fa-regular');
-                        $(this).addClass('fa-solid');
+                        rootElement.removeClass('fa-regular');
+                        rootElement.addClass('fa-solid');
                         voteCount.text(parseInt(voteCount.text()) + 1);
                     } else {
-                        $(this).removeClass('fa-solid');
-                        $(this).addClass('fa-regular');
+                        rootElement.removeClass('fa-solid');
+                        rootElement.addClass('fa-regular');
                         voteCount.text(parseInt(voteCount.text()) - 1);
                     }
             
                 } else {
                     //downvote
-                    if($(this).hasClass('fa-regular')) {
-                        var upVoteElement = $(this).closest(".com-votes-cont").find(".fa-circle-up.comment-proper-votes"); 
+                    if(rootElement.hasClass('fa-regular')) {
+                        var upVoteElement = rootElement.closest(".com-votes-cont").find(".fa-circle-up.comment-proper-votes"); 
             
                         if(upVoteElement.hasClass('fa-solid')) {
                             upVoteElement.removeClass('fa-solid');
@@ -273,12 +284,12 @@ $(document).on("click", ".comment-proper-votes", function (e) {
                             voteCount.text(parseInt(voteCount.text()) - 1);
                         }
                 
-                        $(this).removeClass('fa-regular');
-                        $(this).addClass('fa-solid');
+                        rootElement.removeClass('fa-regular');
+                        rootElement.addClass('fa-solid');
                         voteCount.text(parseInt(voteCount.text()) - 1);
                     } else {
-                        $(this).removeClass('fa-solid');
-                        $(this).addClass('fa-regular');
+                        rootElement.removeClass('fa-solid');
+                        rootElement.addClass('fa-regular');
                         voteCount.text(parseInt(voteCount.text()) + 1);
                     }
                 } 
@@ -297,10 +308,10 @@ $(document).on("click", ".comment-proper-votes", function (e) {
                 success: function(data) {
                     console.log(data.message);
                     //window.location.reload(); // Refresh the page to get the updated comments
-                    if($(this).hasClass('fa-circle-up')) {
+                    if(rootElement.hasClass('fa-circle-up')) {
                         //upvote
-                        if($(this).hasClass('fa-regular')) {
-                            var downVoteElement = $(this).closest(".com-votes-cont").find(".fa-circle-down.comment-proper-votes");  
+                        if(rootElement.hasClass('fa-regular')) {
+                            var downVoteElement = rootElement.closest(".com-votes-cont").find(".fa-circle-down.comment-proper-votes");  
                 
                             if(downVoteElement.hasClass('fa-solid')) {
                                 downVoteElement.removeClass('fa-solid');
@@ -308,19 +319,19 @@ $(document).on("click", ".comment-proper-votes", function (e) {
                                 voteCount.text(parseInt(voteCount.text()) + 1);
                             } 
                     
-                            $(this).removeClass('fa-regular');
-                            $(this).addClass('fa-solid');
+                            rootElement.removeClass('fa-regular');
+                            rootElement.addClass('fa-solid');
                             voteCount.text(parseInt(voteCount.text()) + 1);
                         } else {
-                            $(this).removeClass('fa-solid');
-                            $(this).addClass('fa-regular');
+                            rootElement.removeClass('fa-solid');
+                            rootElement.addClass('fa-regular');
                             voteCount.text(parseInt(voteCount.text()) - 1);
                         }
                 
                     } else {
                         //downvote
-                        if($(this).hasClass('fa-regular')) {
-                            var upVoteElement = $(this).closest(".com-votes-cont").find(".fa-circle-up.comment-proper-votes"); 
+                        if(rootElement.hasClass('fa-regular')) {
+                            var upVoteElement = rootElement.closest(".com-votes-cont").find(".fa-circle-up.comment-proper-votes"); 
                 
                             if(upVoteElement.hasClass('fa-solid')) {
                                 upVoteElement.removeClass('fa-solid');
@@ -328,12 +339,12 @@ $(document).on("click", ".comment-proper-votes", function (e) {
                                 voteCount.text(parseInt(voteCount.text()) - 1);
                             }
                     
-                            $(this).removeClass('fa-regular');
-                            $(this).addClass('fa-solid');
+                            rootElement.removeClass('fa-regular');
+                            rootElement.addClass('fa-solid');
                             voteCount.text(parseInt(voteCount.text()) - 1);
                         } else {
-                            $(this).removeClass('fa-solid');
-                            $(this).addClass('fa-regular');
+                            rootElement.removeClass('fa-solid');
+                            rootElement.addClass('fa-regular');
                             voteCount.text(parseInt(voteCount.text()) + 1);
                         }
                     } 

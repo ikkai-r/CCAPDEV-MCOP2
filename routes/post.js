@@ -616,6 +616,7 @@ router.get('/editc-:id', async (req, res) =>{
             path: "username",
         }).lean();
 
+        const getPost = await Post.findOne({_id: getComment.post_commented}).lean();
 
         if(req.session.username.toString() == getComment.username.username.toString()) {
             //if owner
@@ -658,6 +659,8 @@ router.get('/editc-:id', async (req, res) =>{
                     header: "Edit comment",
                     script: "js/post.js",
                     username: getComment.username.username,
+                    post_title: getPost.post_title,
+                    post_id: getPost._id,
                     comment_date: getComment.comment_date,
                     comment_content: getComment.comment_content,
                     posts_latest: latest_posts,

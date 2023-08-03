@@ -205,7 +205,7 @@ function subUnsub(tagIdValue, action) {
                 action: action},
         success: function(data) {
           console.log(data.message); // Optionally, handle success response
-          window.location.reload();
+          //if window location at user, add user tag
         },
         error: function(error) {
           console.error('Error subscribing:', error); // Optionally, handle error response
