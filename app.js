@@ -90,11 +90,25 @@ app.engine("hbs", exphbs.engine({
         let formattedDate = monthNames[month] + " " + day + ", " + year + " " + formattedTime;
         
         return formattedDate;
-      }
+      },
+      noTimeFormatDate: function(date) {
+        const monthNames = [
+          "January", "February", "March", "April", "May", "June", 
+          "July", "August", "September", "October", "November", "December"
+        ];
+      
+      let day = date.getDate();
+      let month = date.getMonth();
+      let year = date.getFullYear();
+  
+      // Format the date
+      let formattedDate = monthNames[month] + " " + day + ", " + year + " ";
+      
+      return formattedDate;
 
+      }
     }
-    }
-));
+  }));
 app.set("view engine", "hbs");
 app.set("views", "./views");
 
