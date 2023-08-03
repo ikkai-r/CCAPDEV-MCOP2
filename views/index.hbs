@@ -5,6 +5,9 @@
         {{#each posts}}
         {{> post_preview this}}
         {{/each}}
+
+        <!-- Pagination -->
+        {{> pagination-tab}}
     </div> <!-- End of post container -->
     
     {{#if logged_in}}

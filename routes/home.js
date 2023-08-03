@@ -44,13 +44,19 @@ handlebars.registerHelper('checkDown', function(downArray, user, options){
 router.get('/', async (req, res) => {
     const maxTextLength = 100;
 
+    let postsPerPage = 15;
+    let page = parseInt(req.query.page) || 1;
+
     try {
         const listofposts = await Post.find().populate({
             path: 'username',
         }).populate({
             path:'tags',
             select: 'tag_name'
-        }).populate('upvotes').populate('downvotes').sort({post_date: 'desc'}).lean();
+        }).populate('upvotes').populate('downvotes').sort({post_date: 'desc'})
+        .skip((page-1) * postsPerPage)
+        .limit(postsPerPage)
+        .lean();
 
         listofposts.forEach((post) => {
 
@@ -111,8 +117,10 @@ router.get('/', async (req, res) => {
                 count: tagCounts[i].count
             });
           getPopularTags.push(tag);
+        }
 
-  }
+        const numOfPosts = await Post.countDocuments().exec();
+        const totalPages = Math.ceil(numOfPosts / postsPerPage);
        
         res.render("index", {
         title: "Hot Posts",
@@ -124,7 +132,11 @@ router.get('/', async (req, res) => {
         sub_tags: listofTags,
         logged_in: logged_in,
         navbar: navbar,
-        session_user: req.session.username
+        session_user: req.session.username,
+        current: page,
+        pages: totalPages,
+        prev: page > 1 ? page - 1 : null,
+        next: page < totalPages ? page + 1 : null,
         });
     } catch(error){
         console.log(error);
