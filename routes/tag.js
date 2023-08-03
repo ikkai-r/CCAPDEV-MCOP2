@@ -63,8 +63,9 @@ router.get("/:tagname", async (req, res)=>{
             let currPostID = postList[i]._id;
             var isUpvoted = false;
             var isDownvoted = false;
+            var getAPost = await Postschema.findOne({_id: currPostID});
             if(logged_in) {
-                var getAPost = await Postschema.findOne({_id: currPostID});
+               
                 var isUpvoted = await Postschema.findOne({_id: currPostID,
                     upvotes: new mongoose.Types.ObjectId(user._id)
                      });
@@ -91,6 +92,7 @@ router.get("/:tagname", async (req, res)=>{
                 console.log(error);
                 updoots = 0;
              }
+             console.log(updoots);
             var downdoots = 0;
             try{
                 downdoots = getAPost.downvotes.length;
@@ -99,6 +101,7 @@ router.get("/:tagname", async (req, res)=>{
                 console.log(error);
                 downdoots = 0;
              }
+             console.log(downdoots);
             console.log("up " + isUpvoted);
             console.log("down " + isDownvoted);
             //add current info + new info
@@ -115,15 +118,14 @@ router.get("/:tagname", async (req, res)=>{
                 tags: postList[i].tags,
                 upvoted: isUpvoted,
                 downvoted: isDownvoted,
-                net_vote_count: updoots - downdoots
+                net_vote_count: updoots-downdoots,
             })
 
             postWithNetVote.push(postData);
         }
 
-        console.log("all good");
         res.render("tag-posts", {
-            title: "Tag | "+getTagName,
+            title: "Tag | " + getTagName,
             tag_name: getTagName,
             tag_id: getTag[0]._id,
             post_cnt: postListLength, 

@@ -34,7 +34,7 @@
         <div class="share-cont" id="share-btn" onclick="copyLink('post/{{id}}')">
             <i class="fa-regular fa-share-from-square"></i>
         </div>
-        <div class="votes-cont">
+         <div class="votes-cont" data-bs-toggle="modal" data-bs-target="#loginModal">
             <form id = "upvoteForm" style="display:inline">
                  <input type="hidden" value="upvoted" name="action" id="action">
                 <input type="hidden" value="" name="post_id" id="post_id">
@@ -57,7 +57,7 @@
             </form>
             <span style="fontWeight:bold; font-size:smaller" id="downvote-amnt"  data-bs-toggle="modal" data-bs-target="#loginModal"><b>{{downvote_count}}</b></span>
         </div>
-        <div class="comments-cont">
+        <div class="comments-cont" data-bs-toggle="modal" data-bs-target="#loginModal">
             <i class="fa-regular fa-comment-dots"></i>
             <span style="font-size:smaller" id="comment-amnt"><b>{{comment_amount}}</b></span>
         </div>

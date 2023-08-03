@@ -44,6 +44,8 @@ commentSchema.virtual('up').get(function() {
 function populateAll(next){
      this.populate('replies');
      this.populate('username');
+     this.populate('upvotes');
+     this.populate('downvotes')
      next();
 }
 

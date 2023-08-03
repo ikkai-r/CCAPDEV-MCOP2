@@ -35,10 +35,19 @@
                 <i class="fa-regular fa-share-from-square"></i>
             </div>
             <div class="votes-cont profile-post">
-                <i class="fa-regular fa-circle-up upvote-btn"></i>
+                 <input type="hidden" value="{{_id}}" name="this_comment_id" id="this_comment_id"> 
+                  {{#checkUp upvotes @root.session_user}}
+                     <i class="fa-solid fa-circle-up upvote-btn"></i>
+                    {{else}}
+                     <i class="fa-regular fa-circle-up upvote-btn"></i>
+                 {{/checkUp}}
                 <span style="font-size:smaller; margin-right: 0.5vh;" class="upvote-amnt"><b>{{upvotes.length}}</b></span>
                 <span style="font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
-                <i class="fa-regular fa-circle-down downvote-btn"></i>
+                  {{#checkDown downvotes @root.session_user}}
+                     <i class="fa-solid fa-circle-down downvote-btn"></i>
+                    {{else}}
+                     <i class="fa-regular fa-circle-down downvote-btn"></i>
+                 {{/checkDown}}
                 <span style="font-size:smaller" class="downvote-amnt"><b>{{downvotes.length}}</b></span>
             </div>
             <div class="comments-cont" onclick="redirectToPage('post/{{post_commented._id}}')">

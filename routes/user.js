@@ -1,4 +1,5 @@
 const express = require ("express");
+const handlebars = require('handlebars');
 
 const Account = require('../server/schema/Account');
 const Post = require('../server/schema/Post');
@@ -20,11 +21,47 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
+handlebars.registerHelper('checkUp', function(upArray, user, options){
+  var len = upArray.length;
+
+  for (var i = 0; i < len; i++) {
+    var getName = upArray[i].username;
+    console.log(getName === user);
+      if (getName === user) {
+          return options.fn(this);
+      }
+      
+
+  }
+  return options.inverse(this)
+});
+
+handlebars.registerHelper('checkDown', function(downArray, user, options){
+  var len = downArray.length;
+
+  for (var i = 0; i < len; i++) {
+    var getName = downArray[i].username;
+  
+      if (getName == user) {
+          return options.fn(this);
+      }
+      console.log(user);
+
+  }
+  return options.inverse(this)
+});
+
+handlebars.registerHelper('log', function(something){
+  console.log("logged: " + something);
+})
+
 router.get("/:name", async (req, res)=> {
 
-    console.log(req.session.username);
+    // console.log(req.session.username);
     const getName = req.params.name;
     const maxTextLength = 50;
+
+    console.log("current: " + req.session.username);
 
     try{
         const user = await Account.findOne({ "username" : { $regex : new RegExp(getName, "i") } });
@@ -63,7 +100,11 @@ router.get("/:name", async (req, res)=> {
           }).populate({
             path:'username',
             select: 'username'
-        }).lean();
+        }).populate({
+            path: 'upvotes',
+        }).populate({
+          path: 'downvotes',
+      }).lean();
 
           listofcomments.forEach((comment) => {
 
@@ -123,8 +164,6 @@ router.get("/:name", async (req, res)=> {
             getPopularTags.push(tag);
   
     }
-
-    console.log(listofcomments);
          
       res.render("user", {
         title: user.username,

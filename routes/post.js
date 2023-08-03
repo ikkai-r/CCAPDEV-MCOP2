@@ -41,9 +41,12 @@ handlebars.registerHelper('thereExists', function(postId, postParentId, options)
 
 handlebars.registerHelper('checkUp', function(upArray, user, options){
     var len = upArray.length;
+    
 
     for (var i = 0; i < len; i++) {
-        if (upArray[i].equals(user)) {
+        var getName = upArray[i].username;
+        console.log(getName === user);
+          if (getName === user) {
             return options.fn(this);
         }
 
@@ -54,12 +57,15 @@ handlebars.registerHelper('checkUp', function(upArray, user, options){
 handlebars.registerHelper('checkDown', function(downArray, user, options){
     var len = downArray.length;
 
-    for (var i = 0; i < len; i++) {
-        if (downArray[i].equals(user)) {
-            return options.fn(this);
-        }
+  for (var i = 0; i < len; i++) {
+    var getName = downArray[i].username;
+  
+      if (getName == user) {
+          return options.fn(this);
+      }
+      console.log(user);
 
-    }
+  }
     return options.inverse(this)
 });
 

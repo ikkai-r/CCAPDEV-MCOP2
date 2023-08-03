@@ -21,17 +21,32 @@
                 <div class="share-cont" onclick="copyLink('post/{{_id}}');">
                     <i class="fa-regular fa-share-from-square"></i>
                 </div>
-                <div class="votes-cont" data-bs-toggle="modal" data-bs-target="#loginModal">
+                {{#if loggedin}}
+                <div class="votes-cont">
                     <i class="fa-regular fa-circle-up"></i>
                     <span style="font-size:smaller; margin-right: 0.5vh;" id="upvote-amnt"><b>{{{upvotes.length}}}</b></span>
                     <span style="fontWeight:bold; font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
                     <i class="fa-regular fa-circle-down"></i>
                     <span style="fontWeight:bold; font-size:smaller" id="downvote-amnt"><b>{{{downvotes.length}}}</b></span>
                 </div>
-                <div class="comments-cont" onclick="redirectToPage('post/{{_id}}')">
-                    <i class="fa-regular fa-comment-dots"></i>
-                    <span style="font-size:smaller; display:none"><b>{{{comments.length}}}</b></span>
+                <div class="comments-cont" onclick="redirectToPage('/post/{{_id}}')">
+                 <i class="fa-regular fa-comment-dots"></i>
+                <span style="font-size:smaller"><b>{{comments.length}}</b></span>
                 </div>
+                {{else}}
+                <div class="votes-cont" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    <input type="hidden" value="{{_id}}" name="this_post_id" id="this_post_id"> 
+                    <i class="fa-regular fa-circle-up"></i>
+                    <span style="font-size:smaller; margin-right: 0.5vh;" id="upvote-amnt"><b>{{{upvotes.length}}}</b></span>
+                    <span style="fontWeight:bold; font-size:smaller; margin-right: 0.5vh;"><b>|</b></span>
+                    <i class="fa-regular fa-circle-down"></i>
+                    <span style="fontWeight:bold; font-size:smaller" id="downvote-amnt"><b>{{{downvotes.length}}}</b></span>
+                </div>
+                <div class="comments-cont" data-bs-toggle="modal" data-bs-target="#loginModal">
+                 <i class="fa-regular fa-comment-dots"></i>
+                <span style="font-size:smaller"><b>{{comments.length}}</b></span>
+                </div>
+                {{/if}}
             </div>
         </div>
     </div>

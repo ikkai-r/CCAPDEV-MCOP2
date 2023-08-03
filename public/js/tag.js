@@ -81,33 +81,34 @@ leftBarHeaders.forEach((leftBarHeader) => {
             method: 'POST',
             success: function(data) {
              console.log(data.message);
+             if (downvoteBtn.classList.contains('fa-solid')) {
+                voteAmnt.textContent = parseInt(voteAmnt.textContent) + 2;
+    
+                upvoteBtn.classList.remove("fa-regular");
+                upvoteBtn.classList.add("fa-solid");
+                downvoteBtn.classList.add("fa-regular");
+                downvoteBtn.classList.remove("fa-solid");
+            } else if (upvoteBtn.classList.contains('fa-regular')) {
+                voteAmnt.textContent = parseInt(voteAmnt.textContent) + 1;
+    
+                upvoteBtn.classList.remove("fa-regular");
+                upvoteBtn.classList.add("fa-solid");
+                downvoteBtn.classList.add("fa-regular");
+                downvoteBtn.classList.remove("fa-solid");
+            }
+            else {
+                voteAmnt.textContent = parseInt(voteAmnt.textContent) - 1;
+        
+                upvoteBtn.classList.remove("fa-solid");
+                upvoteBtn.classList.add("fa-regular");
+            }
             },
             error: function(error) {
               console.error('Error submitting form:', error);
             }
           });
 
-        if (downvoteBtn.classList.contains('fa-solid')) {
-            voteAmnt.textContent = parseInt(voteAmnt.textContent) + 2;
-
-            upvoteBtn.classList.remove("fa-regular");
-            upvoteBtn.classList.add("fa-solid");
-            downvoteBtn.classList.add("fa-regular");
-            downvoteBtn.classList.remove("fa-solid");
-        } else if (upvoteBtn.classList.contains('fa-regular')) {
-            voteAmnt.textContent = parseInt(voteAmnt.textContent) + 1;
-
-            upvoteBtn.classList.remove("fa-regular");
-            upvoteBtn.classList.add("fa-solid");
-            downvoteBtn.classList.add("fa-regular");
-            downvoteBtn.classList.remove("fa-solid");
-        }
-        else {
-            voteAmnt.textContent = parseInt(voteAmnt.textContent) - 1;
-    
-            upvoteBtn.classList.remove("fa-solid");
-            upvoteBtn.classList.add("fa-regular");
-        }
+       
 
         styleVoteAmnt.style.fontWeight = "bold";
     });
@@ -119,35 +120,37 @@ leftBarHeaders.forEach((leftBarHeader) => {
             method: 'POST',
             success: function(data) {
              console.log(data.message);
+
+             if (upvoteBtn.classList.contains('fa-solid')) {
+                voteAmnt.textContent = parseInt(voteAmnt.textContent) - 2;
+                downvoteBtn.classList.remove("fa-regular");
+                downvoteBtn.classList.add("fa-solid");
+                upvoteBtn.classList.add("fa-regular");
+                upvoteBtn.classList.remove("fa-solid");
+            } else if (downvoteBtn.classList.contains('fa-regular')) {
+                voteAmnt.textContent = parseInt(voteAmnt.textContent) - 1;
+                downvoteAlready = true;
+    
+                downvoteBtn.classList.remove("fa-regular");
+                downvoteBtn.classList.add("fa-solid");
+                upvoteBtn.classList.add("fa-regular");
+                upvoteBtn.classList.remove("fa-solid");
+            }
+            else {
+                voteAmnt.textContent = parseInt(voteAmnt.textContent) + 1;
+                downvoteAlready = false;
+    
+                downvoteBtn.classList.remove("fa-solid");
+                downvoteBtn.classList.add("fa-regular");
+            }
+    
+            styleVoteAmnt.style.fontWeight = "bold";
             },
             error: function(error) {
               console.error('Error submitting form:', error);
             }
           });
 
-        if (upvoteBtn.classList.contains('fa-solid')) {
-            voteAmnt.textContent = parseInt(voteAmnt.textContent) - 2;
-            downvoteBtn.classList.remove("fa-regular");
-            downvoteBtn.classList.add("fa-solid");
-            upvoteBtn.classList.add("fa-regular");
-            upvoteBtn.classList.remove("fa-solid");
-        } else if (downvoteBtn.classList.contains('fa-regular')) {
-            voteAmnt.textContent = parseInt(voteAmnt.textContent) - 1;
-            downvoteAlready = true;
-
-            downvoteBtn.classList.remove("fa-regular");
-            downvoteBtn.classList.add("fa-solid");
-            upvoteBtn.classList.add("fa-regular");
-            upvoteBtn.classList.remove("fa-solid");
-        }
-        else {
-            voteAmnt.textContent = parseInt(voteAmnt.textContent) + 1;
-            downvoteAlready = false;
-
-            downvoteBtn.classList.remove("fa-solid");
-            downvoteBtn.classList.add("fa-regular");
-        }
-
-        styleVoteAmnt.style.fontWeight = "bold";
+       
     });
 });

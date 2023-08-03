@@ -71,6 +71,7 @@ router.get('/', async (req, res) =>{
 
     // need to output the results to here
     res.render("search", {
+        title: "search | " + searchTerm,
         header: "Search Results for " + searchTerm,
         searched_post: searchResults_Post,
         searched_accounts: searchResults_Account,

@@ -137,9 +137,30 @@ upvote.addEventListener("click", function(e){
             data: voteForm,
             success: function(data) {
                 console.log(data.message);
-            },
-            error: function(error) {
-              console.error('Error submitting form:', error);
+                 //upvote
+                if($(this).hasClass('fa-regular')) {
+                    var downVoteElement = $(this).closest(".votes-cont").find("#downvote-btn");  
+
+                    if(downVoteElement.hasClass('fa-solid')) {
+                        downVoteElement.removeClass('fa-solid');
+                        downVoteElement.addClass('fa-regular');
+                        $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount - 1);
+                    } 
+            
+                    $(this).removeClass('fa-regular');
+                    $(this).addClass('fa-solid');
+                    $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount + 1);
+                } else {
+                    $(this).removeClass('fa-solid');
+                    $(this).addClass('fa-regular');
+                    $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount - 1);
+                }
+                document.getElementById("upvote-amnt").style.fontWeight = "bold";
+
+
+                 },
+                    error: function(error) {
+                    console.error('Error submitting form:', error);
             }
           
         });
@@ -149,27 +170,7 @@ upvote.addEventListener("click", function(e){
         console.log(error);
     }
   
-        //upvote
-        if($(this).hasClass('fa-regular')) {
-            var downVoteElement = $(this).closest(".votes-cont").find("#downvote-btn");  
-
-            if(downVoteElement.hasClass('fa-solid')) {
-                downVoteElement.removeClass('fa-solid');
-                downVoteElement.addClass('fa-regular');
-                $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount - 1);
-            } 
-    
-            $(this).removeClass('fa-regular');
-            $(this).addClass('fa-solid');
-            $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount + 1);
-        } else {
-            $(this).removeClass('fa-solid');
-            $(this).addClass('fa-regular');
-            $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount - 1);
-        }
-        document.getElementById("upvote-amnt").style.fontWeight = "bold";
-
-
+       
     
 });
 
@@ -190,10 +191,30 @@ downvote.addEventListener("click", function(e){
             data: voteForm,
             success: function(data) {
                 console.log(data.message);
-            },
-            error: function(error) {
-              console.error('Error submitting form:', error);
-            }
+                 //downvote
+                if($(this).hasClass('fa-regular')) {
+                    var upVoteElement =  $(this).closest(".votes-cont").find("#upvote-btn");  
+
+                    if(upVoteElement.hasClass('fa-solid')) {
+                        upVoteElement.removeClass('fa-solid');
+                        upVoteElement.addClass('fa-regular');
+                        $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount - 1);
+                    }
+
+                    $(this).removeClass('fa-regular');
+                    $(this).addClass('fa-solid');
+                    $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount + 1);
+                } else {
+                    $(this).removeClass('fa-solid');
+                    $(this).addClass('fa-regular');
+                    $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount - 1);
+                }
+
+                document.getElementById("downvote-amnt").style.fontWeight = "bold";
+                        },
+                        error: function(error) {
+                        console.error('Error submitting form:', error);
+                        }
           
         });
     } catch(error){
@@ -201,26 +222,7 @@ downvote.addEventListener("click", function(e){
     }
 
 
-    //downvote
-    if($(this).hasClass('fa-regular')) {
-        var upVoteElement =  $(this).closest(".votes-cont").find("#upvote-btn");  
-
-        if(upVoteElement.hasClass('fa-solid')) {
-            upVoteElement.removeClass('fa-solid');
-            upVoteElement.addClass('fa-regular');
-            $(this).closest(".votes-cont").find("#upvote-amnt").text(upvoteCount - 1);
-        }
-
-        $(this).removeClass('fa-regular');
-        $(this).addClass('fa-solid');
-        $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount + 1);
-    } else {
-        $(this).removeClass('fa-solid');
-        $(this).addClass('fa-regular');
-        $(this).closest(".votes-cont").find("#downvote-amnt").text(downvoteCount - 1);
-    }
-
-    document.getElementById("downvote-amnt").style.fontWeight = "bold";
+   
 
    
 });
@@ -240,6 +242,46 @@ $(document).on("click", ".comment-proper-votes", function (e) {
             success: function(data) {
                 console.log(data.message);
                 //window.location.reload(); // Refresh the page to get the updated comments
+                if($(this).hasClass('fa-circle-up')) {
+                    //upvote
+                    if($(this).hasClass('fa-regular')) {
+                        var downVoteElement = $(this).closest(".com-votes-cont").find(".fa-circle-down.comment-proper-votes");  
+            
+                        if(downVoteElement.hasClass('fa-solid')) {
+                            downVoteElement.removeClass('fa-solid');
+                            downVoteElement.addClass('fa-regular');
+                            voteCount.text(parseInt(voteCount.text()) + 1);
+                        } 
+                
+                        $(this).removeClass('fa-regular');
+                        $(this).addClass('fa-solid');
+                        voteCount.text(parseInt(voteCount.text()) + 1);
+                    } else {
+                        $(this).removeClass('fa-solid');
+                        $(this).addClass('fa-regular');
+                        voteCount.text(parseInt(voteCount.text()) - 1);
+                    }
+            
+                } else {
+                    //downvote
+                    if($(this).hasClass('fa-regular')) {
+                        var upVoteElement = $(this).closest(".com-votes-cont").find(".fa-circle-up.comment-proper-votes"); 
+            
+                        if(upVoteElement.hasClass('fa-solid')) {
+                            upVoteElement.removeClass('fa-solid');
+                            upVoteElement.addClass('fa-regular');
+                            voteCount.text(parseInt(voteCount.text()) - 1);
+                        }
+                
+                        $(this).removeClass('fa-regular');
+                        $(this).addClass('fa-solid');
+                        voteCount.text(parseInt(voteCount.text()) - 1);
+                    } else {
+                        $(this).removeClass('fa-solid');
+                        $(this).addClass('fa-regular');
+                        voteCount.text(parseInt(voteCount.text()) + 1);
+                    }
+                } 
             },
             error: function(error) {
               console.error('Error submitting form:', error);
@@ -255,6 +297,46 @@ $(document).on("click", ".comment-proper-votes", function (e) {
                 success: function(data) {
                     console.log(data.message);
                     //window.location.reload(); // Refresh the page to get the updated comments
+                    if($(this).hasClass('fa-circle-up')) {
+                        //upvote
+                        if($(this).hasClass('fa-regular')) {
+                            var downVoteElement = $(this).closest(".com-votes-cont").find(".fa-circle-down.comment-proper-votes");  
+                
+                            if(downVoteElement.hasClass('fa-solid')) {
+                                downVoteElement.removeClass('fa-solid');
+                                downVoteElement.addClass('fa-regular');
+                                voteCount.text(parseInt(voteCount.text()) + 1);
+                            } 
+                    
+                            $(this).removeClass('fa-regular');
+                            $(this).addClass('fa-solid');
+                            voteCount.text(parseInt(voteCount.text()) + 1);
+                        } else {
+                            $(this).removeClass('fa-solid');
+                            $(this).addClass('fa-regular');
+                            voteCount.text(parseInt(voteCount.text()) - 1);
+                        }
+                
+                    } else {
+                        //downvote
+                        if($(this).hasClass('fa-regular')) {
+                            var upVoteElement = $(this).closest(".com-votes-cont").find(".fa-circle-up.comment-proper-votes"); 
+                
+                            if(upVoteElement.hasClass('fa-solid')) {
+                                upVoteElement.removeClass('fa-solid');
+                                upVoteElement.addClass('fa-regular');
+                                voteCount.text(parseInt(voteCount.text()) - 1);
+                            }
+                    
+                            $(this).removeClass('fa-regular');
+                            $(this).addClass('fa-solid');
+                            voteCount.text(parseInt(voteCount.text()) - 1);
+                        } else {
+                            $(this).removeClass('fa-solid');
+                            $(this).addClass('fa-regular');
+                            voteCount.text(parseInt(voteCount.text()) + 1);
+                        }
+                    } 
                 },
                 error: function(error) {
                   console.error('Error submitting form:', error);
@@ -265,46 +347,7 @@ $(document).on("click", ".comment-proper-votes", function (e) {
     }catch(error){
         console.log(error);
     }
-    if($(this).hasClass('fa-circle-up')) {
-        //upvote
-        if($(this).hasClass('fa-regular')) {
-            var downVoteElement = $(this).closest(".com-votes-cont").find(".fa-circle-down.comment-proper-votes");  
-
-            if(downVoteElement.hasClass('fa-solid')) {
-                downVoteElement.removeClass('fa-solid');
-                downVoteElement.addClass('fa-regular');
-                voteCount.text(parseInt(voteCount.text()) + 1);
-            } 
-    
-            $(this).removeClass('fa-regular');
-            $(this).addClass('fa-solid');
-            voteCount.text(parseInt(voteCount.text()) + 1);
-        } else {
-            $(this).removeClass('fa-solid');
-            $(this).addClass('fa-regular');
-            voteCount.text(parseInt(voteCount.text()) - 1);
-        }
-
-    } else {
-        //downvote
-        if($(this).hasClass('fa-regular')) {
-            var upVoteElement = $(this).closest(".com-votes-cont").find(".fa-circle-up.comment-proper-votes"); 
-
-            if(upVoteElement.hasClass('fa-solid')) {
-                upVoteElement.removeClass('fa-solid');
-                upVoteElement.addClass('fa-regular');
-                voteCount.text(parseInt(voteCount.text()) - 1);
-            }
-    
-            $(this).removeClass('fa-regular');
-            $(this).addClass('fa-solid');
-            voteCount.text(parseInt(voteCount.text()) - 1);
-        } else {
-            $(this).removeClass('fa-solid');
-            $(this).addClass('fa-regular');
-            voteCount.text(parseInt(voteCount.text()) + 1);
-        }
-    } 
+   
 
 });
 
