@@ -106,7 +106,21 @@ router.get("/:name", async (req, res)=> {
           path: 'downvotes',
       }).lean();
 
-          listofcomments.forEach((comment) => {
+          const listofExistingC = [];
+
+          listofcomments.forEach(async (comment) => {
+            
+            if(comment.post_commented) {
+              if(comment.parent_comment_id != null) {
+                const parentId = await Comment.findOne({"_id" : comment.parent_comment_id}).lean();
+                
+                if(parentId) {
+                  listofExistingC.push(comment);
+                }
+              } else {
+                listofExistingC.push(comment);
+              }
+            }
 
             if (comment.post_title && comment.comment_content.length > maxTextLength) {
               comment.comment_content = comment.comment_content.substring(0, maxTextLength) + '...';
@@ -115,11 +129,14 @@ router.get("/:name", async (req, res)=> {
             if (comment.post_commented && comment.post_commented.tags && comment.post_commented.tags.length > 3) {
               comment.post_commented.tags = comment.post_commented.tags.slice(0, 3);
             }
+
           });
 
           const subscribedTags = user.subscribed_tags;
 
           const listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+
+
 
          // start for side-container content
 
@@ -171,7 +188,7 @@ router.get("/:name", async (req, res)=> {
         "profile_desc": user.profile_desc,
         "profile_pic": user.profile_pic,
         user_posts: listofposts,
-        user_comments: listofcomments,
+        user_comments: listofExistingC,
         user_sub_tags: listofTags,
         sub_tags: listofTagsLogged,
         logged_in: logged_in,
