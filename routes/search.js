@@ -1,27 +1,60 @@
 const express = require ("express");
+const handlebars = require('handlebars');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Post =  require('../server/schema/Post');
 const Account =  require('../server/schema/Account');
 const Tag =  require('../server/schema/Tag');
 
+handlebars.registerHelper('checkUp', function(upArray, user, options){
+  var len = upArray.length;
+  
+
+  for (var i = 0; i < len; i++) {
+      var getName = upArray[i].username;
+      console.log(getName === user);
+        if (getName === user) {
+          return options.fn(this);
+      }
+
+  }
+  return options.inverse(this)
+});
+
+handlebars.registerHelper('checkDown', function(downArray, user, options){
+  var len = downArray.length;
+
+for (var i = 0; i < len; i++) {
+  var getName = downArray[i].username;
+
+    if (getName == user) {
+        return options.fn(this);
+    }
+    console.log(user);
+
+}
+  return options.inverse(this)
+});
 
 router.get('/', async (req, res) =>{
 
     let navbar = 'navbar';
+    let logged_in = false;
 
     if(req.session.username) {
+      logged_in = true;
       navbar = 'logged-navbar';
     } 
     
     var searchTerm = req.query.text;
+    // REFERENCE: https://www.youtube.com/watch?v=9Bnpl6bcev4&list=PL4cUxeGkcC9hAJ-ARcYq_z6lDZV7kT1xD&index=6
     const search = searchTerm.replace(/[^a-zA-Z0-9]/g, "");
 
     const searchResults_Post = await Post.find({
       $or: [
         { post_title: {$regex: new RegExp(search, 'i')}},
         { post_content: {$regex: new RegExp(search, 'i')}},
-    ]}).populate('username').populate( { path: 'tags', match: { type: search}},).lean();
+    ]}).populate('username').populate( { path: 'tags', match: { type: search}},).populate({path: 'upvotes'}).populate({path: 'downvotes'}).lean();
    
 
     const searchResults_Account = await Account.find({
@@ -68,6 +101,113 @@ router.get('/', async (req, res) =>{
     console.log(searchResults_Tag);
 
     
+router.post("/up/:post_id", async (req, res)=>{
+      const getId = req.params.post_id;
+      if(req.session.username) {
+  
+          const user = await Account.findOne({ "username" : req.session.username } );
+          
+  
+          try{
+              var isUpvoted = await Postschema.findOne({_id: getId,
+                  upvotes: new mongoose.Types.ObjectId(user._id)
+                   });
+              var isDownvoted =  await Postschema.findOne({_id: getId,
+                  downvotes: new mongoose.Types.ObjectId(user._id)
+              });
+              if (!isUpvoted && !isDownvoted){
+                  await Postschema.findByIdAndUpdate(getId, 
+                      {
+                          $push: {
+                          upvotes: new mongoose.Types.ObjectId(user._id)
+                          }
+                      }
+                  );
+                  return res.json({message:"User upvoted successfully"});
+              }
+              else if (isUpvoted){
+                  await Postschema.findByIdAndUpdate(getId, 
+                      {
+                          $pull: {
+                          upvotes: new mongoose.Types.ObjectId(user._id)
+                          }
+                      }
+                  );
+                  return res.json({message:"User already upvoted, removing upvote"});
+              }
+              else if (isDownvoted){
+                  await Postschema.findByIdAndUpdate(getId, 
+                      {
+                          $push: {
+                          upvotes: new mongoose.Types.ObjectId(user._id)
+                           },
+                          $pull: {
+                          downvotes: new mongoose.Types.ObjectId(user._id)
+                          }
+                      }
+                  );
+                  return res.json({message:"User previously downvoted, removing downvote for upvote"});
+              } 
+          } catch(error){
+              console.log(error);
+          }
+      }
+  });
+  
+  router.post("/down/:post_id", async (req, res)=>{
+      const getId = req.params.post_id;
+     
+      if(req.session.username) {
+  
+          const user = await Account.findOne({ "username" : req.session.username } );
+  
+          try{
+              var isUpvoted = await Postschema.findOne({_id: getId,
+                  upvotes: new mongoose.Types.ObjectId(user._id)
+                   });
+              var isDownvoted =  await Postschema.findOne({_id: getId,
+                  downvotes: new mongoose.Types.ObjectId(user._id)
+              });
+  
+              if (!isUpvoted && !isDownvoted){
+                  await Postschema.findByIdAndUpdate(getId, 
+                      {
+                          $push: {
+                          downvotes: new mongoose.Types.ObjectId(user._id)
+                          }
+                      }
+                  );
+                  return res.json({message:"User downvoted successfully"});
+              }
+              else if (isDownvoted){
+                  await Postschema.findByIdAndUpdate(getId, 
+                      {
+                          $pull: {
+                          downvotes: new mongoose.Types.ObjectId(user._id)
+                          }
+                      }
+                  );
+                  return res.json({message:"User already downvoted, removing downvote"});
+              }
+              else if(isUpvoted){
+                  await Postschema.findByIdAndUpdate(getId, 
+                      {
+                          $push: {
+                          downvotes: new mongoose.Types.ObjectId(user._id)
+                           },
+                          $pull: {
+                          upvotes: new mongoose.Types.ObjectId(user._id)
+                          }
+                      }
+                  );
+              return res.json({message: "User previously upvoted, removing upvote for downvote"});
+              }
+          } catch(error){
+              console.log(error);
+          }
+      }
+  });
+  
 
     // need to output the results to here
     res.render("search", {
@@ -79,6 +219,7 @@ router.get('/', async (req, res) =>{
         script: 'js/index.js',
         add_style: '<link rel="stylesheet" type="text/css" href="css/style1.css">',
         navbar: navbar,
+        logged_in: logged_in,
         session_user: req.session.username
         });
 });

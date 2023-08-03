@@ -1,10 +1,45 @@
 const express = require ("express");
+const handlebars = require('handlebars');
+const mongoose = require('mongoose');
 const Post = require('../server/schema/Post');
 const Tag = require('../server/schema/Tag');
 const Account = require('../server/schema/Account');
 const Comment = require('../server/schema/Comment');
 const router = express.Router();
 
+
+handlebars.registerHelper('checkUp', function(upArray, user, options){
+ if (upArray){
+    var len = upArray.length;
+
+    for (var i = 0; i < len; i++) {
+        var getName = upArray[i].username;
+        console.log(getName === user);
+          if (getName === user) {
+            return options.fn(this);
+        }
+
+    } 
+  }
+  return options.inverse(this)
+});
+
+handlebars.registerHelper('checkDown', function(downArray, user, options){
+  if (downArray){
+      var len = downArray.length;
+
+    for (var i = 0; i < len; i++) {
+      var getName = downArray[i].username;
+
+        if (getName == user) {
+            return options.fn(this);
+        }
+        console.log(user);
+
+    }
+  }
+  return options.inverse(this)
+});
 
 router.get('/', async (req, res) => {
     const maxTextLength = 100;
@@ -15,7 +50,7 @@ router.get('/', async (req, res) => {
         }).populate({
             path:'tags',
             select: 'tag_name'
-        }).sort({date: 'desc'}).lean();
+        }).populate('upvotes').populate('downvotes').sort({post_date: 'desc'}).lean();
 
         listofposts.forEach((post) => {
 
@@ -94,6 +129,113 @@ router.get('/', async (req, res) => {
     } catch(error){
         console.log(error);
     }
+});
+
+router.post("/up/:post_id", async (req, res)=>{
+  const getId = req.params.post_id;
+  if(req.session.username) {
+
+      const user = await Account.findOne({ "username" : req.session.username } );
+      
+
+      try{
+          var isUpvoted = await Post.findOne({_id: getId,
+              upvotes: new mongoose.Types.ObjectId(user._id)
+               });
+          var isDownvoted =  await Post.findOne({_id: getId,
+              downvotes: new mongoose.Types.ObjectId(user._id)
+          });
+          if (!isUpvoted && !isDownvoted){
+              await Post.findByIdAndUpdate(getId, 
+                  {
+                      $push: {
+                      upvotes: new mongoose.Types.ObjectId(user._id)
+                      }
+                  }
+              );
+              return res.json({message:"User upvoted successfully"});
+          }
+          else if (isUpvoted){
+              await Post.findByIdAndUpdate(getId, 
+                  {
+                      $pull: {
+                      upvotes: new mongoose.Types.ObjectId(user._id)
+                      }
+                  }
+              );
+              return res.json({message:"User already upvoted, removing upvote"});
+          }
+          else if (isDownvoted){
+              await Post.findByIdAndUpdate(getId, 
+                  {
+                      $push: {
+                      upvotes: new mongoose.Types.ObjectId(user._id)
+                       },
+                      $pull: {
+                      downvotes: new mongoose.Types.ObjectId(user._id)
+                      }
+                  }
+              );
+              return res.json({message:"User previously downvoted, removing downvote for upvote"});
+          } 
+      } catch(error){
+          console.log(error);
+      }
+  }
+});
+
+router.post("/down/:post_id", async (req, res)=>{
+  const getId = req.params.post_id;
+ 
+  if(req.session.username) {
+
+      const user = await Account.findOne({ "username" : req.session.username } );
+
+      try{
+          var isUpvoted = await Post.findOne({_id: getId,
+              upvotes: new mongoose.Types.ObjectId(user._id)
+               });
+          var isDownvoted =  await Post.findOne({_id: getId,
+              downvotes: new mongoose.Types.ObjectId(user._id)
+          });
+
+          if (!isUpvoted && !isDownvoted){
+              await Post.findByIdAndUpdate(getId, 
+                  {
+                      $push: {
+                      downvotes: new mongoose.Types.ObjectId(user._id)
+                      }
+                  }
+              );
+              return res.json({message:"User downvoted successfully"});
+          }
+          else if (isDownvoted){
+              await Post.findByIdAndUpdate(getId, 
+                  {
+                      $pull: {
+                      downvotes: new mongoose.Types.ObjectId(user._id)
+                      }
+                  }
+              );
+              return res.json({message:"User already downvoted, removing downvote"});
+          }
+          else if(isUpvoted){
+              await Post.findByIdAndUpdate(getId, 
+                  {
+                      $push: {
+                      downvotes: new mongoose.Types.ObjectId(user._id)
+                       },
+                      $pull: {
+                      upvotes: new mongoose.Types.ObjectId(user._id)
+                      }
+                  }
+              );
+          return res.json({message: "User previously upvoted, removing upvote for downvote"});
+          }
+      } catch(error){
+          console.log(error);
+      }
+  }
 });
 
 module.exports = router;
