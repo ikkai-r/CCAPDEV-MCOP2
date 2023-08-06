@@ -1,3 +1,5 @@
+const register_btn = document.getElementById('register-btn');
+
 function copyLink(url) {
     navigator.clipboard.writeText(url);
     $('#copyLinkModal').modal('show');
@@ -37,8 +39,12 @@ $("#username").on('keyup', async function (){
         $("#username-msg").css('display','block');
         $('#username-msg').addClass('alert-danger');
         $("#username-msg").text('Username is already in use');
+        register_btn.ariaDisabled = true;
+        register_btn.disabled = true;
     } else if (response.status == 200){
         $("#username-msg").css('display','none');
+        register_btn.ariaDisabled = false;
+        register_btn.disabled = false;
     }
 });
 
@@ -53,14 +59,21 @@ $("#email-reg").on('keyup', async function (){
             $("#email-msg").css('display','block');
             $('#email-msg').addClass('alert-danger');
             $("#email-msg").text('Email is already in use');
+            register_btn.ariaDisabled = true;
+            register_btn.disabled = true;
             break;
         case 422: 
             $("#email-msg").css('display','block');
             $('#email-msg').addClass('alert-danger');
             $("#email-msg").text('Invalid email.');
+            register_btn.ariaDisabled = true;
+            register_btn.disabled = true;
             break;
         case 200:
             $("#email-msg").css('display','none');
+            register_btn.ariaDisabled = false;
+            register_btn.disabled = false;
+            break;
     }
 });
 
@@ -128,10 +141,14 @@ $('#password-reg, #confirm-password').on('keyup', function () {
     if ($('#password-reg').val() == $('#confirm-password').val() && $('#password-reg').val() != "") {
         $('#pass-msg').css('display', 'none');
         $('#pass-msg').removeClass('alert-danger');
+        register_btn.ariaDisabled = false;
+        register_btn.disabled = false;
     } else  {
         $('#pass-msg').css('display', 'block');
         $('#pass-msg').addClass('alert-danger');
         $('#pass-msg').text('Not matching password');
+        register_btn.ariaDisabled = true;
+        register_btn.disabled = true;
     }
   });
 
@@ -172,7 +189,9 @@ $("#logout-btn").click(function() {
         $('#pass-msg').addClass('alert-danger');
         $('#pass-msg').removeClass('alert-success');
         $('#pass-msg').text('Ensure your passwords are the same before registering.');
-    } else {
+    } else if ($("#register-btn").disabled == true) {
+        $('#pass-msg').text('Invalid log-in.');
+    }else {
         const formData = $('#register-user').serialize();
 
         // Send the form data to the server using AJAX
