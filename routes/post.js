@@ -826,6 +826,7 @@ router.get('/:id', async (req, res) =>{
         });
     } catch(error){
         console.log(error);
+        res.redirect('/404');
     }
    
 });

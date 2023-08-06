@@ -33,7 +33,7 @@ handlebars.registerHelper('checkUp', function(upArray, user, options){
       
 
   }
-  return options.inverse(this)
+  return options.inverse(this);
 });
 
 handlebars.registerHelper('checkDown', function(downArray, user, options){
@@ -63,9 +63,8 @@ router.get("/:name", async (req, res)=> {
 
     console.log("current: " + req.session.username);
 
-    try{
-        const user = await Account.findOne({ "username" : { $regex : new RegExp(getName, "i") } });
-
+        const user = await Account.findOne({ "username" : getName });
+        console.log(user);
         if (!user) {
             // Handle the case when the user is not found
             return res.status(404).send("User not found.");
@@ -200,9 +199,6 @@ router.get("/:name", async (req, res)=> {
         session_user: req.session.username
     });
         
-    } catch(error){
-        console.log(error);
-    }
 })
 
 router.get("/", (req, res)=>{
