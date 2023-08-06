@@ -144,9 +144,29 @@ app.get('/', (req, res) =>{
     res.redirect('/home');
 });
 
-app.all('*', (req, res) => {
+app.all('*', async (req, res) => {
     res.status(404);
-    res.render("404")
+    
+    let logged_in = false;
+  let navbar = 'navbar';
+  if(req.session.username) {
+    //user is logged in
+
+    logged_in = true;
+    
+    const user = await Account.findOne({ "username" : req.session.username });
+
+    const subscribedTags = user.subscribed_tags;
+    listofTags = await Tag.find({ _id: { $in: subscribedTags } }).lean();
+    
+    navbar = 'logged-navbar';
+  }
+
+    res.render("404",{
+    title: "404 | Not found",
+    navbar: navbar,
+    logged_in: logged_in,
+    session_user: req.session.username})
 });
 
 
