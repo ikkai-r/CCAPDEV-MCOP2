@@ -47,8 +47,10 @@ router.get('/', async (req, res) =>{
     } 
     
     var searchTerm = req.query.text;
-    // REFERENCE: https://www.youtube.com/watch?v=9Bnpl6bcev4&list=PL4cUxeGkcC9hAJ-ARcYq_z6lDZV7kT1xD&index=6
-    const search = searchTerm.replace(/[^a-zA-Z0-9]/g, "");
+    console.log("query term: " + searchTerm)
+    // REFERENCE: https://codingbeautydev.com/blog/javascript-remove-special-characters-from-string/
+    const search = searchTerm.replace(/[^a-zA-Z0-9 ]/, '')
+    console.log("search term: " + search)
 
     const searchResults_Post = await Post.find({
       $or: [
