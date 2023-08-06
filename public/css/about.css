@@ -48,6 +48,13 @@
     margin-left: 20vh;
 }
 
+.txt-about-us, .txt-features{
+    font-family: 'Dancing Script', cursive;
+    font-weight: bold;
+    font-size: 5vh;
+    margin-bottom: 2vh;
+}
+
 .about-team{
     background-color: #FFF6EB;
     margin-right: 0;
@@ -55,8 +62,17 @@
     margin-left: 0;
     margin-top: 0;
     padding: 2vh 1vh 2vh 1vh;
+    padding-left: 10vh;
     height: 50vh;
     width: 100%;
+}
+
+.icon{
+    /* Resize the icon */
+    height: 10vh;
+    width: 10vh;
+    /* make it circular */
+    border-radius: 50%;
 }
 
 .prof-pic{
