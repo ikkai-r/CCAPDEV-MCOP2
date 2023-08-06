@@ -524,6 +524,7 @@ router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
         var post_attachment = "";
 
         if(req.file) {
+            //check if same file 
             post_attachment = "img/"+req.file.originalname;
         }
             const { post_title, post_content, tags } = req.body;
