@@ -186,7 +186,8 @@ router.get("/", async  (req, res)=>{
             var newTag = await Tag.findById(tagCounts[i]._id).lean();
             var tag = ({
                 // limit the characters of each tag name into 10 and add "..." if it is greater than 10
-                tag_name: newTag.tag_name.length > 10 ? newTag.tag_name.substring(0, 10) + '...' : newTag.tag_name,
+                tag_name: newTag.tag_name,
+                limit_tag_name: newTag.tag_name.length > 10 ? newTag.tag_name.substring(0, 10) + '...' : newTag.tag_name,
                 photo: newTag.photo,
                 count: tagCounts[i].count
             });
@@ -313,7 +314,5 @@ router.post("/down/:post_id", async (req, res)=>{
         }
     }
 });
-
-
 
 module.exports = router;
