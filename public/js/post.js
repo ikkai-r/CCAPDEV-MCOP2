@@ -123,6 +123,7 @@ fileInput.addEventListener("change", function(e) {
 // For removing attachments
 $(document).on("click", ".post-attachment-delete", function () {
   $(this).parent().remove();
+  $("#deleted_attachment").val("0");
 });
 
 
@@ -139,6 +140,7 @@ $("#edit-post-btn").click(function(e) {
   formData.append('post_content', $('#post_content').val());
   formData.append('tags', tags);
   formData.append('post_id', $('#post_id').val());
+  formData.append('deleted_attachment', $('#deleted_attachment').val()); // Updated this line
   formData.append('action', $('#action').val()); // Updated this line
   
   var fileInput = $('#file')[0].files[0];
