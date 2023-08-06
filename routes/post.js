@@ -526,8 +526,8 @@ router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
         if(req.file) {
             //check if same file 
             post_attachment = "img/"+req.file.originalname;
-        }
-            const { post_title, post_content, tags } = req.body;
+        } 
+            const { deleted_attachment, post_title, post_content, tags } = req.body;
             
             const getPost = await Post.findOne({_id: getId});
             const unchangedTags = [];
@@ -554,7 +554,7 @@ router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
                     if(post_attachment != "") {
                         tag.photo = post_attachment;
                         await tag.save();
-                    }
+                    } 
                 }
 
                 tagIds.push(tag._id);
@@ -584,7 +584,10 @@ router.post('/edit-:id', upload.single('post_attachment'), async (req, res) =>{
             //post attachment
             if(post_attachment != "") {
                 getPost.post_attachment = post_attachment;
+            } else if(deleted_attachment == "0") {
+                getPost.post_attachment = "";
             }
+
             //post edited
             getPost.post_edited = true;
             //tags
