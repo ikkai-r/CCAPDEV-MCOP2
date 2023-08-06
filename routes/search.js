@@ -91,6 +91,7 @@ router.get('/', async (req, res) =>{
       var filteredPostNum = jsonfile.replace(/\D/g,'');
       var newSearchTag = ({
         tag_name: getTagNames.tag_name,
+        tag_photo: getTagNames.photo,
         count: filteredPostNum
       })
       
