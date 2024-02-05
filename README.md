@@ -1,4 +1,4 @@
-# CCAPDEV-MCOP2
+# Discusso
 This project is created to be a forum web application named Discusso. To run this application locally, you will need to install Node.js and the multiple dependencies used in this project.
 Currently, MongoDB is connected to the Discusso database. If you want to change databases, you may need to edit the .env to reflect changes to your own local database.
 
